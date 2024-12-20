@@ -14,7 +14,9 @@ namespace TRTERPproject
 
 		private void button_giris_Click(object sender, EventArgs e)
 		{
-			
-		}
+            loginForm loginForm = new loginForm();
+            loginForm.Show();
+			this.Hide();
+        }
 	}
 }
