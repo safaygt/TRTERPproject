@@ -124,35 +124,60 @@ namespace TRTERPproject
                 {
                     con.Open();
 
-                    // 2. COMCODE Kontrolü
-                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTGEN003 WHERE COMCODE = @COMCODE";
-                    cmd = new SqlCommand(checkQuery, con);
-                    cmd.Parameters.AddWithValue("@COMCODE", comCode);
-
-                    
-
-                    // 3. Ekleme İşlemi
-                    string insertQuery = "INSERT INTO BSMGRTRTGEN003 (COMCODE, COUNTRYCODE, COUNTRYTEXT) VALUES (@COMCODE, @COUNTRYCODE, @COUNTRYTEXT)";
-                    cmd = new SqlCommand(insertQuery, con);
-
-                    cmd.Parameters.AddWithValue("@COMCODE", comCode);
-                    cmd.Parameters.AddWithValue("@COUNTRYCODE", countryCode);
-                    cmd.Parameters.AddWithValue("@COUNTRYTEXT", countryText);
-
-                    int rowsAffected = cmd.ExecuteNonQuery();
-
-                    if (rowsAffected > 0)
+                    // 2. COUNTRYCODE Kontrolü
+                    string checkCountryCodeQuery = "SELECT COUNT(*) FROM BSMGRTRTGEN003 WHERE COUNTRYCODE = @COUNTRYCODE";
+                    using (cmd = new SqlCommand(checkCountryCodeQuery, con))
                     {
-                        MessageBox.Show("Kayıt başarıyla eklendi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        cmd.Parameters.AddWithValue("@COUNTRYCODE", countryCode);
 
-                        // TextBox'ları temizle
-                        firmCodeTextBox.Clear();
-                        countryCodeTextBox.Clear();
-                        countryNameTextBox.Clear();
+                        int countryCodeExists = (int)cmd.ExecuteScalar();
+
+                        if (countryCodeExists > 0)
+                        {
+                            // COUNTRYCODE zaten mevcut
+                            MessageBox.Show("Bu COUNTRYCODE zaten mevcut. Lütfen başka bir COUNTRYCODE giriniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
                     }
-                    else
+
+                    // 3. COMCODE Kontrolü
+                    string checkComCodeQuery = "SELECT COUNT(*) FROM BSMGRTRTGEN003 WHERE COMCODE = @COMCODE";
+                    using (cmd = new SqlCommand(checkComCodeQuery, con))
                     {
-                        MessageBox.Show("Kayıt eklenemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        cmd.Parameters.AddWithValue("@COMCODE", comCode);
+
+                        int comCodeExists = (int)cmd.ExecuteScalar();
+
+                        if (comCodeExists == 0)
+                        {
+                            MessageBox.Show("Belirtilen COMCODE mevcut değil. Lütfen doğru bir COMCODE giriniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+                    }
+
+                    // 4. Ekleme İşlemi
+                    string insertQuery = "INSERT INTO BSMGRTRTGEN003 (COMCODE, COUNTRYCODE, COUNTRYTEXT) VALUES (@COMCODE, @COUNTRYCODE, @COUNTRYTEXT)";
+                    using (cmd = new SqlCommand(insertQuery, con))
+                    {
+                        cmd.Parameters.AddWithValue("@COMCODE", comCode);
+                        cmd.Parameters.AddWithValue("@COUNTRYCODE", countryCode);
+                        cmd.Parameters.AddWithValue("@COUNTRYTEXT", countryText);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show("Kayıt başarıyla eklendi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            // TextBox'ları temizle
+                            firmCodeTextBox.Clear();
+                            countryCodeTextBox.Clear();
+                            countryNameTextBox.Clear();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Kayıt eklenemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -161,6 +186,8 @@ namespace TRTERPproject
                 }
             }
         }
+
+
 
         private void btnDel_Click(object sender, EventArgs e)
         {
