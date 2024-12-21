@@ -23,7 +23,7 @@ namespace TRTERPproject
 
 			//DESKTOP-U86MLBA ibonun server
 
-			con = new SqlConnection("Server=DESKTOP-U86MLBA;Database=TRTdb;Integrated Security=True;");
+			con = new SqlConnection("Server=MSI\\SQLEXPRESS;Database=TRTdb;Integrated Security=True;");
 			cmd = new SqlCommand();
 			con.Open();
 			cmd.Connection = con;
