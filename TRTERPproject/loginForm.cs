@@ -10,11 +10,20 @@ using System.Windows.Forms;
 
 namespace TRTERPproject
 {
-	public partial class loginForm : Form
-	{
-		public loginForm()
-		{
-			InitializeComponent();
-		}
-	}
+    public partial class loginForm : Form
+    {
+        public loginForm()
+        {
+
+
+            InitializeComponent();
+
+
+        }
+
+        private void LoginBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
 }

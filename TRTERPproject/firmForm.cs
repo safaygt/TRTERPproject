@@ -10,18 +10,11 @@ using System.Windows.Forms;
 
 namespace TRTERPproject
 {
-    public partial class CardForm : Form
+    public partial class firmForm : Form
     {
-        public CardForm()
+        public firmForm()
         {
             InitializeComponent();
-        }
-
-        private void firmaBut_Click(object sender, EventArgs e)
-        {
-            firmForm FirmaForm = new firmForm();
-            FirmaForm.Show();
-            
         }
     }
 }
