@@ -37,7 +37,7 @@ namespace TRTERPproject
 			}
 			else
 			{
-				MessageBox.Show("asdas");
+				MessageBox.Show("Kullanıcı Adı veya şifre Yanlış!");
 			}
 		}
 	}
