@@ -268,7 +268,7 @@
 			AutoScaleDimensions = new SizeF(8F, 20F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.FromArgb(197, 110, 51);
-			ClientSize = new Size(1107, 742);
+			ClientSize = new Size(1148, 742);
 			Controls.Add(oprtipBut);
 			Controls.Add(oprBut);
 			Controls.Add(button5);
