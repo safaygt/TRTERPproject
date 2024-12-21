@@ -23,6 +23,7 @@ namespace TRTERPproject
 
 			//string connectionString = "Server=DESKTOP-U86MLBA;Database=TRTdb;Integrated Security=True;";
 			//a
+			//b
 			con = new SqlConnection("Server=DESKTOP-U86MLBA;Database=TRTdb;Integrated Security=True;");
 			cmd = new SqlCommand();
 			con.Open();
