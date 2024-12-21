@@ -15,7 +15,7 @@ namespace TRTERPproject
 		public CardForm()
 		{
 			InitializeComponent();
-			//a
+			//ab
 		}
 	}
 }
