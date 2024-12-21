@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace TRTERPproject
 {
+
 	public partial class CardForm : Form
 	{
 		public CardForm()
@@ -23,5 +24,12 @@ namespace TRTERPproject
 			malzemeKartAna malzemeKartAna= new malzemeKartAna();
 			malzemeKartAna.Show();
 		}
+     private void firmaBut_Click(object sender, EventArgs e)
+        {
+            countryForm FirmaForm = new countryForm();
+            FirmaForm.Show();
+
+        }
 	}
+
 }
