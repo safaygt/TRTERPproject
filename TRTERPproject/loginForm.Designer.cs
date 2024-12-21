@@ -1,6 +1,6 @@
 ﻿namespace TRTERPproject
 {
-	partial class loginForm
+	partial class LoginForm
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -75,6 +75,7 @@
 			LoginBtn.TabIndex = 4;
 			LoginBtn.Text = "Login";
 			LoginBtn.UseVisualStyleBackColor = true;
+			LoginBtn.Click += LoginBtn_Click;
 			// 
 			// loginForm
 			// 
