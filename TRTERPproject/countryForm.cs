@@ -107,12 +107,117 @@ namespace TRTERPproject
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
+            string comCode = firmCodeTextBox.Text.Trim();
+            string countryCode = countryCodeTextBox.Text.Trim();
+            string countryText = countryNameTextBox.Text.Trim();
 
+            // 1. Veri Kontrolü
+            if (string.IsNullOrEmpty(comCode) || string.IsNullOrEmpty(countryCode) || string.IsNullOrEmpty(countryText))
+            {
+                MessageBox.Show("Lütfen tüm alanları doldurun!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (con = new SqlConnection("Server=MSI\\SQLEXPRESS;Database=TRTdb;Integrated Security=True;"))
+            {
+                try
+                {
+                    con.Open();
+
+                    // 2. COMCODE Kontrolü
+                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTGEN003 WHERE COMCODE = @COMCODE";
+                    cmd = new SqlCommand(checkQuery, con);
+                    cmd.Parameters.AddWithValue("@COMCODE", comCode);
+
+                    
+
+                    // 3. Ekleme İşlemi
+                    string insertQuery = "INSERT INTO BSMGRTRTGEN003 (COMCODE, COUNTRYCODE, COUNTRYTEXT) VALUES (@COMCODE, @COUNTRYCODE, @COUNTRYTEXT)";
+                    cmd = new SqlCommand(insertQuery, con);
+
+                    cmd.Parameters.AddWithValue("@COMCODE", comCode);
+                    cmd.Parameters.AddWithValue("@COUNTRYCODE", countryCode);
+                    cmd.Parameters.AddWithValue("@COUNTRYTEXT", countryText);
+
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    if (rowsAffected > 0)
+                    {
+                        MessageBox.Show("Kayıt başarıyla eklendi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // TextBox'ları temizle
+                        firmCodeTextBox.Clear();
+                        countryCodeTextBox.Clear();
+                        countryNameTextBox.Clear();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Kayıt eklenemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void btnDel_Click(object sender, EventArgs e)
         {
+            string countryCode = countryCodeTextBox.Text.Trim();
 
+            // 1. Boş Veri Kontrolü
+            if (string.IsNullOrEmpty(countryCode))
+            {
+                MessageBox.Show("Lütfen bir COUNTRYCODE giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (con = new SqlConnection("Server=MSI\\SQLEXPRESS;Database=TRTdb;Integrated Security=True;"))
+            {
+                try
+                {
+                    con.Open();
+
+                    // 2. Kayıt Kontrolü
+                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTGEN003 WHERE COUNTRYCODE = @COUNTRYCODE";
+                    cmd = new SqlCommand(checkQuery, con);
+                    cmd.Parameters.AddWithValue("@COUNTRYCODE", countryCode);
+
+                    int recordExists = (int)cmd.ExecuteScalar();
+
+                    if (recordExists == 0)
+                    {
+                        // Kayıt bulunamadı
+                        MessageBox.Show("Belirtilen COUNTRYCODE için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    // 3. Silme İşlemi
+                    string deleteQuery = "DELETE FROM BSMGRTRTGEN003 WHERE COUNTRYCODE = @COUNTRYCODE";
+                    cmd = new SqlCommand(deleteQuery, con);
+                    cmd.Parameters.AddWithValue("@COUNTRYCODE", countryCode);
+
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    if (rowsAffected > 0)
+                    {
+                        MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // TextBox'ı temizle
+                        countryCodeTextBox.Clear();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
+
     }
 }
