@@ -61,6 +61,7 @@
 			Malcard.Text = "Malzeme Kartları ";
 			Malcard.TextAlign = ContentAlignment.MiddleLeft;
 			Malcard.UseVisualStyleBackColor = true;
+			Malcard.Click += Malcard_Click;
 			// 
 			// MaliyetBut
 			// 

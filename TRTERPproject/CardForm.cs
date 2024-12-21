@@ -17,5 +17,11 @@ namespace TRTERPproject
 			InitializeComponent();
 			//ab
 		}
+
+		private void Malcard_Click(object sender, EventArgs e)
+		{
+			malzemeKartAna malzemeKartAna= new malzemeKartAna();
+			malzemeKartAna.Show();
+		}
 	}
 }
