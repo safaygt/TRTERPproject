@@ -143,6 +143,8 @@ namespace TRTERPproject
                     }
 
                     // 3. COMCODE Kontrolü
+
+                    /*
                     string checkComCodeQuery = "SELECT COUNT(*) FROM BSMGRTRTGEN001 WHERE COMCODE = @COMCODE";
                     using (cmd = new SqlCommand(checkComCodeQuery, con))
                     {
@@ -156,6 +158,9 @@ namespace TRTERPproject
                             return;
                         }
                     }
+                    */
+
+
 
                     // 4. Ekleme İşlemi
                     string insertQuery = "INSERT INTO BSMGRTRTGEN001 (COMCODE, COMTEXT, ADDRESS1, ADDRESS2, CITYCODE, COUNTRYCODE) VALUES (@COMCODE, @COMTEXT, @ADDRESS1, @ADDRESS2, @CITYCODE, @COUNTRYCODE)";

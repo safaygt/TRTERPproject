@@ -12,12 +12,14 @@ using TRTERPproject.Helpers;
 
 namespace TRTERPproject
 {
-    public partial class lanForm : Form
+    public partial class unitForm : Form
     {
+
         SqlDataReader reader;
         SqlCommand cmd;
         SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString);
-        public lanForm()
+
+        public unitForm()
         {
             InitializeComponent();
         }
@@ -25,7 +27,7 @@ namespace TRTERPproject
         private void btnGet_Click(object sender, EventArgs e)
         {
 
-            string query = "Select * from BSMGRTRTGEN002";
+            string query = "Select * from BSMGRTRTGEN005";
             con = new SqlConnection(ConnectionHelper.ConnectionString);
             cmd = new SqlCommand();
             cmd.Connection = con;
@@ -58,25 +60,24 @@ namespace TRTERPproject
                 con.Close();
             }
 
-
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
 
-            string lanCode = lanCodeTextBox.Text;
+            string unitCode = unitCodeTextBox.Text;
 
-            if (string.IsNullOrEmpty(lanCode))
+            if (string.IsNullOrEmpty(unitCode))
             {
-                MessageBox.Show("Lütfen bir Dil Kodu giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Lütfen bir Birim Kodu giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             using (con = new SqlConnection(ConnectionHelper.ConnectionString))
             {
-                string query = "SELECT COUNT(*) FROM BSMGRTRTGEN002 WHERE LANCODE = @LANCODE";
+                string query = "SELECT COUNT(*) FROM BSMGRTRTGEN005 WHERE UNITCODE = @UNITCODE";
                 cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@LANCODE", lanCode);
+                cmd.Parameters.AddWithValue("@UNITCODE", unitCode);
 
                 try
                 {
@@ -85,14 +86,13 @@ namespace TRTERPproject
 
                     if (recordExists > 0)
                     {
-                        // COUNTRYCODE bulundu, Edit formuna geç
-                        lanFormEdit LanFormEdit = new lanFormEdit(lanCode);
-                        LanFormEdit.Show();
+                        // UNITCODE bulundu, Edit formuna geç
+                        unitFormEdit UnitFormEdit = new unitFormEdit(unitCode);
+                        UnitFormEdit.Show();
                     }
                     else
                     {
-                        // COUNTRYCODE bulunamadı
-                        MessageBox.Show("Belirtilen Dil Kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Belirtilen Birim Kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
                 catch (Exception ex)
@@ -106,12 +106,15 @@ namespace TRTERPproject
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            string comCode = firmCodeTextBox.Text.Trim();
-            string lanCode = lanCodeTextBox.Text.Trim();
-            string lanText = lanTextBox.Text.Trim();
 
-            // 1. Veri Kontrolü
-            if (string.IsNullOrEmpty(comCode) || string.IsNullOrEmpty(lanCode) || string.IsNullOrEmpty(lanText))
+            string comCode = firmCodeTextBox.Text.Trim();
+            string unitCode = unitCodeTextBox.Text.Trim();
+            string unitText = unitTextBox.Text.Trim();
+            int isMainUnit = isMainUnitCheckBox.Checked ? 1 : 0; // Checkbox durumunu belirle
+            string mainUnitCode = mainUnitCodeTextBox.Text.Trim();
+
+
+            if (string.IsNullOrEmpty(comCode) || string.IsNullOrEmpty(unitCode) || string.IsNullOrEmpty(unitText))
             {
                 MessageBox.Show("Lütfen tüm alanları doldurun!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -123,55 +126,39 @@ namespace TRTERPproject
                 {
                     con.Open();
 
-                    // 2. COUNTRYCODE Kontrolü
-                    string checkCountryCodeQuery = "SELECT COUNT(*) FROM BSMGRTRTGEN002 WHERE LANCODE = @LANCODE";
-                    using (cmd = new SqlCommand(checkCountryCodeQuery, con))
+                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTGEN005 WHERE UNITCODE = @UNITCODE";
+                    using (cmd = new SqlCommand(checkQuery, con))
                     {
-                        cmd.Parameters.AddWithValue("@LANCODE", lanCode);
+                        cmd.Parameters.AddWithValue("@UNITCODE", unitCode);
 
-                        int countryCodeExists = (int)cmd.ExecuteScalar();
+                        int unitCodeExists = (int)cmd.ExecuteScalar();
 
-                        if (countryCodeExists > 0)
+                        if (unitCodeExists > 0)
                         {
-                            // COUNTRYCODE zaten mevcut
-                            MessageBox.Show("Bu Dil Kodu zaten mevcut. Lütfen başka bir Dil Kodu giriniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBox.Show("Bu Birim Kodu zaten mevcut. Lütfen başka bir Birim Kodu giriniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
                         }
                     }
 
-                    // 3. COMCODE Kontrolü
-                    string checkComCodeQuery = "SELECT COUNT(*) FROM BSMGRTRTGEN002 WHERE COMCODE = @COMCODE";
-                    using (cmd = new SqlCommand(checkComCodeQuery, con))
-                    {
-                        cmd.Parameters.AddWithValue("@COMCODE", comCode);
-
-                        int comCodeExists = (int)cmd.ExecuteScalar();
-
-                        if (comCodeExists == 0)
-                        {
-                            MessageBox.Show("Belirtilen COMCODE mevcut değil. Lütfen doğru bir COMCODE giriniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            return;
-                        }
-                    }
-
-                    // 4. Ekleme İşlemi
-                    string insertQuery = "INSERT INTO BSMGRTRTGEN002 (COMCODE, LANCODE, LANTEXT) VALUES (@COMCODE, @LANCODE, @LANTEXT)";
+                    string insertQuery = "INSERT INTO BSMGRTRTGEN005 (COMCODE, UNITCODE, UNITTEXT, ISMAINUNIT,MAINUNITCODE) VALUES (@COMCODE, @UNITCODE, @UNITTEXT, @ISMAINUNIT, @MAINUNITCODE)";
                     using (cmd = new SqlCommand(insertQuery, con))
                     {
                         cmd.Parameters.AddWithValue("@COMCODE", comCode);
-                        cmd.Parameters.AddWithValue("@COUNTRYCODE", lanCode);
-                        cmd.Parameters.AddWithValue("@COUNTRYTEXT", lanText);
+                        cmd.Parameters.AddWithValue("@UNITCODE", unitCode);
+                        cmd.Parameters.AddWithValue("@UNITTEXT", unitText);
+                        cmd.Parameters.AddWithValue("@ISMAINUNIT", isMainUnit);
+                        cmd.Parameters.AddWithValue("@MAINUNITCODE", mainUnitCode);
 
                         int rowsAffected = cmd.ExecuteNonQuery();
 
                         if (rowsAffected > 0)
                         {
                             MessageBox.Show("Kayıt başarıyla eklendi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                            // TextBox'ları temizle
                             firmCodeTextBox.Clear();
-                            lanCodeTextBox.Clear();
-                            lanTextBox.Clear();
+                            unitCodeTextBox.Clear();
+                            unitTextBox.Clear();
+                            isMainUnitCheckBox.Checked = false;
+                            mainUnitCodeTextBox.Clear();
                         }
                         else
                         {
@@ -184,18 +171,16 @@ namespace TRTERPproject
                     MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+
         }
 
         private void btnDel_Click(object sender, EventArgs e)
         {
+            string unitCode = unitCodeTextBox.Text.Trim();
 
-
-            string lanCode = lanCodeTextBox.Text.Trim();
-
-            // 1. Boş Veri Kontrolü
-            if (string.IsNullOrEmpty(lanCode))
+            if (string.IsNullOrEmpty(unitCode))
             {
-                MessageBox.Show("Lütfen bir Dil Kodu giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Lütfen bir UNITCODE giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -205,33 +190,28 @@ namespace TRTERPproject
                 {
                     con.Open();
 
-                    // 2. Kayıt Kontrolü
-                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTGEN002 WHERE LANCODE = @LANCODE";
+                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTGEN005 WHERE UNITCODE = @UNITCODE";
                     cmd = new SqlCommand(checkQuery, con);
-                    cmd.Parameters.AddWithValue("@LANCODE", lanCode);
+                    cmd.Parameters.AddWithValue("@UNITCODE", unitCode);
 
                     int recordExists = (int)cmd.ExecuteScalar();
 
                     if (recordExists == 0)
                     {
-                        // Kayıt bulunamadı
-                        MessageBox.Show("Belirtilen Dil Kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Belirtilen Birim Kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
 
-                    // 3. Silme İşlemi
-                    string deleteQuery = "DELETE FROM BSMGRTRTGEN002 WHERE LANCODE = @LANCODE";
+                    string deleteQuery = "DELETE FROM BSMGRTRTGEN005 WHERE UNITCODE = @UNITCODE";
                     cmd = new SqlCommand(deleteQuery, con);
-                    cmd.Parameters.AddWithValue("@LANCODE", lanCode);
+                    cmd.Parameters.AddWithValue("@UNITCODE", unitCode);
 
                     int rowsAffected = cmd.ExecuteNonQuery();
 
                     if (rowsAffected > 0)
                     {
                         MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        // TextBox'ı temizle
-                        lanCodeTextBox.Clear();
+                        unitCodeTextBox.Clear();
                     }
                     else
                     {
@@ -244,37 +224,6 @@ namespace TRTERPproject
                 }
             }
 
-
-
-        }
-
-        private void CountryDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void lanTextBox_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void lanCodeTextBox_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void firmCodeTextBox_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
         }
     }
 }
