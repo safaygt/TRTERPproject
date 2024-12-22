@@ -1,6 +1,7 @@
 ﻿namespace TRTERPproject
 {
 
+
     public partial class CardForm : Form
     {
         public CardForm()
@@ -74,7 +75,16 @@
             unitForm unitForm = new unitForm();
             unitForm.Show();
         }
+        
+        	private void MalLbl_Click(object sender, EventArgs e)
+		{
+			MatForm matForm = new MatForm();
+			matForm.Show();
+		}
+    
+    
     }
+
 }
 
 
