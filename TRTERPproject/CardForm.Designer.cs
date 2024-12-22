@@ -144,6 +144,7 @@
             sehirBut.TabIndex = 7;
             sehirBut.Text = "Şehir";
             sehirBut.UseVisualStyleBackColor = true;
+            sehirBut.Click += sehirBut_Click;
             // 
             // birimBut
             // 
