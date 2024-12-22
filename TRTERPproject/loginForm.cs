@@ -1,13 +1,10 @@
-﻿using System;
-using System.Data;
-using System.Data.SqlClient;
-using System.Windows.Forms;
-using System.Data.Sql;
+﻿using System.Data.SqlClient;
+using TRTERPproject.Helpers;
 namespace TRTERPproject
 {
 	public partial class LoginForm : Form
 	{
-		SqlConnection con;
+		SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString);
 		SqlDataReader reader;
 		SqlCommand cmd;
 		
@@ -15,7 +12,7 @@ namespace TRTERPproject
 		{
 			InitializeComponent();
 		}
-		private string connectionString = "Server=DESKTOP-U86MLBA;Database=TRTdb;Integrated Security=True;";
+		//private string connectionString = "Server=DESKTOP-U86MLBA;Database=TRTdb;Integrated Security=True;";
 
 		private void LoginBtn_Click(object sender, EventArgs e)
 		{
@@ -24,7 +21,7 @@ namespace TRTERPproject
 			string password = pwdBox.Text.Trim();
 
 
-			con = new SqlConnection(connectionString);
+			con = new SqlConnection(ConnectionHelper.ConnectionString);
 			cmd = new SqlCommand();
 			con.Open();
 			cmd.Connection = con;

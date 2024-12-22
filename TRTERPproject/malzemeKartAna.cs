@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Data;
 using System.Data.SqlClient;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
-
+using TRTERPproject.Helpers;
 namespace TRTERPproject
 {
 	public partial class malzemeKartAna : Form
 	{
-		SqlConnection con = new SqlConnection("Server=DESKTOP-U86MLBA;Database=TRTdb;Integrated Security=True;");
+		SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString);
 		SqlDataReader reader;
 		SqlCommand cmd;
 

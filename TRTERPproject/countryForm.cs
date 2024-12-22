@@ -1,35 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Data;
 using System.Data.SqlClient;
+using TRTERPproject.Helpers;
 
 namespace TRTERPproject
 {
-    public partial class countryForm : Form
+	public partial class countryForm : Form
     {
 
         SqlDataReader reader;
         SqlCommand cmd;
-        SqlConnection con;
+        SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString);
 
 		public countryForm()
         {
             InitializeComponent();
         }
-		private string connectionString = "Server=DESKTOP-U86MLBA;Database=TRTdb;Integrated Security=True;";
+		//private string connectionString = "Server=DESKTOP-U86MLBA;Database=TRTdb;Integrated Security=True;";
 
         
 		private void btnGet_Click(object sender, EventArgs e)
         {
 
             string query = "Select * from BSMGRTRTGEN003";
-           con = new SqlConnection(connectionString);
+           con = new SqlConnection(ConnectionHelper.ConnectionString);
             cmd = new SqlCommand();
             cmd.Connection = con;
             cmd.CommandText = query;
@@ -74,7 +67,7 @@ namespace TRTERPproject
                 return;
             }
 
-            using (con = new SqlConnection(connectionString))
+            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
             {
                 string query = "SELECT COUNT(*) FROM BSMGRTRTGEN003 WHERE COUNTRYCODE = @COUNTRYCODE";
                 cmd = new SqlCommand(query, con);
@@ -118,7 +111,7 @@ namespace TRTERPproject
                 return;
             }
 
-            using (con = new SqlConnection(connectionString))
+            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
             {
                 try
                 {
@@ -200,7 +193,7 @@ namespace TRTERPproject
                 return;
             }
 
-            using (con = new SqlConnection(connectionString))
+            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
 			{
                 try
                 {

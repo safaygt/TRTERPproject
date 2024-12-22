@@ -8,25 +8,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using TRTERPproject.Helpers;
 namespace TRTERPproject
 {
     public partial class countryFormEdit : Form
     {
         private string countryCode;
         SqlCommand cmd;
-		SqlConnection con;
+		SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString);
 		public countryFormEdit(string countryCode)
         {
             InitializeComponent();
             this.countryCode = countryCode;
         }
 
-		private string connectionString = "Server=DESKTOP-U86MLBA;Database=TRTdb;Integrated Security=True;";
+		//private string connectionString = "Server=DESKTOP-U86MLBA;Database=TRTdb;Integrated Security=True;";
 
 		private void btnSave_Click(object sender, EventArgs e)
 		{
-			using (SqlConnection con = new SqlConnection(connectionString))
+			using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
 			{
 				string query = "UPDATE BSMGRTRTGEN003 SET COMCODE = @COMCODE, COUNTRYTEXT = @COUNTRYTEXT WHERE COUNTRYCODE = @COUNTRYCODE";
 				cmd = new SqlCommand(query, con);
@@ -58,7 +58,7 @@ namespace TRTERPproject
 
 		private void countryFormEdit_Load(object sender, EventArgs e)
 		{
-			using (SqlConnection con = new SqlConnection(connectionString))
+			using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
 			{
 				string query = "SELECT COMCODE, COUNTRYTEXT FROM BSMGRTRTGEN003 WHERE COUNTRYCODE = @COUNTRYCODE";
 				cmd = new SqlCommand(query, con);
