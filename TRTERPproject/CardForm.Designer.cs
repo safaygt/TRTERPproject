@@ -172,6 +172,7 @@
 			dilBut.TabIndex = 9;
 			dilBut.Text = "Dil";
 			dilBut.UseVisualStyleBackColor = true;
+			dilBut.Click += dilBut_Click_1;
 			// 
 			// ControlLbl
 			// 
