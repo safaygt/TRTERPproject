@@ -15,15 +15,16 @@ namespace TRTERPproject
 		{
 			InitializeComponent();
 		}
+		private string connectionString = "Server=DESKTOP-U86MLBA;Database=TRTdb;Integrated Security=True;";
 
 		private void LoginBtn_Click(object sender, EventArgs e)
 		{
+			
 			string username = usernameBox.Text.Trim();
 			string password = pwdBox.Text.Trim();
 
-			//DESKTOP-U86MLBA ibonun server
 
-			con = new SqlConnection("Server=MSI\\SQLEXPRESS;Database=TRTdb;Integrated Security=True;");
+			con = new SqlConnection(connectionString);
 			cmd = new SqlCommand();
 			con.Open();
 			cmd.Connection = con;
