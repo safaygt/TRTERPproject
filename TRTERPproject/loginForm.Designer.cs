@@ -48,6 +48,7 @@
 			pwdBox.Name = "pwdBox";
 			pwdBox.Size = new Size(159, 27);
 			pwdBox.TabIndex = 1;
+			pwdBox.UseSystemPasswordChar = true;
 			// 
 			// label1
 			// 
