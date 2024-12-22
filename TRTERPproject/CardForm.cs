@@ -43,11 +43,25 @@
 			isMerkeziKart isMerkeziKart = new isMerkeziKart();
 			isMerkeziKart.Show();
 		}
-    private void sehirBut_Click(object sender, EventArgs e)
-        {
-            cityForm CityForm = new cityForm();
-            CityForm.Show();
-        }
+
+
+		private void sehirBut_Click_1(object sender, EventArgs e)
+		{
+			cityForm CityForm = new cityForm();
+			CityForm.Show();
+		}
+
+		private void UrunBut_Click(object sender, EventArgs e)
+		{
+			urunAgaciKart urunAgaciKart = new urunAgaciKart();
+			urunAgaciKart.Show();
+		}
+
+		private void RotaBut_Click(object sender, EventArgs e)
+		{
+			RotaKartAna rotaKartAna = new RotaKartAna();
+			rotaKartAna.Show();
+		}
 
 
         private void dilBut_Click(object sender, EventArgs e)
@@ -56,7 +70,6 @@
             LanForm.Show();
         }
     }
-
 	}
 
 

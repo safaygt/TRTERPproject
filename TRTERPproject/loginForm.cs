@@ -7,7 +7,7 @@ namespace TRTERPproject
 		SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString);
 		SqlDataReader reader;
 		SqlCommand cmd;
-		
+
 		public LoginForm()
 		{
 			InitializeComponent();
@@ -16,7 +16,7 @@ namespace TRTERPproject
 
 		private void LoginBtn_Click(object sender, EventArgs e)
 		{
-			
+
 			string username = usernameBox.Text.Trim();
 			string password = pwdBox.Text.Trim();
 
@@ -25,7 +25,7 @@ namespace TRTERPproject
 			cmd = new SqlCommand();
 			con.Open();
 			cmd.Connection = con;
-			cmd.CommandText = "Select * From login where userName= '"  + username + "' And password= '" + password + "'";
+			cmd.CommandText = "Select * From login where userName= '" + username + "' And password= '" + password + "'";
 			reader = cmd.ExecuteReader();
 			if (reader.Read())
 			{
