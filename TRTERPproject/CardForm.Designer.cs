@@ -32,7 +32,7 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CardForm));
 			Malcard = new Button();
 			MaliyetBut = new Button();
-			urunBut = new Button();
+			UrunBut = new Button();
 			RotaBut = new Button();
 			WorkBut = new Button();
 			ulkeBut = new Button();
@@ -77,16 +77,17 @@
 			MaliyetBut.UseVisualStyleBackColor = true;
 			MaliyetBut.Click += MaliyetBut_Click;
 			// 
-			// urunBut
+			// UrunBut
 			// 
-			urunBut.Image = (Image)resources.GetObject("urunBut.Image");
-			urunBut.ImageAlign = ContentAlignment.MiddleRight;
-			urunBut.Location = new Point(299, 199);
-			urunBut.Name = "urunBut";
-			urunBut.Size = new Size(180, 82);
-			urunBut.TabIndex = 2;
-			urunBut.Text = "Ürün\r\nAğacı";
-			urunBut.UseVisualStyleBackColor = true;
+			UrunBut.Image = (Image)resources.GetObject("UrunBut.Image");
+			UrunBut.ImageAlign = ContentAlignment.MiddleRight;
+			UrunBut.Location = new Point(299, 199);
+			UrunBut.Name = "UrunBut";
+			UrunBut.Size = new Size(180, 82);
+			UrunBut.TabIndex = 2;
+			UrunBut.Text = "Ürün\r\nAğacı";
+			UrunBut.UseVisualStyleBackColor = true;
+			UrunBut.Click += UrunBut_Click;
 			// 
 			// RotaBut
 			// 
@@ -98,6 +99,7 @@
 			RotaBut.TabIndex = 3;
 			RotaBut.Text = "Rotalar";
 			RotaBut.UseVisualStyleBackColor = true;
+			RotaBut.Click += RotaBut_Click;
 			// 
 			// WorkBut
 			// 
@@ -146,6 +148,7 @@
 			sehirBut.TabIndex = 7;
 			sehirBut.Text = "Şehir";
 			sehirBut.UseVisualStyleBackColor = true;
+			sehirBut.Click += sehirBut_Click_1;
 			// 
 			// birimBut
 			// 
@@ -291,7 +294,7 @@
 			Controls.Add(ulkeBut);
 			Controls.Add(WorkBut);
 			Controls.Add(RotaBut);
-			Controls.Add(urunBut);
+			Controls.Add(UrunBut);
 			Controls.Add(MaliyetBut);
 			Controls.Add(Malcard);
 			Name = "CardForm";
@@ -312,7 +315,7 @@
 
 		private Button Malcard;
 		private Button MaliyetBut;
-		private Button urunBut;
+		private Button UrunBut;
 		private Button RotaBut;
 		private Button WorkBut;
 		private Button ulkeBut;
