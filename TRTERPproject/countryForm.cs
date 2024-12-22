@@ -14,22 +14,22 @@ namespace TRTERPproject
     public partial class countryForm : Form
     {
 
-        SqlConnection con;
         SqlDataReader reader;
         SqlCommand cmd;
+        SqlConnection con;
 
-        public countryForm()
+		public countryForm()
         {
             InitializeComponent();
         }
+		private string connectionString = "Server=DESKTOP-U86MLBA;Database=TRTdb;Integrated Security=True;";
 
-
-
-        private void btnGet_Click(object sender, EventArgs e)
+        
+		private void btnGet_Click(object sender, EventArgs e)
         {
 
             string query = "Select * from BSMGRTRTGEN003";
-            con = new SqlConnection("Server=MSI\\SQLEXPRESS;Database=TRTdb;Integrated Security=True;");
+           con = new SqlConnection(connectionString);
             cmd = new SqlCommand();
             cmd.Connection = con;
             cmd.CommandText = query;
@@ -74,7 +74,7 @@ namespace TRTERPproject
                 return;
             }
 
-            using (con = new SqlConnection("Server=MSI\\SQLEXPRESS;Database=TRTdb;Integrated Security=True;"))
+            using (con = new SqlConnection(connectionString))
             {
                 string query = "SELECT COUNT(*) FROM BSMGRTRTGEN003 WHERE COUNTRYCODE = @COUNTRYCODE";
                 cmd = new SqlCommand(query, con);
@@ -118,7 +118,7 @@ namespace TRTERPproject
                 return;
             }
 
-            using (con = new SqlConnection("Server=MSI\\SQLEXPRESS;Database=TRTdb;Integrated Security=True;"))
+            using (con = new SqlConnection(connectionString))
             {
                 try
                 {
@@ -200,8 +200,8 @@ namespace TRTERPproject
                 return;
             }
 
-            using (con = new SqlConnection("Server=MSI\\SQLEXPRESS;Database=TRTdb;Integrated Security=True;"))
-            {
+            using (con = new SqlConnection(connectionString))
+			{
                 try
                 {
                     con.Open();
