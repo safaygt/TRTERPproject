@@ -1,26 +1,27 @@
 ﻿namespace TRTERPproject
 {
-    partial class CardForm
-    {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+	partial class CardForm
+	{
+		/// <summary>
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+		/// <summary>
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && (components != null))
+			{
+				components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
 
-        #region Windows Form Designer generated code
+		#region Windows Form Designer generated code
+
 
 
         /// <summary>
@@ -300,33 +301,35 @@
             PerformLayout();
         }
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
+
+
+		/// <summary>
+		/// Required method for Designer support - do not modify
+		/// the contents of this method with the code editor.
+		/// </summary>
 
 
 
-        #endregion
+		#endregion
 
-        private Button Malcard;
-        private Button MaliyetBut;
-        private Button urunBut;
-        private Button RotaBut;
-        private Button WorkBut;
-        private Button ulkeBut;
-        private Button firmaBut;
-        private Button sehirBut;
-        private Button birimBut;
-        private Button dilBut;
-        private Label ControlLbl;
-        private Label veriLbl;
-        private Button MalLbl;
-        private Button malmerLbl;
-        private Button urnAgLbl;
-        private Button RotaBtn;
-        private Button button5;
-        private Button oprBut;
-        private Button oprtipBut;
-    }
+		private Button Malcard;
+		private Button MaliyetBut;
+		private Button urunBut;
+		private Button RotaBut;
+		private Button WorkBut;
+		private Button ulkeBut;
+		private Button firmaBut;
+		private Button sehirBut;
+		private Button birimBut;
+		private Button dilBut;
+		private Label ControlLbl;
+		private Label veriLbl;
+		private Button MalLbl;
+		private Button malmerLbl;
+		private Button urnAgLbl;
+		private Button RotaBtn;
+		private Button button5;
+		private Button oprBut;
+		private Button oprtipBut;
+	}
 }
