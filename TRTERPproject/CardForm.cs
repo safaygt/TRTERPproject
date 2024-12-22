@@ -32,6 +32,12 @@
 			MaliyetKartAna maliyetKartAna = new MaliyetKartAna();
 			maliyetKartAna.Show();
 		}
+
+		private void WorkBut_Click(object sender, EventArgs e)
+		{
+			isMerkeziKart isMerkeziKart = new isMerkeziKart();
+			isMerkeziKart.Show();
+		}
 	}
 
 }

@@ -110,6 +110,7 @@
 			WorkBut.Text = "İş Merkezleri";
 			WorkBut.TextAlign = ContentAlignment.MiddleLeft;
 			WorkBut.UseVisualStyleBackColor = true;
+			WorkBut.Click += WorkBut_Click;
 			// 
 			// ulkeBut
 			// 
