@@ -1,6 +1,7 @@
 ﻿namespace TRTERPproject
 {
 
+
 	public partial class CardForm : Form
 	{
 		public CardForm()
@@ -38,6 +39,11 @@
 			isMerkeziKart isMerkeziKart = new isMerkeziKart();
 			isMerkeziKart.Show();
 		}
+    private void sehirBut_Click(object sender, EventArgs e)
+        {
+            cityForm CityForm = new cityForm();
+            CityForm.Show();
+        }
 	}
 
 }
