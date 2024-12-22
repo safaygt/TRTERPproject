@@ -17,10 +17,14 @@
 		}
 
 
-		private void firmaBut_Click_1(object sender, EventArgs e)
-		{
+        private void firmaBut_Click_1(object sender, EventArgs e)
+        {
+            firmForm FirmaForm = new firmForm();
+            FirmaForm.Show();
+        }
 
-		}
+
+	
 
 		private void ulkeBut_Click(object sender, EventArgs e)
 		{
@@ -44,6 +48,16 @@
             cityForm CityForm = new cityForm();
             CityForm.Show();
         }
+
+
+        private void dilBut_Click(object sender, EventArgs e)
+        {
+            lanForm LanForm = new lanForm();
+            LanForm.Show();
+        }
+    }
+
 	}
+
 
 }
