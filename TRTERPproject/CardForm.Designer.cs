@@ -206,6 +206,7 @@
 			MalLbl.TabIndex = 12;
 			MalLbl.Text = "Malzeme\r\nTipi";
 			MalLbl.UseVisualStyleBackColor = true;
+			MalLbl.Click += MalLbl_Click;
 			// 
 			// malmerLbl
 			// 

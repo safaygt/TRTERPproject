@@ -68,6 +68,12 @@
 			lanForm LanForm = new lanForm();
 			LanForm.Show();
 		}
+
+		private void MalLbl_Click(object sender, EventArgs e)
+		{
+			MatForm matForm = new MatForm();
+			matForm.Show();
+		}
 	}
 }
 
