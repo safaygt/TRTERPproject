@@ -49,6 +49,8 @@
 			addBut = new Button();
 			DelBut = new Button();
 			duzBut = new Button();
+			deletedlbl = new CheckBox();
+			checkboxpas = new CheckBox();
 			((System.ComponentModel.ISupportInitialize)malKartAna).BeginInit();
 			SuspendLayout();
 			// 
@@ -123,7 +125,7 @@
 			label7.AutoSize = true;
 			label7.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
 			label7.ForeColor = Color.GhostWhite;
-			label7.Location = new Point(256, 98);
+			label7.Location = new Point(265, 107);
 			label7.Name = "label7";
 			label7.Size = new Size(105, 23);
 			label7.TabIndex = 6;
@@ -134,7 +136,7 @@
 			label8.AutoSize = true;
 			label8.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
 			label8.ForeColor = Color.GhostWhite;
-			label8.Location = new Point(461, 98);
+			label8.Location = new Point(461, 107);
 			label8.Name = "label8";
 			label8.Size = new Size(80, 23);
 			label8.TabIndex = 7;
@@ -243,12 +245,38 @@
 			duzBut.Text = "Düzenle";
 			duzBut.UseVisualStyleBackColor = true;
 			// 
+			// deletedlbl
+			// 
+			deletedlbl.AutoSize = true;
+			deletedlbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
+			deletedlbl.ForeColor = SystemColors.Control;
+			deletedlbl.Location = new Point(635, 131);
+			deletedlbl.Name = "deletedlbl";
+			deletedlbl.Size = new Size(120, 29);
+			deletedlbl.TabIndex = 21;
+			deletedlbl.Text = "Silindi mi?";
+			deletedlbl.UseVisualStyleBackColor = true;
+			// 
+			// checkboxpas
+			// 
+			checkboxpas.AutoSize = true;
+			checkboxpas.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
+			checkboxpas.ForeColor = SystemColors.Control;
+			checkboxpas.Location = new Point(821, 131);
+			checkboxpas.Name = "checkboxpas";
+			checkboxpas.Size = new Size(109, 29);
+			checkboxpas.TabIndex = 22;
+			checkboxpas.Text = "Pasif mi?";
+			checkboxpas.UseVisualStyleBackColor = true;
+			// 
 			// malzemeKartAna
 			// 
 			AutoScaleDimensions = new SizeF(8F, 20F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.FromArgb(197, 110, 51);
 			ClientSize = new Size(1048, 635);
+			Controls.Add(checkboxpas);
+			Controls.Add(deletedlbl);
 			Controls.Add(duzBut);
 			Controls.Add(DelBut);
 			Controls.Add(addBut);
@@ -300,5 +328,7 @@
 		private Button addBut;
 		private Button DelBut;
 		private Button duzBut;
+		private CheckBox deletedlbl;
+		private CheckBox checkboxpas;
 	}
 }
