@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			comboBoxOprCode = new ComboBox();
+			urnAgaTipBox = new ComboBox();
 			label2 = new Label();
 			firmbox = new ComboBox();
 			checkboxpas = new CheckBox();
@@ -48,17 +48,17 @@
 			textBox1 = new TextBox();
 			label7 = new Label();
 			urnagamalztipbox = new ComboBox();
-			urnmalznumtip = new ComboBox();
+			urnmalznumBox = new ComboBox();
 			((System.ComponentModel.ISupportInitialize)urnAgcData).BeginInit();
 			SuspendLayout();
 			// 
-			// comboBoxOprCode
+			// urnAgaTipBox
 			// 
-			comboBoxOprCode.FormattingEnabled = true;
-			comboBoxOprCode.Location = new Point(18, 160);
-			comboBoxOprCode.Name = "comboBoxOprCode";
-			comboBoxOprCode.Size = new Size(186, 28);
-			comboBoxOprCode.TabIndex = 96;
+			urnAgaTipBox.FormattingEnabled = true;
+			urnAgaTipBox.Location = new Point(18, 160);
+			urnAgaTipBox.Name = "urnAgaTipBox";
+			urnAgaTipBox.Size = new Size(186, 28);
+			urnAgaTipBox.TabIndex = 96;
 			// 
 			// label2
 			// 
@@ -245,13 +245,13 @@
 			urnagamalztipbox.Size = new Size(186, 28);
 			urnagamalztipbox.TabIndex = 99;
 			// 
-			// urnmalznumtip
+			// urnmalznumBox
 			// 
-			urnmalznumtip.FormattingEnabled = true;
-			urnmalznumtip.Location = new Point(451, 77);
-			urnmalznumtip.Name = "urnmalznumtip";
-			urnmalznumtip.Size = new Size(186, 28);
-			urnmalznumtip.TabIndex = 100;
+			urnmalznumBox.FormattingEnabled = true;
+			urnmalznumBox.Location = new Point(451, 77);
+			urnmalznumBox.Name = "urnmalznumBox";
+			urnmalznumBox.Size = new Size(186, 28);
+			urnmalznumBox.TabIndex = 100;
 			// 
 			// urunAgaciKart
 			// 
@@ -259,11 +259,11 @@
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.FromArgb(197, 110, 51);
 			ClientSize = new Size(1071, 673);
-			Controls.Add(urnmalznumtip);
+			Controls.Add(urnmalznumBox);
 			Controls.Add(urnagamalztipbox);
 			Controls.Add(textBox1);
 			Controls.Add(label7);
-			Controls.Add(comboBoxOprCode);
+			Controls.Add(urnAgaTipBox);
 			Controls.Add(label2);
 			Controls.Add(firmbox);
 			Controls.Add(checkboxpas);
@@ -288,7 +288,7 @@
 		}
 
 		#endregion
-		private ComboBox comboBoxOprCode;
+		private ComboBox urnAgaTipBox;
 		private Label label2;
 		private ComboBox firmbox;
 		private CheckBox checkboxpas;
@@ -308,6 +308,6 @@
 		private TextBox textBox1;
 		private Label label7;
 		private ComboBox urnagamalztipbox;
-		private ComboBox urnmalznumtip;
+		private ComboBox urnmalznumBox;
 	}
 }
