@@ -221,6 +221,7 @@
 			malmerLbl.TabIndex = 13;
 			malmerLbl.Text = "Maliyet \r\nMerkezi";
 			malmerLbl.UseVisualStyleBackColor = true;
+			malmerLbl.Click += malmerLbl_Click_1;
 			// 
 			// urnAgLbl
 			// 
