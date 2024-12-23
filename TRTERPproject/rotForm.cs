@@ -1,23 +1,31 @@
-﻿using System.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using TRTERPproject.Helpers;
 
 namespace TRTERPproject
 {
-    public partial class MatForm : Form
+    public partial class rotForm : Form
     {
         SqlDataReader reader;
         SqlCommand cmd;
         SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString);
-        public MatForm()
+
+        public rotForm()
         {
             InitializeComponent();
         }
 
         private void btnGet_Click(object sender, EventArgs e)
         {
-
-            string query = "Select * from BSMGRTRTMAT001";
+            string query = "Select * from BSMGRTRTROT001";
             con = new SqlConnection(ConnectionHelper.ConnectionString);
             cmd = new SqlCommand();
             cmd.Connection = con;
@@ -37,7 +45,7 @@ namespace TRTERPproject
                 da.Fill(ds);
 
                 // DataGridView'e veri bağla
-                MatDataGridWiew.DataSource = ds.Tables[0];  // Veritabanından çekilen ilk tabloyu DataGridView'e bağla
+                RotDataGridWiew.DataSource = ds.Tables[0];  // Veritabanından çekilen ilk tabloyu DataGridView'e bağla
             }
             catch (Exception ex)
             {
@@ -53,19 +61,21 @@ namespace TRTERPproject
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            string materialCode = MatCodeBox.Text;
 
-            if (string.IsNullOrEmpty(materialCode))
+
+            string rotType = rotTypeTextBox.Text;
+
+            if (string.IsNullOrEmpty(rotType))
             {
-                MessageBox.Show("Lütfen bir Malzeme kodu giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Lütfen bir Rota Tipi giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             using (con = new SqlConnection(ConnectionHelper.ConnectionString))
             {
-                string query = "SELECT COUNT(*) FROM BSMGRTRTMAT001 WHERE DOCTYPE = @DOCTYPE";
+                string query = "SELECT COUNT(*) FROM BSMGRTRTROT001 WHERE DOCTYPE = @DOCTYPE";
                 cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@DOCTYPE", materialCode);
+                cmd.Parameters.AddWithValue("@DOCTYPE", rotType);
 
                 try
                 {
@@ -74,14 +84,13 @@ namespace TRTERPproject
 
                     if (recordExists > 0)
                     {
-                        // COUNTRYCODE bulundu, Edit formuna geç
-                        MatFormEdit matFormEdit = new MatFormEdit(materialCode);
-                        matFormEdit.Show();
+                        // UNITCODE bulundu, Edit formuna geç
+                        rotEditForm RotEditForm = new rotEditForm(rotType);
+                        RotEditForm.Show();
                     }
                     else
                     {
-                        // COUNTRYCODE bulunamadı
-                        MessageBox.Show("Belirtilen Malzeme kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Belirtilen Rota Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
                 catch (Exception ex)
@@ -89,17 +98,20 @@ namespace TRTERPproject
                     MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            string comCode = firmCodeTextBox.Text.Trim();
-            string materialCode = MatCodeBox.Text.Trim();
-            string materialText = MatNameBox.Text.Trim();
-            int isPassive = ispassiveBOX.Checked ? 1 : 0;
 
-            // 1. Veri Kontrolü
-            if (string.IsNullOrEmpty(comCode) || string.IsNullOrEmpty(materialCode) || string.IsNullOrEmpty(materialText))
+            string comCode = firmCodeTextBox.Text.Trim();
+            string docType = rotTypeTextBox.Text.Trim();
+            string docTypeStatement = rotTypeStatementTextBox.Text.Trim();
+            int isPassive = isPassiveBOX.Checked ? 1 : 0; // Checkbox durumunu belirle
+
+
+
+            if (string.IsNullOrEmpty(comCode) || string.IsNullOrEmpty(docType) || string.IsNullOrEmpty(docTypeStatement))
             {
                 MessageBox.Show("Lütfen tüm alanları doldurun!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -111,57 +123,39 @@ namespace TRTERPproject
                 {
                     con.Open();
 
-                    // 2. COUNTRYCODE Kontrolü
-                    string checkMatCodeQuery = "SELECT COUNT(*) FROM BSMGRTRTMAT001 WHERE DOCTYPE = @DOCTYPE";
-                    using (cmd = new SqlCommand(checkMatCodeQuery, con))
+                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTROT001 WHERE DOCTYPE = @DOCTYPE";
+                    using (cmd = new SqlCommand(checkQuery, con))
                     {
-                        cmd.Parameters.AddWithValue("@DOCTYPE", materialCode);
+                        cmd.Parameters.AddWithValue("@DOCTYPE", docType);
 
-                        int MatCodeExists = (int)cmd.ExecuteScalar();
+                        int unitCodeExists = (int)cmd.ExecuteScalar();
 
-                        if (MatCodeExists > 0)
+                        if (unitCodeExists > 0)
                         {
-                            // COUNTRYCODE zaten mevcut
-                            MessageBox.Show("Bu Materyal kodu zaten mevcut. Lütfen başka bir materyal kodu giriniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBox.Show("Bu Rota Tipi zaten mevcut. Lütfen başka bir Rota Tipi giriniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
                         }
                     }
 
-                    // 3. COMCODE Kontrolü
-                    string checkComCodeQuery = "SELECT COUNT(*) FROM BSMGRTRTMAT001 WHERE COMCODE = @COMCODE";
-                    using (cmd = new SqlCommand(checkComCodeQuery, con))
-                    {
-                        cmd.Parameters.AddWithValue("@COMCODE", comCode);
-
-                        int comCodeExists = (int)cmd.ExecuteScalar();
-
-                        if (comCodeExists == 0)
-                        {
-                            MessageBox.Show("Belirtilen COMCODE mevcut değil. Lütfen doğru bir COMCODE giriniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            return;
-                        }
-                    }
-
-                    // 4. Ekleme İşlemi
-                    string insertQuery = "INSERT INTO BSMGRTRTMAT001 (COMCODE, DOCTYPE, DOCTYPETEXT, ISPASSIVE) VALUES (@COMCODE, @DOCTYPE, @DOCTYPETEXT, @ISPASSIVE)";
+                    string insertQuery = "INSERT INTO BSMGRTRTROT001 (COMCODE, DOCTYPE, DOCTYPETEXT, ISPASSIVE) VALUES (@COMCODE, @DOCTYPE, @DOCTYPETEXT, @ISPASSIVE)";
                     using (cmd = new SqlCommand(insertQuery, con))
                     {
                         cmd.Parameters.AddWithValue("@COMCODE", comCode);
-                        cmd.Parameters.AddWithValue("@DOCTYPE", materialCode);
-                        cmd.Parameters.AddWithValue("@DOCTYPETEXT", materialText);
+                        cmd.Parameters.AddWithValue("@DOCTYPE", docType);
+                        cmd.Parameters.AddWithValue("@DOCTYPETEXT", docTypeStatement);
                         cmd.Parameters.AddWithValue("@ISPASSIVE", isPassive);
+
 
                         int rowsAffected = cmd.ExecuteNonQuery();
 
                         if (rowsAffected > 0)
                         {
                             MessageBox.Show("Kayıt başarıyla eklendi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                            // TextBox'ları temizle
                             firmCodeTextBox.Clear();
-                            MatCodeBox.Clear();
-                            MatNameBox.Clear();
-                            ispassiveBOX.Checked = false;
+                            rotTypeTextBox.Clear();
+                            rotTypeStatementTextBox.Clear();
+                            isPassiveBOX.Checked = false;
+
                         }
                         else
                         {
@@ -174,17 +168,17 @@ namespace TRTERPproject
                     MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+
         }
 
         private void btnDel_Click(object sender, EventArgs e)
         {
 
-            string MatCode = MatCodeBox.Text.Trim();
+            string docType = rotTypeTextBox.Text.Trim();
 
-            // 1. Boş Veri Kontrolü
-            if (string.IsNullOrEmpty(MatCode))
+            if (string.IsNullOrEmpty(docType))
             {
-                MessageBox.Show("Lütfen bir Malzeme Kodu giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Lütfen bir Rota Tipi giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -194,33 +188,28 @@ namespace TRTERPproject
                 {
                     con.Open();
 
-                    // 2. Kayıt Kontrolü
-                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTMAT001 WHERE DOCTYPE = @DOCTYPE";
+                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTROT001 WHERE DOCTYPE = @DOCTYPE";
                     cmd = new SqlCommand(checkQuery, con);
-                    cmd.Parameters.AddWithValue("@COUNTRYCODE", MatCode);
+                    cmd.Parameters.AddWithValue("@DOCTYPE", docType);
 
                     int recordExists = (int)cmd.ExecuteScalar();
 
                     if (recordExists == 0)
                     {
-                        // Kayıt bulunamadı
-                        MessageBox.Show("Belirtilen Malzeme kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Belirtilen Rota Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
 
-                    // 3. Silme İşlemi
-                    string deleteQuery = "DELETE FROM BSMGRTRTMAT001 WHERE DOCTYPE = @DOCTYPE";
+                    string deleteQuery = "DELETE FROM BSMGRTRTROT001 WHERE DOCTYPE = @DOCTYPE";
                     cmd = new SqlCommand(deleteQuery, con);
-                    cmd.Parameters.AddWithValue("@COUNTRYCODE", MatCode);
+                    cmd.Parameters.AddWithValue("@DOCTYPE", docType);
 
                     int rowsAffected = cmd.ExecuteNonQuery();
 
                     if (rowsAffected > 0)
                     {
                         MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        // TextBox'ı temizle
-                        MatCodeBox.Clear();
+                        rotTypeTextBoxş.Clear();
                     }
                     else
                     {
@@ -232,6 +221,8 @@ namespace TRTERPproject
                     MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+
+
         }
     }
 }
