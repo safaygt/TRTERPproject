@@ -82,13 +82,15 @@
 			MatForm matForm = new MatForm();
 			matForm.Show();
 		}
-    
-     private void malmerLbl_Click(object sender, EventArgs e)
-        {
-            costForm CostForm = new costForm(); 
-            CostForm.Show();
-        }
+
+
+		private void malmerLbl_Click_1(object sender, EventArgs e)
+		{
+			costForm CostForm = new costForm();
+			CostForm.Show();
+		}
 	}
+}
 
 
 
