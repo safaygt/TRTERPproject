@@ -2,6 +2,7 @@
 {
 
 
+
 	public partial class CardForm : Form
 	{
 		public CardForm()
@@ -81,8 +82,14 @@
 			MatForm matForm = new MatForm();
 			matForm.Show();
 		}
+    
+     private void malmerLbl_Click(object sender, EventArgs e)
+        {
+            costForm CostForm = new costForm(); 
+            CostForm.Show();
+        }
 	}
 
-}
+
 
 
