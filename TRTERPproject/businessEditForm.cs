@@ -12,14 +12,13 @@ using TRTERPproject.Helpers;
 
 namespace TRTERPproject
 {
-    public partial class costEditForm : Form
+    public partial class businessEditForm : Form
     {
 
         private string docType;
         SqlCommand cmd;
         SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString);
-
-        public costEditForm(string docType)
+        public businessEditForm(string docType)
         {
             InitializeComponent();
             this.docType = docType;
@@ -27,15 +26,14 @@ namespace TRTERPproject
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-
             using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
             {
-                string query = "UPDATE BSMGRTRTCCM001 SET COMCODE = @COMCODE, DOCTYPE = @DOCTYPE, DOCTYPETEXT = @DOCTYPETEXT, ISPASSIVE = @ISPASSIVE WHERE DOCTYPE = @NEWDOCTYPE";
+                string query = "UPDATE BSMGRTRTWCM001 SET COMCODE = @COMCODE, DOCTYPE = @DOCTYPE, DOCTYPETEXT = @DOCTYPETEXT, ISPASSIVE = @ISPASSIVE WHERE DOCTYPE = @NEWDOCTYPE";
                 cmd = new SqlCommand(query, con);
 
                 cmd.Parameters.AddWithValue("@COMCODE", firmCodeTextBox.Text.Trim());
-                cmd.Parameters.AddWithValue("@DOCTYPE", costTypeTextBox.Text.Trim());
-                cmd.Parameters.AddWithValue("@DOCTYPETEXT", costTypeStatementTextBox.Text.Trim());
+                cmd.Parameters.AddWithValue("@DOCTYPE", businessTypeTextBox.Text.Trim());
+                cmd.Parameters.AddWithValue("@DOCTYPETEXT", businessTypeStatementTextBox.Text.Trim());
                 cmd.Parameters.AddWithValue("@ISPASSIVE", isPassiveCheckBox.Checked ? 1 : 0);
                 cmd.Parameters.AddWithValue("@NEWDOCTYPE", docType);
 
@@ -73,14 +71,14 @@ namespace TRTERPproject
                     MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-
         }
 
-        private void costEditForm_Load(object sender, EventArgs e)
+        private void businessEditForm_Load(object sender, EventArgs e)
         {
+
             using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
             {
-                string query = "SELECT COMCODE, DOCTYPE, DOCTYPETEXT, ISPASSIVE FROM BSMGRTRTCCM001 WHERE DOCTYPE = @DOCTYPE";
+                string query = "SELECT COMCODE, DOCTYPE, DOCTYPETEXT, ISPASSIVE FROM BSMGRTRTWCM001 WHERE DOCTYPE = @DOCTYPE";
                 cmd = new SqlCommand(query, con);
                 cmd.Parameters.AddWithValue("@DOCTYPE", docType);
 
@@ -92,8 +90,8 @@ namespace TRTERPproject
                     if (reader.Read())
                     {
                         firmCodeTextBox.Text = reader["COMCODE"].ToString();
-                        costTypeTextBox.Text = docType;
-                        costTypeStatementTextBox.Text = reader["DOCTYPETEXT"].ToString();
+                        businessTypeTextBox.Text = docType;
+                        businessTypeStatementTextBox.Text = reader["DOCTYPETEXT"].ToString();
                         isPassiveCheckBox.Checked = Convert.ToBoolean(reader["ISPASSIVE"]);
 
 

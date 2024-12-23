@@ -50,7 +50,7 @@
             malmerLbl = new Button();
             urnAgLbl = new Button();
             RotaBtn = new Button();
-            button5 = new Button();
+            businessBtn = new Button();
             oprBut = new Button();
             oprtipBut = new Button();
             SuspendLayout();
@@ -234,6 +234,7 @@
             urnAgLbl.TabIndex = 14;
             urnAgLbl.Text = "Ürün Ağacı";
             urnAgLbl.UseVisualStyleBackColor = true;
+            urnAgLbl.Click += urnAgLbl_Click;
             // 
             // RotaBtn
             // 
@@ -247,16 +248,17 @@
             RotaBtn.UseVisualStyleBackColor = true;
             RotaBtn.Click += RotaBtn_Click;
             // 
-            // button5
+            // businessBtn
             // 
-            button5.Image = (Image)resources.GetObject("button5.Image");
-            button5.ImageAlign = ContentAlignment.MiddleRight;
-            button5.Location = new Point(875, 526);
-            button5.Name = "button5";
-            button5.Size = new Size(180, 82);
-            button5.TabIndex = 16;
-            button5.Text = "İş Merkezi\r\nTipi";
-            button5.UseVisualStyleBackColor = true;
+            businessBtn.Image = (Image)resources.GetObject("businessBtn.Image");
+            businessBtn.ImageAlign = ContentAlignment.MiddleRight;
+            businessBtn.Location = new Point(875, 526);
+            businessBtn.Name = "businessBtn";
+            businessBtn.Size = new Size(180, 82);
+            businessBtn.TabIndex = 16;
+            businessBtn.Text = "İş Merkezi\r\nTipi";
+            businessBtn.UseVisualStyleBackColor = true;
+            businessBtn.Click += button5_Click;
             // 
             // oprBut
             // 
@@ -280,6 +282,7 @@
             oprtipBut.TabIndex = 18;
             oprtipBut.Text = "Operasyon Tipi";
             oprtipBut.UseVisualStyleBackColor = true;
+            oprtipBut.Click += oprtipBut_Click;
             // 
             // CardForm
             // 
@@ -289,7 +292,7 @@
             ClientSize = new Size(1148, 742);
             Controls.Add(oprtipBut);
             Controls.Add(oprBut);
-            Controls.Add(button5);
+            Controls.Add(businessBtn);
             Controls.Add(RotaBtn);
             Controls.Add(urnAgLbl);
             Controls.Add(malmerLbl);
@@ -341,7 +344,7 @@
         private Button malmerLbl;
         private Button urnAgLbl;
         private Button RotaBtn;
-        private Button button5;
+        private Button businessBtn;
         private Button oprBut;
         private Button oprtipBut;
     }
