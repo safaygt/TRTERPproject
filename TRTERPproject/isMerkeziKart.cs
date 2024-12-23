@@ -18,7 +18,7 @@ namespace TRTERPproject
 			firmbox.Leave += (s, e) => ValidateAndAddData(firmbox, "COMCODE");
 			comboBoxIsMerTip.Leave += (s, e) => ValidateAndAddData(comboBoxIsMerTip, "WCMDOCTYPE");
 			//comboBoxOprCode.Leave += (s, e) => ValidateAndAddData(comboBoxOprCode, "operasyon");
-			//dilBox.Leave += (s, e) => ValidateAndAddData(dilBox, "dil");
+			dilBox.Leave += (s, e) => ValidateAndAddData(dilBox, "LANCODE");
 		}
 		private void LoadComboBoxData()
 		{
@@ -44,16 +44,16 @@ namespace TRTERPproject
 				comboBoxIsMerTip.DisplayMember = "WCMDOCTYPE";
 				comboBoxIsMerTip.ValueMember = "WCMDOCTYPE";
 				comboBoxIsMerTip.DropDownStyle = ComboBoxStyle.DropDown;
-				/*
-				string queryTtip = "SELECT DISTINCT SUPPLYTYPE FROM BSMGRTRTWCMHEAD"; // Tablo ve sütun adını kontrol edin
+				
+				string queryTtip = "SELECT DISTINCT LANCODE FROM BSMGRTRTGEN002"; // Tablo ve sütun adını kontrol edin
 				SqlDataAdapter daTtip = new SqlDataAdapter(queryTtip, con);
 				DataTable dtTtip = new DataTable();
 				daTtip.Fill(dtTtip);
-				comboBoxTedTip.DataSource = dtTtip;
-				comboBoxTedTip.DisplayMember = "SUPPLYTYPE";
-				comboBoxTedTip.ValueMember = "SUPPLYTYPE";
-				comboBoxTedTip.DropDownStyle = ComboBoxStyle.DropDown;
-				*/
+				dilBox.DataSource = dtTtip;
+				dilBox.DisplayMember = "LANCODE";
+				dilBox.ValueMember = "LANCODE";
+				dilBox.DropDownStyle = ComboBoxStyle.DropDown;
+				
 			}
 			catch (Exception ex)
 			{
@@ -103,16 +103,23 @@ namespace TRTERPproject
 			// SQL sorgusu
 			string query = @"
                         SELECT 
-							COMCODE AS 'Firma', 
-                            WCMDOCTYPE AS 'İş Merkezi Tipi', 
-                            WCMDOCNUM AS 'İş Merkezi  Numarası', 
-                            WCMDOCFROM AS 'Geçerlilik Başlangıç',
-							WCMDOCUNTIL	AS 'Geçerlilik Bitiş',
-                            MAINWCMDOCTYPE AS 'Ana İş Merkezi Tipi', 
-                            MAINWCMDOCNUM AS 'Ana İş Merkezi Numarası', 
-							ISDELETED AS 'Silindi mi?',
-							ISPASSIVE AS 'Pasif mi?'
-                        FROM BSMGRTRTWCMHEAD";
+							WH.COMCODE AS 'Firma', 
+                            WH.WCMDOCTYPE AS 'İş Merkezi Tipi', 
+                            WH.WCMDOCNUM AS 'İş Merkezi  Numarası', 
+                            WH.WCMDOCFROM AS 'Geçerlilik Başlangıç',
+							WH.WCMDOCUNTIL	AS 'Geçerlilik Bitiş',
+                            WH.MAINWCMDOCTYPE AS 'Ana İş Merkezi Tipi', 
+                            WH.MAINWCMDOCNUM AS 'Ana İş Merkezi Numarası', 
+							WH.ISDELETED AS 'Silindi mi?',
+							WH.ISPASSIVE AS 'Pasif mi?',
+							G2.LANCODE AS 'Dil'
+							FROM 
+							    BSMGRTRTWCMHEAD WH
+							INNER JOIN 
+							    BSMGRTRTWCMTEXT WT ON WH.WCMDOCNUM = WT.WCMDOCNUM
+							INNER JOIN 
+							    BSMGRTRTGEN002 G2 ON WT.LANCODE = G2.LANCODE";
+ 
 			con = new SqlConnection(ConnectionHelper.ConnectionString);
 			cmd = new SqlCommand();
 			cmd.Connection = con;

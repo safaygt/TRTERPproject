@@ -17,7 +17,7 @@ namespace TRTERPproject
 			// ComboBox leave eventlerini bağla
 			firmComboBox.Leave += (s, e) => ValidateAndAddData(firmComboBox, "COMCODE");
 			comboBoxMalMerTip.Leave += (s, e) => ValidateAndAddData(comboBoxMalMerTip, "CCMDOCTYPE");
-			//dilCombo.Leave += (s, e) => ValidateAndAddData(dilCombo, "");
+			dilCombo.Leave += (s, e) => ValidateAndAddData(dilCombo, "LANCODE");
 		}
 		private void LoadComboBoxData()
 		{
@@ -43,16 +43,16 @@ namespace TRTERPproject
 				comboBoxMalMerTip.DisplayMember = "CCMDOCTYPE";
 				comboBoxMalMerTip.ValueMember = "CCMDOCTYPE";
 				comboBoxMalMerTip.DropDownStyle = ComboBoxStyle.DropDown;
-				/*
-				string queryTtip = "SELECT DISTINCT SUPPLYTYPE FROM BSMGRTRTCCMHEAD"; // Tablo ve sütun adını kontrol edin
+				
+				string queryTtip = "SELECT DISTINCT LANCODE FROM BSMGRTRTGEN002"; // Tablo ve sütun adını kontrol edin
 				SqlDataAdapter daTtip = new SqlDataAdapter(queryTtip, con);
 				DataTable dtTtip = new DataTable();
 				daTtip.Fill(dtTtip);
-				comboBoxTedTip.DataSource = dtTtip;
-				comboBoxTedTip.DisplayMember = "SUPPLYTYPE";
-				comboBoxTedTip.ValueMember = "SUPPLYTYPE";
-				comboBoxTedTip.DropDownStyle = ComboBoxStyle.DropDown;
-				*/
+				dilCombo.DataSource = dtTtip;
+				dilCombo.DisplayMember = "LANCODE";
+				dilCombo.ValueMember = "LANCODE";
+				dilCombo.DropDownStyle = ComboBoxStyle.DropDown;
+				
 			}
 			catch (Exception ex)
 			{
@@ -102,16 +102,22 @@ namespace TRTERPproject
 			// SQL sorgusu
 			string query = @"
                         SELECT 
-							COMCODE AS 'Firma', 
-                            CCMDOCTYPE AS 'Maliyet Merkezi Tipi', 
-                            CCMDOCNUM AS 'Maliyet Merkezi  Numarası', 
-                            CCMDOCFROM AS 'Geçerlilik Başlangıç',
-							CCMDOCUNTIL	AS 'Geçerlilik Bitiş',
-                            MAINCCMDOCTYPE AS 'Ana Maliyet Merkezi Tipi', 
-                            MAINCCMDOCNUM AS 'Ana Maliyet Merkezi Numarası', 
-							ISDELETED AS 'Silindi mi?',
-							ISPASSIVE AS 'Pasif mi?'
-                        FROM BSMGRTRTCCMHEAD";
+							CH.COMCODE AS 'Firma', 
+                            CH.CCMDOCTYPE AS 'Maliyet Merkezi Tipi', 
+                            CH.CCMDOCNUM AS 'Maliyet Merkezi  Numarası', 
+                            CH.CCMDOCFROM AS 'Geçerlilik Başlangıç',
+							CH.CCMDOCUNTIL	AS 'Geçerlilik Bitiş',
+                            CH.MAINCCMDOCTYPE AS 'Ana Maliyet Merkezi Tipi', 
+                            CH.MAINCCMDOCNUM AS 'Ana Maliyet Merkezi Numarası', 
+							CH.ISDELETED AS 'Silindi mi?',
+							CH.ISPASSIVE AS 'Pasif mi?',
+							G2.LANCODE AS 'Dil'
+							FROM 
+							    BSMGRTRTCCMHEAD CH
+							INNER JOIN 
+							    BSMGRTRTCCMTEXT CT ON CH.CCMDOCNUM = CT.CCMDOCNUM
+							INNER JOIN 
+							    BSMGRTRTGEN002 G2 ON CT.LANCODE = G2.LANCODE";
 			con = new SqlConnection(ConnectionHelper.ConnectionString);
 			cmd = new SqlCommand();
 			cmd.Connection = con;

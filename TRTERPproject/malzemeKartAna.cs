@@ -19,7 +19,7 @@ namespace TRTERPproject
 			comboBoxMalzFirm.Leave += (s, e) => ValidateAndAddData(comboBoxMalzFirm, "COMCODE");
 			malzTipcombo.Leave += (s, e) => ValidateAndAddData(malzTipcombo, "MATDOCTYPE");
 			comboBoxTedTip.Leave += (s, e) => ValidateAndAddData(comboBoxTedTip, "SUPPLYTYPE");
-			comboBoxDil.Leave += (s, e) => ValidateAndAddData(comboBoxDil, "SUPPLYTYPE");
+			comboBoxDil.Leave += (s, e) => ValidateAndAddData(comboBoxDil, "LANCODE");
 		}
 		private void LoadComboBoxData()
 		{
@@ -54,6 +54,17 @@ namespace TRTERPproject
 				comboBoxTedTip.DisplayMember = "SUPPLYTYPE";
 				comboBoxTedTip.ValueMember = "SUPPLYTYPE";
 				comboBoxTedTip.DropDownStyle = ComboBoxStyle.DropDown;
+
+				string queryLtip = "SELECT DISTINCT LANCODE FROM BSMGRTRTGEN002"; // Tablo ve sütun adını kontrol edin
+				SqlDataAdapter daLtip = new SqlDataAdapter(queryLtip, con);
+				DataTable dtLtip = new DataTable();
+				daLtip.Fill(dtLtip); // Hata burada düzeltiliyor
+				comboBoxDil.DataSource = dtLtip;
+				comboBoxDil.DisplayMember = "LANCODE";
+				comboBoxDil.ValueMember = "LANCODE";
+				comboBoxDil.DropDownStyle = ComboBoxStyle.DropDown;
+
+
 			}
 			catch (Exception ex)
 			{

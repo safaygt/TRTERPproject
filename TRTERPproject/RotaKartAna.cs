@@ -17,7 +17,7 @@ namespace TRTERPproject
 			// ComboBox leave eventlerini bağla
 			firmbox.Leave += (s, e) => ValidateAndAddData(firmbox, "COMCODE");
 			comboBoxRotTip.Leave += (s, e) => ValidateAndAddData(comboBoxRotTip, "ROTDOCTYPE");
-			//dilCombo.Leave += (s, e) => ValidateAndAddData(dilCombo, "");
+			dilBox.Leave += (s, e) => ValidateAndAddData(dilBox, "LANCODE");
 		}
 		private void LoadComboBoxData()
 		{
@@ -43,16 +43,16 @@ namespace TRTERPproject
 				comboBoxRotTip.DisplayMember = "ROTDOCTYPE";
 				comboBoxRotTip.ValueMember = "ROTDOCTYPE";
 				comboBoxRotTip.DropDownStyle = ComboBoxStyle.DropDown;
-				/*
-				string queryTtip = "SELECT DISTINCT SUPPLYTYPE FROM BSMGRTRTCCMHEAD"; // Tablo ve sütun adını kontrol edin
+				
+				string queryTtip = "SELECT DISTINCT LANCODE FROM BSMGRTRTGEN002"; // Tablo ve sütun adını kontrol edin
 				SqlDataAdapter daTtip = new SqlDataAdapter(queryTtip, con);
 				DataTable dtTtip = new DataTable();
 				daTtip.Fill(dtTtip);
-				comboBoxTedTip.DataSource = dtTtip;
-				comboBoxTedTip.DisplayMember = "SUPPLYTYPE";
-				comboBoxTedTip.ValueMember = "SUPPLYTYPE";
-				comboBoxTedTip.DropDownStyle = ComboBoxStyle.DropDown;
-				*/
+				dilBox.DataSource = dtTtip;
+				dilBox.DisplayMember = "LANCODE";
+				dilBox.ValueMember = "LANCODE";
+				dilBox.DropDownStyle = ComboBoxStyle.DropDown;
+				
 			}
 			catch (Exception ex)
 			{
@@ -101,18 +101,26 @@ namespace TRTERPproject
 		{
 			string query = @"
                         SELECT 
-							COMCODE AS 'Firma', 
-                            ROTDOCTYPE AS 'Rota Tipi', 
-                            ROTDOCNUM AS 'Rota Numarası',
-							MATDOCTYPE AS 'Malzeme Tipi',
-							MATDOCNUM AS 'Malzeme Numarası',
-                            ROTDOCFROM AS 'Geçerlilik Başlangıç',
-							ROTDOCUNTIL	AS 'Geçerlilik Bitiş',
-							QUANTITY AS 'Miktar',
-							DRAWNUM AS 'Çizim Numarası',
-							ISDELETED AS 'Silindi mi?',
-							ISPASSIVE AS 'Pasif mi?'
-                        FROM BSMGRTRTROTHEAD";
+							RH.COMCODE AS 'Firma', 
+                            RH.ROTDOCTYPE AS 'Rota Tipi', 
+                            RH.ROTDOCNUM AS 'Rota Numarası',
+							RH.MATDOCTYPE AS 'Malzeme Tipi',
+							RH.MATDOCNUM AS 'Malzeme Numarası',
+                            RH.ROTDOCFROM AS 'Geçerlilik Başlangıç',
+							RH.ROTDOCUNTIL	AS 'Geçerlilik Bitiş',
+							RH.QUANTITY AS 'Miktar',
+							RH.DRAWNUM AS 'Çizim Numarası',
+							RH.ISDELETED AS 'Silindi mi?',
+							RH.ISPASSIVE AS 'Pasif mi?',
+							G2.LANCODE AS 'Dil'
+							FROM 
+							    BSMGRTRTROTHEAD RH
+							INNER JOIN 
+							    BSMGRTRTMATHEAD MH ON MH.MATDOCNUM = RH.MATDOCNUM
+							INNER JOIN
+								BSMGRTRTMATTEXT MT ON MH.MATDOCNUM = MT.MATDOCNUM
+							INNER JOIN 
+							    BSMGRTRTGEN002 G2 ON MT.LANCODE = G2.LANCODE";
 			con = new SqlConnection(ConnectionHelper.ConnectionString);
 			cmd = new SqlCommand();
 			cmd.Connection = con;
