@@ -159,8 +159,8 @@ namespace TRTERPproject
                     using (cmd = new SqlCommand(insertQuery, con))
                     {
                         cmd.Parameters.AddWithValue("@COMCODE", comCode);
-                        cmd.Parameters.AddWithValue("@COUNTRYCODE", lanCode);
-                        cmd.Parameters.AddWithValue("@COUNTRYTEXT", lanText);
+                        cmd.Parameters.AddWithValue("@LANCODE", lanCode);
+                        cmd.Parameters.AddWithValue("@LANTEXT", lanText);
 
                         int rowsAffected = cmd.ExecuteNonQuery();
 
