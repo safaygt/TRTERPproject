@@ -134,7 +134,7 @@ namespace TRTERPproject
 
                         if (unitCodeExists > 0)
                         {
-                            MessageBox.Show("Bu Malzeme Tipi zaten mevcut. Lütfen başka bir Malzeme Tipi giriniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBox.Show("Bu Maliyet Merkezi Tipi zaten mevcut. Lütfen başka bir Maliyet Merkezi Tipi giriniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
                         }
                     }
@@ -181,7 +181,7 @@ namespace TRTERPproject
 
             if (string.IsNullOrEmpty(docType))
             {
-                MessageBox.Show("Lütfen bir Malzeme Tipi giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Lütfen bir Maliyet Merkezi Tipi giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -199,7 +199,7 @@ namespace TRTERPproject
 
                     if (recordExists == 0)
                     {
-                        MessageBox.Show("Belirtilen Birim Kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Belirtilen Maliyet Merkezi Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
 
