@@ -22,6 +22,7 @@
 
         #region Windows Form Designer generated code
 
+
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
@@ -285,6 +286,7 @@
             PerformLayout();
         }
 
+
         #endregion
 
         private CheckBox checkboxpas;
@@ -294,7 +296,6 @@
 		private Button addBut;
 		private Button getBut;
 		private DataGridView maliyetdata;
-		private TextBox maltiptxtbox;
 		private TextBox bitistarTxtBox;
 		private TextBox basTarTxtBox;
 		private TextBox maliyTxtBox;
@@ -306,7 +307,8 @@
 		private Label label3;
 		private Label maliylbl;
 		private Label label1;
-		private ComboBox firmbox;
-		private ComboBox dilBox;
+		private ComboBox firmComboBox;
+		private ComboBox dilCombo;
+		private ComboBox comboBoxMalMerTip;
 	}
 }

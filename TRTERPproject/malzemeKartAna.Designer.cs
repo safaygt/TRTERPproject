@@ -35,15 +35,10 @@
 			label5 = new Label();
 			label6 = new Label();
 			label7 = new Label();
-			label8 = new Label();
-			firmatxtBox = new TextBox();
 			malNotxtBox = new TextBox();
 			malacicTxtBox = new TextBox();
 			basTarTxtBox = new TextBox();
 			bitistarTxtBox = new TextBox();
-			maltiptxtbox = new TextBox();
-			tedtiptextBox = new TextBox();
-			dilkodTxtBox = new TextBox();
 			malKartAna = new DataGridView();
 			getBut = new Button();
 			addBut = new Button();
@@ -51,6 +46,13 @@
 			duzBut = new Button();
 			deletedlbl = new CheckBox();
 			checkboxpas = new CheckBox();
+			comboBoxMalzFirm = new ComboBox();
+			malzTipcombo = new ComboBox();
+			label8 = new Label();
+			comboBoxDil = new ComboBox();
+			comboBoxTedTip = new ComboBox();
+			comboBoxUrnAgcRota = new ComboBox();
+			label9 = new Label();
 			((System.ComponentModel.ISupportInitialize)malKartAna).BeginInit();
 			SuspendLayout();
 			// 
@@ -92,7 +94,7 @@
 			label4.AutoSize = true;
 			label4.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
 			label4.ForeColor = Color.GhostWhite;
-			label4.Location = new Point(619, 30);
+			label4.Location = new Point(850, 95);
 			label4.Name = "label4";
 			label4.Size = new Size(165, 23);
 			label4.TabIndex = 3;
@@ -103,7 +105,7 @@
 			label5.AutoSize = true;
 			label5.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
 			label5.ForeColor = Color.GhostWhite;
-			label5.Location = new Point(821, 30);
+			label5.Location = new Point(871, 29);
 			label5.Name = "label5";
 			label5.Size = new Size(125, 23);
 			label5.TabIndex = 4;
@@ -114,7 +116,7 @@
 			label6.AutoSize = true;
 			label6.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
 			label6.ForeColor = Color.GhostWhite;
-			label6.Location = new Point(79, 107);
+			label6.Location = new Point(94, 107);
 			label6.Name = "label6";
 			label6.Size = new Size(118, 23);
 			label6.TabIndex = 5;
@@ -130,24 +132,6 @@
 			label7.Size = new Size(105, 23);
 			label7.TabIndex = 6;
 			label7.Text = "Tedarik Tipi";
-			// 
-			// label8
-			// 
-			label8.AutoSize = true;
-			label8.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
-			label8.ForeColor = Color.GhostWhite;
-			label8.Location = new Point(461, 107);
-			label8.Name = "label8";
-			label8.Size = new Size(80, 23);
-			label8.TabIndex = 7;
-			label8.Text = "Dil Kodu";
-			// 
-			// firmatxtBox
-			// 
-			firmatxtBox.Location = new Point(67, 56);
-			firmatxtBox.Name = "firmatxtBox";
-			firmatxtBox.Size = new Size(158, 27);
-			firmatxtBox.TabIndex = 8;
 			// 
 			// malNotxtBox
 			// 
@@ -165,38 +149,17 @@
 			// 
 			// basTarTxtBox
 			// 
-			basTarTxtBox.Location = new Point(619, 56);
+			basTarTxtBox.Location = new Point(850, 121);
 			basTarTxtBox.Name = "basTarTxtBox";
 			basTarTxtBox.Size = new Size(158, 27);
 			basTarTxtBox.TabIndex = 11;
 			// 
 			// bitistarTxtBox
 			// 
-			bitistarTxtBox.Location = new Point(800, 56);
+			bitistarTxtBox.Location = new Point(850, 55);
 			bitistarTxtBox.Name = "bitistarTxtBox";
 			bitistarTxtBox.Size = new Size(158, 27);
 			bitistarTxtBox.TabIndex = 12;
-			// 
-			// maltiptxtbox
-			// 
-			maltiptxtbox.Location = new Point(72, 133);
-			maltiptxtbox.Name = "maltiptxtbox";
-			maltiptxtbox.Size = new Size(153, 27);
-			maltiptxtbox.TabIndex = 13;
-			// 
-			// tedtiptextBox
-			// 
-			tedtiptextBox.Location = new Point(244, 133);
-			tedtiptextBox.Name = "tedtiptextBox";
-			tedtiptextBox.Size = new Size(158, 27);
-			tedtiptextBox.TabIndex = 14;
-			// 
-			// dilkodTxtBox
-			// 
-			dilkodTxtBox.Location = new Point(424, 133);
-			dilkodTxtBox.Name = "dilkodTxtBox";
-			dilkodTxtBox.Size = new Size(158, 27);
-			dilkodTxtBox.TabIndex = 15;
 			// 
 			// malKartAna
 			// 
@@ -250,7 +213,7 @@
 			deletedlbl.AutoSize = true;
 			deletedlbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
 			deletedlbl.ForeColor = SystemColors.Control;
-			deletedlbl.Location = new Point(635, 131);
+			deletedlbl.Location = new Point(864, 214);
 			deletedlbl.Name = "deletedlbl";
 			deletedlbl.Size = new Size(120, 29);
 			deletedlbl.TabIndex = 21;
@@ -262,12 +225,75 @@
 			checkboxpas.AutoSize = true;
 			checkboxpas.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
 			checkboxpas.ForeColor = SystemColors.Control;
-			checkboxpas.Location = new Point(821, 131);
+			checkboxpas.Location = new Point(864, 179);
 			checkboxpas.Name = "checkboxpas";
 			checkboxpas.Size = new Size(109, 29);
 			checkboxpas.TabIndex = 22;
 			checkboxpas.Text = "Pasif mi?";
 			checkboxpas.UseVisualStyleBackColor = true;
+			// 
+			// comboBoxMalzFirm
+			// 
+			comboBoxMalzFirm.FormattingEnabled = true;
+			comboBoxMalzFirm.Location = new Point(72, 55);
+			comboBoxMalzFirm.Name = "comboBoxMalzFirm";
+			comboBoxMalzFirm.Size = new Size(151, 28);
+			comboBoxMalzFirm.TabIndex = 23;
+			comboBoxMalzFirm.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
+			// 
+			// malzTipcombo
+			// 
+			malzTipcombo.FormattingEnabled = true;
+			malzTipcombo.Location = new Point(72, 133);
+			malzTipcombo.Name = "malzTipcombo";
+			malzTipcombo.Size = new Size(151, 28);
+			malzTipcombo.TabIndex = 24;
+			// 
+			// label8
+			// 
+			label8.AutoSize = true;
+			label8.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
+			label8.ForeColor = Color.GhostWhite;
+			label8.Location = new Point(462, 107);
+			label8.Name = "label8";
+			label8.Size = new Size(80, 23);
+			label8.TabIndex = 25;
+			label8.Text = "Dil Kodu";
+			// 
+			// comboBoxDil
+			// 
+			comboBoxDil.FormattingEnabled = true;
+			comboBoxDil.Location = new Point(424, 133);
+			comboBoxDil.Name = "comboBoxDil";
+			comboBoxDil.Size = new Size(173, 28);
+			comboBoxDil.TabIndex = 26;
+			// 
+			// comboBoxTedTip
+			// 
+			comboBoxTedTip.FormattingEnabled = true;
+			comboBoxTedTip.Location = new Point(244, 133);
+			comboBoxTedTip.Name = "comboBoxTedTip";
+			comboBoxTedTip.Size = new Size(151, 28);
+			comboBoxTedTip.TabIndex = 27;
+			// 
+			// comboBoxUrnAgcRota
+			// 
+			comboBoxUrnAgcRota.FormattingEnabled = true;
+			comboBoxUrnAgcRota.Location = new Point(636, 56);
+			comboBoxUrnAgcRota.Name = "comboBoxUrnAgcRota";
+			comboBoxUrnAgcRota.Size = new Size(173, 28);
+			comboBoxUrnAgcRota.TabIndex = 29;
+			// 
+			// label9
+			// 
+			label9.AutoSize = true;
+			label9.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
+			label9.ForeColor = Color.GhostWhite;
+			label9.Location = new Point(650, 29);
+			label9.Name = "label9";
+			label9.Size = new Size(141, 23);
+			label9.TabIndex = 28;
+			label9.Text = "Ürün Ağacı Rota";
 			// 
 			// malzemeKartAna
 			// 
@@ -275,6 +301,13 @@
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.FromArgb(197, 110, 51);
 			ClientSize = new Size(1048, 635);
+			Controls.Add(comboBoxUrnAgcRota);
+			Controls.Add(label9);
+			Controls.Add(comboBoxTedTip);
+			Controls.Add(comboBoxDil);
+			Controls.Add(label8);
+			Controls.Add(malzTipcombo);
+			Controls.Add(comboBoxMalzFirm);
 			Controls.Add(checkboxpas);
 			Controls.Add(deletedlbl);
 			Controls.Add(duzBut);
@@ -282,15 +315,10 @@
 			Controls.Add(addBut);
 			Controls.Add(getBut);
 			Controls.Add(malKartAna);
-			Controls.Add(dilkodTxtBox);
-			Controls.Add(tedtiptextBox);
-			Controls.Add(maltiptxtbox);
 			Controls.Add(bitistarTxtBox);
 			Controls.Add(basTarTxtBox);
 			Controls.Add(malacicTxtBox);
 			Controls.Add(malNotxtBox);
-			Controls.Add(firmatxtBox);
-			Controls.Add(label8);
 			Controls.Add(label7);
 			Controls.Add(label6);
 			Controls.Add(label5);
@@ -314,15 +342,10 @@
 		private Label label5;
 		private Label label6;
 		private Label label7;
-		private Label label8;
-		private TextBox firmatxtBox;
 		private TextBox malNotxtBox;
 		private TextBox malacicTxtBox;
 		private TextBox basTarTxtBox;
 		private TextBox bitistarTxtBox;
-		private TextBox maltiptxtbox;
-		private TextBox tedtiptextBox;
-		private TextBox dilkodTxtBox;
 		private DataGridView malKartAna;
 		private Button getBut;
 		private Button addBut;
@@ -330,5 +353,12 @@
 		private Button duzBut;
 		private CheckBox deletedlbl;
 		private CheckBox checkboxpas;
+		private ComboBox comboBoxMalzFirm;
+		private ComboBox malzTipcombo;
+		private Label label8;
+		private ComboBox comboBoxDil;
+		private ComboBox comboBoxTedTip;
+		private ComboBox comboBoxUrnAgcRota;
+		private Label label9;
 	}
 }

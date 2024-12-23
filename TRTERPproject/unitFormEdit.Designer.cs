@@ -66,6 +66,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label2.ForeColor = SystemColors.ControlLightLight;
             label2.Location = new Point(213, 88);
             label2.Name = "label2";
             label2.Size = new Size(88, 20);
@@ -76,6 +77,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label3.ForeColor = SystemColors.ControlLightLight;
             label3.Location = new Point(385, 88);
             label3.Name = "label3";
             label3.Size = new Size(47, 20);
@@ -86,6 +88,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label1.ForeColor = SystemColors.ControlLightLight;
             label1.Location = new Point(28, 87);
             label1.Name = "label1";
             label1.Size = new Size(90, 20);
@@ -106,6 +109,7 @@
             // 
             isMainUnitCheckBox.AutoSize = true;
             isMainUnitCheckBox.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            isMainUnitCheckBox.ForeColor = SystemColors.ControlLightLight;
             isMainUnitCheckBox.Location = new Point(552, 142);
             isMainUnitCheckBox.Name = "isMainUnitCheckBox";
             isMainUnitCheckBox.Size = new Size(130, 24);
@@ -126,6 +130,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label5.ForeColor = SystemColors.ControlLightLight;
             label5.Location = new Point(28, 213);
             label5.Name = "label5";
             label5.Size = new Size(120, 20);

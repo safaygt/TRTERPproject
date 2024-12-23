@@ -37,7 +37,6 @@
 			addBut = new Button();
 			getBut = new Button();
 			ismerkData = new DataGridView();
-			işmerkzitiptxtbox = new TextBox();
 			bitistarTxtBox = new TextBox();
 			basTarTxtBox = new TextBox();
 			ismerktipTxtBox = new TextBox();
@@ -53,6 +52,7 @@
 			label2 = new Label();
 			label7 = new Label();
 			operasTxtBox = new TextBox();
+			comboBoxIsMerTip = new ComboBox();
 			((System.ComponentModel.ISupportInitialize)ismerkData).BeginInit();
 			SuspendLayout();
 			// 
@@ -143,13 +143,6 @@
 			ismerkData.Size = new Size(1024, 337);
 			ismerkData.TabIndex = 60;
 			// 
-			// işmerkzitiptxtbox
-			// 
-			işmerkzitiptxtbox.Location = new Point(229, 51);
-			işmerkzitiptxtbox.Name = "işmerkzitiptxtbox";
-			işmerkzitiptxtbox.Size = new Size(173, 27);
-			işmerkzitiptxtbox.TabIndex = 59;
-			// 
 			// bitistarTxtBox
 			// 
 			bitistarTxtBox.Location = new Point(880, 137);
@@ -194,7 +187,7 @@
 			label6.AutoSize = true;
 			label6.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
 			label6.ForeColor = Color.GhostWhite;
-			label6.Location = new Point(230, 25);
+			label6.Location = new Point(246, 23);
 			label6.Name = "label6";
 			label6.Size = new Size(127, 23);
 			label6.TabIndex = 53;
@@ -292,12 +285,21 @@
 			operasTxtBox.Size = new Size(181, 27);
 			operasTxtBox.TabIndex = 73;
 			// 
+			// comboBoxIsMerTip
+			// 
+			comboBoxIsMerTip.FormattingEnabled = true;
+			comboBoxIsMerTip.Location = new Point(230, 49);
+			comboBoxIsMerTip.Name = "comboBoxIsMerTip";
+			comboBoxIsMerTip.Size = new Size(167, 28);
+			comboBoxIsMerTip.TabIndex = 74;
+			// 
 			// isMerkeziKart
 			// 
 			AutoScaleDimensions = new SizeF(8F, 20F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.FromArgb(197, 110, 51);
 			ClientSize = new Size(1102, 654);
+			Controls.Add(comboBoxIsMerTip);
 			Controls.Add(operasTxtBox);
 			Controls.Add(label7);
 			Controls.Add(comboBoxOprCode);
@@ -311,7 +313,6 @@
 			Controls.Add(addBut);
 			Controls.Add(getBut);
 			Controls.Add(ismerkData);
-			Controls.Add(işmerkzitiptxtbox);
 			Controls.Add(bitistarTxtBox);
 			Controls.Add(basTarTxtBox);
 			Controls.Add(ismerktipTxtBox);
@@ -341,7 +342,6 @@
 		private Button addBut;
 		private Button getBut;
 		private DataGridView ismerkData;
-		private TextBox işmerkzitiptxtbox;
 		private TextBox bitistarTxtBox;
 		private TextBox basTarTxtBox;
 		private TextBox ismerktipTxtBox;
@@ -357,5 +357,6 @@
 		private Label label2;
 		private Label label7;
 		private TextBox operasTxtBox;
+		private ComboBox comboBoxIsMerTip;
 	}
 }
