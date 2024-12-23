@@ -88,7 +88,14 @@
             costForm CostForm = new costForm(); 
             CostForm.Show();
         }
+   
+   private void urnAgLbl_Click(object sender, EventArgs e)
+        {
+            prodTree prodTree = new prodTree();
+            prodTree.Show();
+        }
 	}
+
 
 
 
