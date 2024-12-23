@@ -37,7 +37,6 @@
 			addBut = new Button();
 			getBut = new Button();
 			RotaData = new DataGridView();
-			maltiptxtbox = new TextBox();
 			bitistarTxtBox = new TextBox();
 			basTarTxtBox = new TextBox();
 			maliyTxtBox = new TextBox();
@@ -49,6 +48,7 @@
 			label3 = new Label();
 			maliylbl = new Label();
 			label1 = new Label();
+			comboBoxRotTip = new ComboBox();
 			((System.ComponentModel.ISupportInitialize)RotaData).BeginInit();
 			SuspendLayout();
 			// 
@@ -139,13 +139,6 @@
 			RotaData.Size = new Size(1024, 337);
 			RotaData.TabIndex = 60;
 			// 
-			// maltiptxtbox
-			// 
-			maltiptxtbox.Location = new Point(251, 85);
-			maltiptxtbox.Name = "maltiptxtbox";
-			maltiptxtbox.Size = new Size(173, 27);
-			maltiptxtbox.TabIndex = 59;
-			// 
 			// bitistarTxtBox
 			// 
 			bitistarTxtBox.Location = new Point(907, 162);
@@ -190,7 +183,7 @@
 			label6.AutoSize = true;
 			label6.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
 			label6.ForeColor = Color.GhostWhite;
-			label6.Location = new Point(276, 59);
+			label6.Location = new Point(287, 59);
 			label6.Name = "label6";
 			label6.Size = new Size(83, 23);
 			label6.TabIndex = 53;
@@ -251,12 +244,21 @@
 			label1.TabIndex = 48;
 			label1.Text = "Firma Kodu";
 			// 
+			// comboBoxRotTip
+			// 
+			comboBoxRotTip.FormattingEnabled = true;
+			comboBoxRotTip.Location = new Point(253, 85);
+			comboBoxRotTip.Name = "comboBoxRotTip";
+			comboBoxRotTip.Size = new Size(174, 28);
+			comboBoxRotTip.TabIndex = 69;
+			// 
 			// RotaKartAna
 			// 
 			AutoScaleDimensions = new SizeF(8F, 20F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.FromArgb(197, 110, 51);
 			ClientSize = new Size(1144, 710);
+			Controls.Add(comboBoxRotTip);
 			Controls.Add(dilBox);
 			Controls.Add(firmbox);
 			Controls.Add(checkboxpas);
@@ -266,7 +268,6 @@
 			Controls.Add(addBut);
 			Controls.Add(getBut);
 			Controls.Add(RotaData);
-			Controls.Add(maltiptxtbox);
 			Controls.Add(bitistarTxtBox);
 			Controls.Add(basTarTxtBox);
 			Controls.Add(maliyTxtBox);
@@ -296,7 +297,6 @@
 		private Button addBut;
 		private Button getBut;
 		private DataGridView RotaData;
-		private TextBox maltiptxtbox;
 		private TextBox bitistarTxtBox;
 		private TextBox basTarTxtBox;
 		private TextBox maliyTxtBox;
@@ -308,5 +308,6 @@
 		private Label label3;
 		private Label maliylbl;
 		private Label label1;
+		private ComboBox comboBoxRotTip;
 	}
 }
