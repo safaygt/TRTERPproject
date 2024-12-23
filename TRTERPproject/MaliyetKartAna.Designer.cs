@@ -35,7 +35,6 @@
 			addBut = new Button();
 			getBut = new Button();
 			maliyetdata = new DataGridView();
-			maltiptxtbox = new TextBox();
 			bitistarTxtBox = new TextBox();
 			basTarTxtBox = new TextBox();
 			maliyTxtBox = new TextBox();
@@ -47,8 +46,9 @@
 			label3 = new Label();
 			maliylbl = new Label();
 			label1 = new Label();
-			firmbox = new ComboBox();
-			dilBox = new ComboBox();
+			firmComboBox = new ComboBox();
+			dilCombo = new ComboBox();
+			comboBoxMalMerTip = new ComboBox();
 			((System.ComponentModel.ISupportInitialize)maliyetdata).BeginInit();
 			SuspendLayout();
 			// 
@@ -122,13 +122,6 @@
 			maliyetdata.RowTemplate.Height = 29;
 			maliyetdata.Size = new Size(1024, 337);
 			maliyetdata.TabIndex = 39;
-			// 
-			// maltiptxtbox
-			// 
-			maltiptxtbox.Location = new Point(208, 50);
-			maltiptxtbox.Name = "maltiptxtbox";
-			maltiptxtbox.Size = new Size(173, 27);
-			maltiptxtbox.TabIndex = 36;
 			// 
 			// bitistarTxtBox
 			// 
@@ -235,21 +228,29 @@
 			label1.TabIndex = 23;
 			label1.Text = "Firma Kodu";
 			// 
-			// firmbox
+			// firmComboBox
 			// 
-			firmbox.FormattingEnabled = true;
-			firmbox.Location = new Point(14, 49);
-			firmbox.Name = "firmbox";
-			firmbox.Size = new Size(167, 28);
-			firmbox.TabIndex = 46;
+			firmComboBox.FormattingEnabled = true;
+			firmComboBox.Location = new Point(14, 49);
+			firmComboBox.Name = "firmComboBox";
+			firmComboBox.Size = new Size(167, 28);
+			firmComboBox.TabIndex = 46;
 			// 
-			// dilBox
+			// dilCombo
 			// 
-			dilBox.FormattingEnabled = true;
-			dilBox.Location = new Point(635, 49);
-			dilBox.Name = "dilBox";
-			dilBox.Size = new Size(174, 28);
-			dilBox.TabIndex = 47;
+			dilCombo.FormattingEnabled = true;
+			dilCombo.Location = new Point(635, 49);
+			dilCombo.Name = "dilCombo";
+			dilCombo.Size = new Size(174, 28);
+			dilCombo.TabIndex = 47;
+			// 
+			// comboBoxMalMerTip
+			// 
+			comboBoxMalMerTip.FormattingEnabled = true;
+			comboBoxMalMerTip.Location = new Point(209, 49);
+			comboBoxMalMerTip.Name = "comboBoxMalMerTip";
+			comboBoxMalMerTip.Size = new Size(175, 28);
+			comboBoxMalMerTip.TabIndex = 48;
 			// 
 			// MaliyetKartAna
 			// 
@@ -257,8 +258,9 @@
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.FromArgb(197, 110, 51);
 			ClientSize = new Size(1059, 637);
-			Controls.Add(dilBox);
-			Controls.Add(firmbox);
+			Controls.Add(comboBoxMalMerTip);
+			Controls.Add(dilCombo);
+			Controls.Add(firmComboBox);
 			Controls.Add(checkboxpas);
 			Controls.Add(deletedlbl);
 			Controls.Add(duzBut);
@@ -266,7 +268,6 @@
 			Controls.Add(addBut);
 			Controls.Add(getBut);
 			Controls.Add(maliyetdata);
-			Controls.Add(maltiptxtbox);
 			Controls.Add(bitistarTxtBox);
 			Controls.Add(basTarTxtBox);
 			Controls.Add(maliyTxtBox);
@@ -294,7 +295,6 @@
 		private Button addBut;
 		private Button getBut;
 		private DataGridView maliyetdata;
-		private TextBox maltiptxtbox;
 		private TextBox bitistarTxtBox;
 		private TextBox basTarTxtBox;
 		private TextBox maliyTxtBox;
@@ -306,7 +306,8 @@
 		private Label label3;
 		private Label maliylbl;
 		private Label label1;
-		private ComboBox firmbox;
-		private ComboBox dilBox;
+		private ComboBox firmComboBox;
+		private ComboBox dilCombo;
+		private ComboBox comboBoxMalMerTip;
 	}
 }
