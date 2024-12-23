@@ -233,6 +233,7 @@
 			urnAgLbl.TabIndex = 14;
 			urnAgLbl.Text = "Ürün Ağacı";
 			urnAgLbl.UseVisualStyleBackColor = true;
+			urnAgLbl.Click += urnAgLbl_Click_1;
 			// 
 			// RotaBtn
 			// 
