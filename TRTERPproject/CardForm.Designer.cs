@@ -275,6 +275,7 @@
             oprtipBut.TabIndex = 18;
             oprtipBut.Text = "Operasyon Tipi";
             oprtipBut.UseVisualStyleBackColor = true;
+            oprtipBut.Click += oprtipBut_Click;
             // 
             // CardForm
             // 
