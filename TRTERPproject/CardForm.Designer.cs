@@ -208,6 +208,7 @@
             MalLbl.TabIndex = 12;
             MalLbl.Text = "Malzeme\r\nTipi";
             MalLbl.UseVisualStyleBackColor = true;
+            MalLbl.Click += MalLbl_Click_1;
             // 
             // malmerLbl
             // 
@@ -230,6 +231,7 @@
             urnAgLbl.TabIndex = 14;
             urnAgLbl.Text = "Ürün Ağacı";
             urnAgLbl.UseVisualStyleBackColor = true;
+            urnAgLbl.Click += urnAgLbl_Click;
             // 
             // RotaBtn
             // 

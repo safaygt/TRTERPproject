@@ -75,14 +75,20 @@
             unitForm unitForm = new unitForm();
             unitForm.Show();
         }
-        
-        	private void MalLbl_Click(object sender, EventArgs e)
-		{
-			MatForm matForm = new MatForm();
-			matForm.Show();
-		}
-    
-    
+
+
+
+        private void MalLbl_Click_1(object sender, EventArgs e)
+        {
+            MatForm matForm = new MatForm();
+            matForm.Show();
+        }
+
+        private void urnAgLbl_Click(object sender, EventArgs e)
+        {
+            prodTree prodTree = new prodTree();
+            prodTree.Show();
+        }
     }
 
 }
