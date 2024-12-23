@@ -1,6 +1,6 @@
 ﻿namespace TRTERPproject
 {
-    partial class costEditForm
+    partial class businessEditForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,134 +28,134 @@
         /// </summary>
         private void InitializeComponent()
         {
+            btnSave = new Button();
             isPassiveCheckBox = new CheckBox();
-            costTypeStatementTextBox = new TextBox();
-            costTypeTextBox = new TextBox();
+            businessTypeStatementTextBox = new TextBox();
+            businessTypeTextBox = new TextBox();
             firmCodeTextBox = new TextBox();
             label2 = new Label();
             label4 = new Label();
             label3 = new Label();
             label1 = new Label();
-            btnSave = new Button();
             SuspendLayout();
+            // 
+            // btnSave
+            // 
+            btnSave.Location = new Point(497, 244);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(125, 29);
+            btnSave.TabIndex = 40;
+            btnSave.Text = "Kaydet";
+            btnSave.UseVisualStyleBackColor = true;
+            btnSave.Click += btnSave_Click;
             // 
             // isPassiveCheckBox
             // 
             isPassiveCheckBox.AutoSize = true;
             isPassiveCheckBox.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             isPassiveCheckBox.ForeColor = SystemColors.ControlLightLight;
-            isPassiveCheckBox.Location = new Point(705, 148);
+            isPassiveCheckBox.Location = new Point(674, 116);
             isPassiveCheckBox.Name = "isPassiveCheckBox";
             isPassiveCheckBox.Size = new Size(94, 24);
-            isPassiveCheckBox.TabIndex = 30;
+            isPassiveCheckBox.TabIndex = 39;
             isPassiveCheckBox.Text = "Pasif mi?";
             isPassiveCheckBox.UseVisualStyleBackColor = true;
             // 
-            // costTypeStatementTextBox
+            // businessTypeStatementTextBox
             // 
-            costTypeStatementTextBox.Location = new Point(424, 148);
-            costTypeStatementTextBox.Name = "costTypeStatementTextBox";
-            costTypeStatementTextBox.Size = new Size(229, 27);
-            costTypeStatementTextBox.TabIndex = 27;
+            businessTypeStatementTextBox.Location = new Point(393, 116);
+            businessTypeStatementTextBox.Name = "businessTypeStatementTextBox";
+            businessTypeStatementTextBox.Size = new Size(229, 27);
+            businessTypeStatementTextBox.TabIndex = 36;
             // 
-            // costTypeTextBox
+            // businessTypeTextBox
             // 
-            costTypeTextBox.Location = new Point(231, 148);
-            costTypeTextBox.Name = "costTypeTextBox";
-            costTypeTextBox.Size = new Size(150, 27);
-            costTypeTextBox.TabIndex = 28;
+            businessTypeTextBox.Location = new Point(200, 116);
+            businessTypeTextBox.Name = "businessTypeTextBox";
+            businessTypeTextBox.Size = new Size(150, 27);
+            businessTypeTextBox.TabIndex = 37;
             // 
             // firmCodeTextBox
             // 
-            firmCodeTextBox.Location = new Point(51, 148);
+            firmCodeTextBox.Location = new Point(20, 116);
             firmCodeTextBox.Name = "firmCodeTextBox";
             firmCodeTextBox.Size = new Size(127, 27);
-            firmCodeTextBox.TabIndex = 29;
+            firmCodeTextBox.TabIndex = 38;
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             label2.ForeColor = SystemColors.ControlLightLight;
-            label2.Location = new Point(231, 96);
+            label2.Location = new Point(200, 64);
             label2.Name = "label2";
-            label2.Size = new Size(150, 20);
-            label2.TabIndex = 23;
-            label2.Text = "Maliyet Merkezi Tipi";
+            label2.Size = new Size(110, 20);
+            label2.TabIndex = 32;
+            label2.Text = "İş Merkezi Tipi";
             // 
             // label4
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label4.Location = new Point(591, 97);
+            label4.Location = new Point(560, 65);
             label4.Name = "label4";
             label4.Size = new Size(0, 20);
-            label4.TabIndex = 24;
+            label4.TabIndex = 33;
             // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             label3.ForeColor = SystemColors.ControlLightLight;
-            label3.Location = new Point(424, 96);
+            label3.Location = new Point(393, 64);
             label3.Name = "label3";
-            label3.Size = new Size(229, 20);
-            label3.TabIndex = 25;
-            label3.Text = "Maliyet Merkezi Tipi Açıklaması";
+            label3.Size = new Size(189, 20);
+            label3.TabIndex = 34;
+            label3.Text = "İş Merkezi Tipi Açıklaması";
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             label1.ForeColor = SystemColors.ControlLightLight;
-            label1.Location = new Point(51, 96);
+            label1.Location = new Point(20, 64);
             label1.Name = "label1";
             label1.Size = new Size(90, 20);
-            label1.TabIndex = 26;
+            label1.TabIndex = 35;
             label1.Text = "Firma Kodu";
             // 
-            // btnSave
-            // 
-            btnSave.Location = new Point(528, 276);
-            btnSave.Name = "btnSave";
-            btnSave.Size = new Size(125, 29);
-            btnSave.TabIndex = 31;
-            btnSave.Text = "Kaydet";
-            btnSave.UseVisualStyleBackColor = true;
-            btnSave.Click += btnSave_Click;
-            // 
-            // costEditForm
+            // businessEditForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
-            ClientSize = new Size(860, 553);
+            ClientSize = new Size(800, 450);
             Controls.Add(btnSave);
             Controls.Add(isPassiveCheckBox);
-            Controls.Add(costTypeStatementTextBox);
-            Controls.Add(costTypeTextBox);
+            Controls.Add(businessTypeStatementTextBox);
+            Controls.Add(businessTypeTextBox);
             Controls.Add(firmCodeTextBox);
             Controls.Add(label2);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label1);
-            Name = "costEditForm";
-            Text = "costEditForm";
-            Load += costEditForm_Load;
+            Name = "businessEditForm";
+            Text = "businessEditForm";
+            Load += businessEditForm_Load;
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
+        private Button btnSave;
         private CheckBox isPassiveCheckBox;
-        private TextBox costTypeStatementTextBox;
-        private TextBox costTypeTextBox;
+        private TextBox businessTypeStatementTextBox;
+        private TextBox businessTypeTextBox;
         private TextBox firmCodeTextBox;
         private Label label2;
         private Label label4;
         private Label label3;
         private Label label1;
-        private Button btnSave;
     }
 }

@@ -12,22 +12,20 @@ using TRTERPproject.Helpers;
 
 namespace TRTERPproject
 {
-    public partial class costForm : Form
+    public partial class businessForm : Form
     {
-
         SqlDataReader reader;
         SqlCommand cmd;
         SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString);
 
-        public costForm()
+        public businessForm()
         {
             InitializeComponent();
         }
 
         private void btnGet_Click(object sender, EventArgs e)
         {
-
-            string query = "Select * from BSMGRTRTCCM001";
+            string query = "Select * from BSMGRTRTWCM001";
             con = new SqlConnection(ConnectionHelper.ConnectionString);
             cmd = new SqlCommand();
             cmd.Connection = con;
@@ -59,23 +57,21 @@ namespace TRTERPproject
                 // Bağlantıyı kapat
                 con.Close();
             }
-
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-
-            string docType = costTypeTextBox.Text;
+            string docType = businessTypeTextBox.Text;
 
             if (string.IsNullOrEmpty(docType))
             {
-                MessageBox.Show("Lütfen bir Maliyet Merkezi Tipi giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Lütfen bir İş Merkezi Tipi giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             using (con = new SqlConnection(ConnectionHelper.ConnectionString))
             {
-                string query = "SELECT COUNT(*) FROM BSMGRTRTCCM001 WHERE DOCTYPE = @DOCTYPE";
+                string query = "SELECT COUNT(*) FROM BSMGRTRTWCM001 WHERE DOCTYPE = @DOCTYPE";
                 cmd = new SqlCommand(query, con);
                 cmd.Parameters.AddWithValue("@DOCTYPE", docType);
 
@@ -87,12 +83,12 @@ namespace TRTERPproject
                     if (recordExists > 0)
                     {
                         // UNITCODE bulundu, Edit formuna geç
-                        costEditForm CostEditForm = new costEditForm(docType);
-                        CostEditForm.Show();
+                        businessEditForm BusinessEditForm = new businessEditForm(docType);
+                        BusinessEditForm.Show();
                     }
                     else
                     {
-                        MessageBox.Show("Belirtilen Maliyet Merkezi Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Belirtilen İş Merkezi Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
                 catch (Exception ex)
@@ -101,14 +97,14 @@ namespace TRTERPproject
                 }
             }
 
-
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
+
             string comCode = firmCodeTextBox.Text.Trim();
-            string docType = costTypeTextBox.Text.Trim();
-            string docTypeStatement = costTypeStatementTextBox.Text.Trim();
+            string docType = businessTypeTextBox.Text.Trim();
+            string docTypeStatement = businessTypeStatementTextBox.Text.Trim();
             int isPassive = isPassiveCheckBox.Checked ? 1 : 0; // Checkbox durumunu belirle
 
 
@@ -125,7 +121,7 @@ namespace TRTERPproject
                 {
                     con.Open();
 
-                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTCCM001 WHERE DOCTYPE = @DOCTYPE";
+                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTWCM001 WHERE DOCTYPE = @DOCTYPE";
                     using (cmd = new SqlCommand(checkQuery, con))
                     {
                         cmd.Parameters.AddWithValue("@DOCTYPE", docType);
@@ -134,12 +130,12 @@ namespace TRTERPproject
 
                         if (unitCodeExists > 0)
                         {
-                            MessageBox.Show("Bu Maliyet Merkezi Tipi zaten mevcut. Lütfen başka bir Maliyet Merkezi Tipi giriniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBox.Show("Bu İş Merkezi Tipi zaten mevcut. Lütfen başka bir İş Merkezi Tipi giriniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
                         }
                     }
 
-                    string insertQuery = "INSERT INTO BSMGRTRTCCM001 (COMCODE, DOCTYPE, DOCTYPETEXT, ISPASSIVE) VALUES (@COMCODE, @DOCTYPE, @DOCTYPETEXT, @ISPASSIVE)";
+                    string insertQuery = "INSERT INTO BSMGRTRTWCM001 (COMCODE, DOCTYPE, DOCTYPETEXT, ISPASSIVE) VALUES (@COMCODE, @DOCTYPE, @DOCTYPETEXT, @ISPASSIVE)";
                     using (cmd = new SqlCommand(insertQuery, con))
                     {
                         cmd.Parameters.AddWithValue("@COMCODE", comCode);
@@ -154,8 +150,8 @@ namespace TRTERPproject
                         {
                             MessageBox.Show("Kayıt başarıyla eklendi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             firmCodeTextBox.Clear();
-                            costTypeTextBox.Clear();
-                            costTypeStatementTextBox.Clear();
+                            businessTypeTextBox.Clear();
+                            businessTypeStatementTextBox.Clear();
                             isPassiveCheckBox.Checked = false;
 
                         }
@@ -177,11 +173,11 @@ namespace TRTERPproject
         private void btnDel_Click(object sender, EventArgs e)
         {
 
-            string docType = costTypeTextBox.Text.Trim();
+            string docType = businessTypeTextBox.Text.Trim();
 
             if (string.IsNullOrEmpty(docType))
             {
-                MessageBox.Show("Lütfen bir Maliyet Merkezi Tipi giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Lütfen bir İş Merkezi Tipi giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -191,7 +187,7 @@ namespace TRTERPproject
                 {
                     con.Open();
 
-                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTCCM001 WHERE DOCTYPE = @DOCTYPE";
+                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTWCM001 WHERE DOCTYPE = @DOCTYPE";
                     cmd = new SqlCommand(checkQuery, con);
                     cmd.Parameters.AddWithValue("@DOCTYPE", docType);
 
@@ -199,11 +195,11 @@ namespace TRTERPproject
 
                     if (recordExists == 0)
                     {
-                        MessageBox.Show("Belirtilen Maliyet Merkezi Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Belirtilen İş Merkezi Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
 
-                    string deleteQuery = "DELETE FROM BSMGRTRTCCM001 WHERE DOCTYPE = @DOCTYPE";
+                    string deleteQuery = "DELETE FROM BSMGRTRTWCM001 WHERE DOCTYPE = @DOCTYPE";
                     cmd = new SqlCommand(deleteQuery, con);
                     cmd.Parameters.AddWithValue("@DOCTYPE", docType);
 
@@ -212,7 +208,7 @@ namespace TRTERPproject
                     if (rowsAffected > 0)
                     {
                         MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        costTypeTextBox.Clear();
+                        businessTypeTextBox.Clear();
                     }
                     else
                     {
@@ -223,42 +219,8 @@ namespace TRTERPproject
                 {
                     MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+
             }
-
-
-        }
-
-        private void isPassiveCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void CountryDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-        }
-
-        private void costTypeStatementTextBox_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void costTypeTextBox_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void firmCodeTextBox_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
         }
     }
 }

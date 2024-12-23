@@ -209,7 +209,7 @@ namespace TRTERPproject
                     if (rowsAffected > 0)
                     {
                         MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        rotTypeTextBoxş.Clear();
+                        rotTypeTextBox.Clear();
                     }
                     else
                     {
