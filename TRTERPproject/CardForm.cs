@@ -78,6 +78,16 @@
             unitForm.Show();
         }
 
+
+
+        private void oprtipBut_Click(object sender, EventArgs e)
+        {
+            oprForm OprForm = new oprForm();
+            OprForm.Show();
+        }
+    }
+
+
         private void MalLbl_Click_1(object sender, EventArgs e)
         {
             MatForm matForm = new MatForm();
@@ -106,10 +116,6 @@
             prodTree.Show();
         }
 
-        private void oprtipBut_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void button5_Click(object sender, EventArgs e)
         {
