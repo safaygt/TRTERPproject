@@ -46,6 +46,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label1.ForeColor = SystemColors.ControlLightLight;
             label1.Location = new Point(36, 38);
             label1.Name = "label1";
             label1.Size = new Size(90, 20);
@@ -70,6 +71,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label2.ForeColor = SystemColors.ControlLightLight;
             label2.Location = new Point(187, 38);
             label2.Name = "label2";
             label2.Size = new Size(81, 20);
@@ -87,6 +89,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label3.ForeColor = SystemColors.ControlLightLight;
             label3.Location = new Point(334, 38);
             label3.Name = "label3";
             label3.Size = new Size(68, 20);
@@ -105,6 +108,7 @@
             // 
             // btnGet
             // 
+            btnGet.ForeColor = SystemColors.ActiveCaptionText;
             btnGet.Location = new Point(36, 154);
             btnGet.Name = "btnGet";
             btnGet.Size = new Size(127, 29);
@@ -115,6 +119,7 @@
             // 
             // btnEdit
             // 
+            btnEdit.ForeColor = SystemColors.ActiveCaptionText;
             btnEdit.Location = new Point(187, 154);
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(127, 29);
@@ -125,6 +130,7 @@
             // 
             // btnAdd
             // 
+            btnAdd.ForeColor = SystemColors.ActiveCaptionText;
             btnAdd.Location = new Point(334, 154);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(127, 29);
@@ -135,6 +141,7 @@
             // 
             // btnDel
             // 
+            btnDel.ForeColor = SystemColors.ActiveCaptionText;
             btnDel.Location = new Point(484, 154);
             btnDel.Name = "btnDel";
             btnDel.Size = new Size(127, 29);
@@ -160,6 +167,7 @@
             Controls.Add(firmCodeTextBox);
             Controls.Add(label3);
             Controls.Add(label1);
+            ForeColor = SystemColors.ControlLightLight;
             Name = "countryForm";
             Text = "Country Form";
             ((System.ComponentModel.ISupportInitialize)CountryDataGridView).EndInit();

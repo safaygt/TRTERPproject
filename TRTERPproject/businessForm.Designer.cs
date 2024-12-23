@@ -1,6 +1,6 @@
 ﻿namespace TRTERPproject
 {
-    partial class cityForm
+    partial class businessForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,58 +28,69 @@
         /// </summary>
         private void InitializeComponent()
         {
+            isPassiveCheckBox = new CheckBox();
             btnDel = new Button();
             btnAdd = new Button();
             btnEdit = new Button();
             btnGet = new Button();
             CountryDataGridView = new DataGridView();
-            cityNameTextBox = new TextBox();
-            cityCodeTextBox = new TextBox();
-            label2 = new Label();
+            businessTypeStatementTextBox = new TextBox();
+            businessTypeTextBox = new TextBox();
             firmCodeTextBox = new TextBox();
+            label2 = new Label();
             label3 = new Label();
             label1 = new Label();
-            countryCodeTextBox = new TextBox();
-            label4 = new Label();
             ((System.ComponentModel.ISupportInitialize)CountryDataGridView).BeginInit();
             SuspendLayout();
             // 
+            // isPassiveCheckBox
+            // 
+            isPassiveCheckBox.AutoSize = true;
+            isPassiveCheckBox.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            isPassiveCheckBox.ForeColor = SystemColors.ControlLightLight;
+            isPassiveCheckBox.Location = new Point(643, 74);
+            isPassiveCheckBox.Name = "isPassiveCheckBox";
+            isPassiveCheckBox.Size = new Size(94, 24);
+            isPassiveCheckBox.TabIndex = 50;
+            isPassiveCheckBox.Text = "Pasif mi?";
+            isPassiveCheckBox.UseVisualStyleBackColor = true;
+            // 
             // btnDel
             // 
-            btnDel.Location = new Point(475, 131);
+            btnDel.Location = new Point(481, 125);
             btnDel.Name = "btnDel";
-            btnDel.Size = new Size(127, 29);
-            btnDel.TabIndex = 11;
+            btnDel.Size = new Size(116, 29);
+            btnDel.TabIndex = 46;
             btnDel.Text = "Sil";
             btnDel.UseVisualStyleBackColor = true;
             btnDel.Click += btnDel_Click;
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(325, 131);
+            btnAdd.Location = new Point(331, 125);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(127, 29);
-            btnAdd.TabIndex = 12;
+            btnAdd.TabIndex = 47;
             btnAdd.Text = "Ekle";
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;
             // 
             // btnEdit
             // 
-            btnEdit.Location = new Point(178, 131);
+            btnEdit.Location = new Point(184, 125);
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(127, 29);
-            btnEdit.TabIndex = 13;
+            btnEdit.TabIndex = 48;
             btnEdit.Text = "Düzenle";
             btnEdit.UseVisualStyleBackColor = true;
             btnEdit.Click += btnEdit_Click;
             // 
             // btnGet
             // 
-            btnGet.Location = new Point(27, 131);
+            btnGet.Location = new Point(33, 125);
             btnGet.Name = "btnGet";
             btnGet.Size = new Size(127, 29);
-            btnGet.TabIndex = 14;
+            btnGet.TabIndex = 49;
             btnGet.Text = "Getir";
             btnGet.UseVisualStyleBackColor = true;
             btnGet.Click += btnGet_Click;
@@ -87,106 +98,87 @@
             // CountryDataGridView
             // 
             CountryDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            CountryDataGridView.Location = new Point(12, 209);
+            CountryDataGridView.Location = new Point(24, 197);
             CountryDataGridView.Name = "CountryDataGridView";
             CountryDataGridView.RowHeadersWidth = 51;
             CountryDataGridView.RowTemplate.Height = 29;
             CountryDataGridView.Size = new Size(915, 239);
-            CountryDataGridView.TabIndex = 10;
+            CountryDataGridView.TabIndex = 45;
             // 
-            // cityNameTextBox
+            // businessTypeStatementTextBox
             // 
-            cityNameTextBox.Location = new Point(325, 81);
-            cityNameTextBox.Name = "cityNameTextBox";
-            cityNameTextBox.Size = new Size(127, 27);
-            cityNameTextBox.TabIndex = 7;
+            businessTypeStatementTextBox.Location = new Point(368, 74);
+            businessTypeStatementTextBox.Name = "businessTypeStatementTextBox";
+            businessTypeStatementTextBox.Size = new Size(229, 27);
+            businessTypeStatementTextBox.TabIndex = 42;
             // 
-            // cityCodeTextBox
+            // businessTypeTextBox
             // 
-            cityCodeTextBox.Location = new Point(178, 81);
-            cityCodeTextBox.Name = "cityCodeTextBox";
-            cityCodeTextBox.Size = new Size(127, 27);
-            cityCodeTextBox.TabIndex = 8;
+            businessTypeTextBox.Location = new Point(184, 74);
+            businessTypeTextBox.Name = "businessTypeTextBox";
+            businessTypeTextBox.Size = new Size(150, 27);
+            businessTypeTextBox.TabIndex = 43;
+            // 
+            // firmCodeTextBox
+            // 
+            firmCodeTextBox.Location = new Point(33, 74);
+            firmCodeTextBox.Name = "firmCodeTextBox";
+            firmCodeTextBox.Size = new Size(127, 27);
+            firmCodeTextBox.TabIndex = 44;
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             label2.ForeColor = SystemColors.ControlLightLight;
-            label2.Location = new Point(178, 39);
+            label2.Location = new Point(184, 42);
             label2.Name = "label2";
-            label2.Size = new Size(85, 20);
-            label2.TabIndex = 4;
-            label2.Text = "Şehir Kodu";
-            // 
-            // firmCodeTextBox
-            // 
-            firmCodeTextBox.Location = new Point(27, 81);
-            firmCodeTextBox.Name = "firmCodeTextBox";
-            firmCodeTextBox.Size = new Size(127, 27);
-            firmCodeTextBox.TabIndex = 9;
+            label2.Size = new Size(110, 20);
+            label2.TabIndex = 39;
+            label2.Text = "İş Merkezi Tipi";
             // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             label3.ForeColor = SystemColors.ControlLightLight;
-            label3.Location = new Point(325, 39);
+            label3.Location = new Point(368, 42);
             label3.Name = "label3";
-            label3.Size = new Size(72, 20);
-            label3.TabIndex = 5;
-            label3.Text = "Şehir Adı";
+            label3.Size = new Size(189, 20);
+            label3.TabIndex = 40;
+            label3.Text = "İş Merkezi Tipi Açıklaması";
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             label1.ForeColor = SystemColors.ControlLightLight;
-            label1.Location = new Point(27, 39);
+            label1.Location = new Point(33, 42);
             label1.Name = "label1";
             label1.Size = new Size(90, 20);
-            label1.TabIndex = 6;
+            label1.TabIndex = 41;
             label1.Text = "Firma Kodu";
             // 
-            // countryCodeTextBox
-            // 
-            countryCodeTextBox.Location = new Point(475, 81);
-            countryCodeTextBox.Name = "countryCodeTextBox";
-            countryCodeTextBox.Size = new Size(127, 27);
-            countryCodeTextBox.TabIndex = 7;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label4.ForeColor = SystemColors.ControlLightLight;
-            label4.Location = new Point(475, 39);
-            label4.Name = "label4";
-            label4.Size = new Size(81, 20);
-            label4.TabIndex = 5;
-            label4.Text = "Ülke Kodu";
-            // 
-            // cityForm
+            // businessForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
-            ClientSize = new Size(967, 474);
+            ClientSize = new Size(1036, 533);
+            Controls.Add(isPassiveCheckBox);
             Controls.Add(btnDel);
             Controls.Add(btnAdd);
             Controls.Add(btnEdit);
             Controls.Add(btnGet);
             Controls.Add(CountryDataGridView);
-            Controls.Add(countryCodeTextBox);
-            Controls.Add(cityNameTextBox);
-            Controls.Add(cityCodeTextBox);
-            Controls.Add(label2);
+            Controls.Add(businessTypeStatementTextBox);
+            Controls.Add(businessTypeTextBox);
             Controls.Add(firmCodeTextBox);
-            Controls.Add(label4);
+            Controls.Add(label2);
             Controls.Add(label3);
             Controls.Add(label1);
-            Name = "cityForm";
-            Text = "cityForm";
+            Name = "businessForm";
+            Text = "businessForm";
             ((System.ComponentModel.ISupportInitialize)CountryDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -194,18 +186,17 @@
 
         #endregion
 
+        private CheckBox isPassiveCheckBox;
         private Button btnDel;
         private Button btnAdd;
         private Button btnEdit;
         private Button btnGet;
         private DataGridView CountryDataGridView;
-        private TextBox cityNameTextBox;
-        private TextBox cityCodeTextBox;
-        private Label label2;
+        private TextBox businessTypeStatementTextBox;
+        private TextBox businessTypeTextBox;
         private TextBox firmCodeTextBox;
+        private Label label2;
         private Label label3;
         private Label label1;
-        private TextBox countryCodeTextBox;
-        private Label label4;
     }
 }

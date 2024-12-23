@@ -4,25 +4,25 @@ using TRTERPproject.Helpers;
 
 namespace TRTERPproject
 {
-	public partial class countryForm : Form
+    public partial class countryForm : Form
     {
 
         SqlDataReader reader;
         SqlCommand cmd;
         SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString);
 
-		public countryForm()
+        public countryForm()
         {
             InitializeComponent();
         }
-		//private string connectionString = "Server=DESKTOP-U86MLBA;Database=TRTdb;Integrated Security=True;";
+        //private string connectionString = "Server=DESKTOP-U86MLBA;Database=TRTdb;Integrated Security=True;";
 
-        
-		private void btnGet_Click(object sender, EventArgs e)
+
+        private void btnGet_Click(object sender, EventArgs e)
         {
 
             string query = "Select * from BSMGRTRTGEN003";
-           con = new SqlConnection(ConnectionHelper.ConnectionString);
+            con = new SqlConnection(ConnectionHelper.ConnectionString);
             cmd = new SqlCommand();
             cmd.Connection = con;
             cmd.CommandText = query;
@@ -96,7 +96,7 @@ namespace TRTERPproject
                 }
             }
 
-            }
+        }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
@@ -194,7 +194,7 @@ namespace TRTERPproject
             }
 
             using (con = new SqlConnection(ConnectionHelper.ConnectionString))
-			{
+            {
                 try
                 {
                     con.Open();

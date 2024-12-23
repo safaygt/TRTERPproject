@@ -109,7 +109,7 @@ namespace TRTERPproject
             string firmCode = firmCodeTextBox.Text.Trim();
             string firmName = firmNameTextBox.Text.Trim();
             string address1 = address1TextBox.Text.Trim();
-            string address2 = address2TextBox.Text.Trim();  
+            string address2 = address2TextBox.Text.Trim();
             string cityCode = cityCodeTextBox.Text.Trim();
             string countryCode = countryCodeTextBox.Text.Trim();
 

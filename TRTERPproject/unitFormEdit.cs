@@ -79,7 +79,7 @@ namespace TRTERPproject
                         unitTextBox.Text = reader["UNITTEXT"].ToString();
                         isMainUnitCheckBox.Checked = Convert.ToBoolean(reader["ISMAINUNIT"]);
                         mainUnitCodeTextBox.Text += reader["MAINUNITCODE"].ToString();
-                        
+
                     }
                     reader.Close();
                 }

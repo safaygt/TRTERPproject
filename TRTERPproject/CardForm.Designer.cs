@@ -25,6 +25,8 @@
 
 
 
+
+
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
@@ -48,7 +50,7 @@
             malmerLbl = new Button();
             urnAgLbl = new Button();
             RotaBtn = new Button();
-            button5 = new Button();
+            businessBtn = new Button();
             oprBut = new Button();
             oprtipBut = new Button();
             SuspendLayout();
@@ -208,6 +210,7 @@
             MalLbl.TabIndex = 12;
             MalLbl.Text = "Malzeme\r\nTipi";
             MalLbl.UseVisualStyleBackColor = true;
+            MalLbl.Click += MalLbl_Click_1;
             // 
             // malmerLbl
             // 
@@ -219,6 +222,7 @@
             malmerLbl.TabIndex = 13;
             malmerLbl.Text = "Maliyet \r\nMerkezi";
             malmerLbl.UseVisualStyleBackColor = true;
+            malmerLbl.Click += malmerLbl_Click_1;
             // 
             // urnAgLbl
             // 
@@ -230,6 +234,7 @@
             urnAgLbl.TabIndex = 14;
             urnAgLbl.Text = "Ürün Ağacı";
             urnAgLbl.UseVisualStyleBackColor = true;
+            urnAgLbl.Click += urnAgLbl_Click;
             // 
             // RotaBtn
             // 
@@ -241,17 +246,19 @@
             RotaBtn.TabIndex = 15;
             RotaBtn.Text = "Rota Tipi";
             RotaBtn.UseVisualStyleBackColor = true;
+            RotaBtn.Click += RotaBtn_Click;
             // 
-            // button5
+            // businessBtn
             // 
-            button5.Image = (Image)resources.GetObject("button5.Image");
-            button5.ImageAlign = ContentAlignment.MiddleRight;
-            button5.Location = new Point(875, 526);
-            button5.Name = "button5";
-            button5.Size = new Size(180, 82);
-            button5.TabIndex = 16;
-            button5.Text = "İş Merkezi\r\nTipi";
-            button5.UseVisualStyleBackColor = true;
+            businessBtn.Image = (Image)resources.GetObject("businessBtn.Image");
+            businessBtn.ImageAlign = ContentAlignment.MiddleRight;
+            businessBtn.Location = new Point(875, 526);
+            businessBtn.Name = "businessBtn";
+            businessBtn.Size = new Size(180, 82);
+            businessBtn.TabIndex = 16;
+            businessBtn.Text = "İş Merkezi\r\nTipi";
+            businessBtn.UseVisualStyleBackColor = true;
+            businessBtn.Click += button5_Click;
             // 
             // oprBut
             // 
@@ -285,7 +292,7 @@
             ClientSize = new Size(1148, 742);
             Controls.Add(oprtipBut);
             Controls.Add(oprBut);
-            Controls.Add(button5);
+            Controls.Add(businessBtn);
             Controls.Add(RotaBtn);
             Controls.Add(urnAgLbl);
             Controls.Add(malmerLbl);
@@ -307,6 +314,8 @@
             ResumeLayout(false);
             PerformLayout();
         }
+
+
 
 
 
@@ -335,7 +344,7 @@
         private Button malmerLbl;
         private Button urnAgLbl;
         private Button RotaBtn;
-        private Button button5;
+        private Button businessBtn;
         private Button oprBut;
         private Button oprtipBut;
     }

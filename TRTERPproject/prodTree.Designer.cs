@@ -1,6 +1,6 @@
 ﻿namespace TRTERPproject
 {
-    partial class cityForm
+    partial class prodTree
     {
         /// <summary>
         /// Required designer variable.
@@ -32,21 +32,20 @@
             btnAdd = new Button();
             btnEdit = new Button();
             btnGet = new Button();
-            CountryDataGridView = new DataGridView();
-            cityNameTextBox = new TextBox();
-            cityCodeTextBox = new TextBox();
+            prodTreeDataGridView = new DataGridView();
+            prodDoctypeTextTextBox = new TextBox();
+            prodDoctypeTextBox = new TextBox();
             label2 = new Label();
             firmCodeTextBox = new TextBox();
             label3 = new Label();
             label1 = new Label();
-            countryCodeTextBox = new TextBox();
-            label4 = new Label();
-            ((System.ComponentModel.ISupportInitialize)CountryDataGridView).BeginInit();
+            prodDocispassiveBOX = new CheckBox();
+            ((System.ComponentModel.ISupportInitialize)prodTreeDataGridView).BeginInit();
             SuspendLayout();
             // 
             // btnDel
             // 
-            btnDel.Location = new Point(475, 131);
+            btnDel.Location = new Point(482, 137);
             btnDel.Name = "btnDel";
             btnDel.Size = new Size(127, 29);
             btnDel.TabIndex = 11;
@@ -56,7 +55,7 @@
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(325, 131);
+            btnAdd.Location = new Point(332, 137);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(127, 29);
             btnAdd.TabIndex = 12;
@@ -66,7 +65,7 @@
             // 
             // btnEdit
             // 
-            btnEdit.Location = new Point(178, 131);
+            btnEdit.Location = new Point(185, 137);
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(127, 29);
             btnEdit.TabIndex = 13;
@@ -76,7 +75,7 @@
             // 
             // btnGet
             // 
-            btnGet.Location = new Point(27, 131);
+            btnGet.Location = new Point(34, 137);
             btnGet.Name = "btnGet";
             btnGet.Size = new Size(127, 29);
             btnGet.TabIndex = 14;
@@ -84,44 +83,43 @@
             btnGet.UseVisualStyleBackColor = true;
             btnGet.Click += btnGet_Click;
             // 
-            // CountryDataGridView
+            // prodTreeDataGridView
             // 
-            CountryDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            CountryDataGridView.Location = new Point(12, 209);
-            CountryDataGridView.Name = "CountryDataGridView";
-            CountryDataGridView.RowHeadersWidth = 51;
-            CountryDataGridView.RowTemplate.Height = 29;
-            CountryDataGridView.Size = new Size(915, 239);
-            CountryDataGridView.TabIndex = 10;
+            prodTreeDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            prodTreeDataGridView.Location = new Point(34, 224);
+            prodTreeDataGridView.Name = "prodTreeDataGridView";
+            prodTreeDataGridView.RowHeadersWidth = 51;
+            prodTreeDataGridView.RowTemplate.Height = 29;
+            prodTreeDataGridView.Size = new Size(718, 239);
+            prodTreeDataGridView.TabIndex = 10;
             // 
-            // cityNameTextBox
+            // prodDoctypeTextTextBox
             // 
-            cityNameTextBox.Location = new Point(325, 81);
-            cityNameTextBox.Name = "cityNameTextBox";
-            cityNameTextBox.Size = new Size(127, 27);
-            cityNameTextBox.TabIndex = 7;
+            prodDoctypeTextTextBox.Location = new Point(332, 53);
+            prodDoctypeTextTextBox.Name = "prodDoctypeTextTextBox";
+            prodDoctypeTextTextBox.Size = new Size(196, 27);
+            prodDoctypeTextTextBox.TabIndex = 7;
             // 
-            // cityCodeTextBox
+            // prodDoctypeTextBox
             // 
-            cityCodeTextBox.Location = new Point(178, 81);
-            cityCodeTextBox.Name = "cityCodeTextBox";
-            cityCodeTextBox.Size = new Size(127, 27);
-            cityCodeTextBox.TabIndex = 8;
+            prodDoctypeTextBox.Location = new Point(185, 53);
+            prodDoctypeTextBox.Name = "prodDoctypeTextBox";
+            prodDoctypeTextBox.Size = new Size(127, 27);
+            prodDoctypeTextBox.TabIndex = 8;
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label2.ForeColor = SystemColors.ControlLightLight;
-            label2.Location = new Point(178, 39);
+            label2.Location = new Point(185, 21);
             label2.Name = "label2";
-            label2.Size = new Size(85, 20);
+            label2.Size = new Size(117, 20);
             label2.TabIndex = 4;
-            label2.Text = "Şehir Kodu";
+            label2.Text = "Ürün Ağacı Tipi";
             // 
             // firmCodeTextBox
             // 
-            firmCodeTextBox.Location = new Point(27, 81);
+            firmCodeTextBox.Location = new Point(34, 53);
             firmCodeTextBox.Name = "firmCodeTextBox";
             firmCodeTextBox.Size = new Size(127, 27);
             firmCodeTextBox.TabIndex = 9;
@@ -130,64 +128,56 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label3.ForeColor = SystemColors.ControlLightLight;
-            label3.Location = new Point(325, 39);
+            label3.Location = new Point(332, 21);
             label3.Name = "label3";
-            label3.Size = new Size(72, 20);
+            label3.Size = new Size(196, 20);
             label3.TabIndex = 5;
-            label3.Text = "Şehir Adı";
+            label3.Text = "Ürün Ağacı Tipi Açıklaması";
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label1.ForeColor = SystemColors.ControlLightLight;
-            label1.Location = new Point(27, 39);
+            label1.Location = new Point(34, 21);
             label1.Name = "label1";
             label1.Size = new Size(90, 20);
             label1.TabIndex = 6;
             label1.Text = "Firma Kodu";
             // 
-            // countryCodeTextBox
+            // prodDocispassiveBOX
             // 
-            countryCodeTextBox.Location = new Point(475, 81);
-            countryCodeTextBox.Name = "countryCodeTextBox";
-            countryCodeTextBox.Size = new Size(127, 27);
-            countryCodeTextBox.TabIndex = 7;
+            prodDocispassiveBOX.AutoSize = true;
+            prodDocispassiveBOX.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
+            prodDocispassiveBOX.ForeColor = SystemColors.ControlLightLight;
+            prodDocispassiveBOX.Location = new Point(567, 51);
+            prodDocispassiveBOX.Name = "prodDocispassiveBOX";
+            prodDocispassiveBOX.Size = new Size(109, 29);
+            prodDocispassiveBOX.TabIndex = 16;
+            prodDocispassiveBOX.Text = "Pasif mi?";
+            prodDocispassiveBOX.UseVisualStyleBackColor = true;
             // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label4.ForeColor = SystemColors.ControlLightLight;
-            label4.Location = new Point(475, 39);
-            label4.Name = "label4";
-            label4.Size = new Size(81, 20);
-            label4.TabIndex = 5;
-            label4.Text = "Ülke Kodu";
-            // 
-            // cityForm
+            // prodTree
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
-            ClientSize = new Size(967, 474);
+            ClientSize = new Size(869, 489);
+            Controls.Add(prodDocispassiveBOX);
             Controls.Add(btnDel);
             Controls.Add(btnAdd);
             Controls.Add(btnEdit);
             Controls.Add(btnGet);
-            Controls.Add(CountryDataGridView);
-            Controls.Add(countryCodeTextBox);
-            Controls.Add(cityNameTextBox);
-            Controls.Add(cityCodeTextBox);
+            Controls.Add(prodTreeDataGridView);
+            Controls.Add(prodDoctypeTextTextBox);
+            Controls.Add(prodDoctypeTextBox);
             Controls.Add(label2);
             Controls.Add(firmCodeTextBox);
-            Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label1);
-            Name = "cityForm";
-            Text = "cityForm";
-            ((System.ComponentModel.ISupportInitialize)CountryDataGridView).EndInit();
+            Name = "prodTree";
+            Text = "prodTree";
+            Load += prodTree_Load;
+            ((System.ComponentModel.ISupportInitialize)prodTreeDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -198,14 +188,13 @@
         private Button btnAdd;
         private Button btnEdit;
         private Button btnGet;
-        private DataGridView CountryDataGridView;
-        private TextBox cityNameTextBox;
-        private TextBox cityCodeTextBox;
+        private DataGridView prodTreeDataGridView;
+        private TextBox prodDoctypeTextTextBox;
+        private TextBox prodDoctypeTextBox;
         private Label label2;
         private TextBox firmCodeTextBox;
         private Label label3;
         private Label label1;
-        private TextBox countryCodeTextBox;
-        private Label label4;
+        private CheckBox prodDocispassiveBOX;
     }
 }
