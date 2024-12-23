@@ -19,6 +19,7 @@ namespace TRTERPproject
 			comboBoxMalzFirm.Leave += (s, e) => ValidateAndAddData(comboBoxMalzFirm, "COMCODE");
 			malzTipcombo.Leave += (s, e) => ValidateAndAddData(malzTipcombo, "MATDOCTYPE");
 			comboBoxTedTip.Leave += (s, e) => ValidateAndAddData(comboBoxTedTip, "SUPPLYTYPE");
+			comboBoxDil.Leave += (s, e) => ValidateAndAddData(comboBoxDil, "SUPPLYTYPE");
 		}
 		private void LoadComboBoxData()
 		{
@@ -103,26 +104,32 @@ namespace TRTERPproject
 			// SQL sorgusu
 			string query = @"
                         SELECT 
-							COMCODE AS 'Firma', 
-                            MATDOCTYPE AS 'Malzeme Tipi', 
-                            MATDOCNUM AS 'Malzeme Numarası', 
-                            MATDOCFROM AS 'Geçerlilik Başlangıç',
-							MATDOCUNTIL	AS 'Geçerlilik Bitiş',
-							SUPPLYTYPE AS 'Tedarik Tipi',
-							STUNIT AS 'Stok Birimi',
-							NETWEIGHT AS 'Net Ağırlık',
-							NWUNIT AS 'Net Ağırlık Birimi',
-							BRUTWEIGHT AS 'Brüt Ağırlık',
-							BWUNIT AS 'Brüt Ağırlık Brimi',
-							ISBOM AS 'Ürün Ağacı Var mı?',
-							BOMDOCTYPE AS 'Ürün Ağacı Tipi',
-							BOMDOCNUM AS 'Ürün Ağacı Kodu',
-							ISROUTE AS 'Rota Var mı?',
-							ROTDOCTYPE AS 'Rota Tipi',
-							ROTDOCNUM AS 'Rota Kodu',
-							ISDELETED AS 'Silindi mi?',
-							ISPASSIVE AS 'Pasif mi?'
-                        FROM BSMGRTRTMATHEAD";
+							MH.COMCODE AS 'Firma', 
+                            MH.MATDOCTYPE AS 'Malzeme Tipi', 
+                            MH.MATDOCNUM AS 'Malzeme Numarası', 
+                            MH.MATDOCFROM AS 'Geçerlilik Başlangıç',
+							MH.MATDOCUNTIL	AS 'Geçerlilik Bitiş',
+							MH.SUPPLYTYPE AS 'Tedarik Tipi',
+							MH.STUNIT AS 'Stok Birimi',
+							MH.NETWEIGHT AS 'Net Ağırlık',
+							MH.NWUNIT AS 'Net Ağırlık Birimi',
+							MH.BRUTWEIGHT AS 'Brüt Ağırlık',
+							MH.BWUNIT AS 'Brüt Ağırlık Brimi',
+							MH.ISBOM AS 'Ürün Ağacı Var mı?',
+							MH.BOMDOCTYPE AS 'Ürün Ağacı Tipi',
+							MH.BOMDOCNUM AS 'Ürün Ağacı Kodu',
+							MH.ISROUTE AS 'Rota Var mı?',
+							MH.ROTDOCTYPE AS 'Rota Tipi',
+							MH.ROTDOCNUM AS 'Rota Kodu',
+							MH.ISDELETED AS 'Silindi mi?',
+							MH.ISPASSIVE AS 'Pasif mi?',
+							G2.LANCODE AS 'Dil'
+							FROM 
+							    BSMGRTRTMATHEAD MH
+							INNER JOIN 
+							    BSMGRTRTMATTEXT MT ON MH.MATDOCNUM = MT.MATDOCNUM
+							INNER JOIN 
+							    BSMGRTRTGEN002 G2 ON MT.LANCODE = G2.LANCODE";
 
 			con = new SqlConnection(ConnectionHelper.ConnectionString);
 			cmd = new SqlCommand();

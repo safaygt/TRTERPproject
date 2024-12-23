@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			comboBoxTedTip = new ComboBox();
 			label1 = new Label();
 			label2 = new Label();
 			label3 = new Label();
@@ -50,11 +51,19 @@
 			malzTipcombo = new ComboBox();
 			label8 = new Label();
 			comboBoxDil = new ComboBox();
-			comboBoxTedTip = new ComboBox();
 			comboBoxUrnAgcRota = new ComboBox();
 			label9 = new Label();
 			((System.ComponentModel.ISupportInitialize)malKartAna).BeginInit();
 			SuspendLayout();
+			// 
+			// comboBoxTedTip
+			// 
+			comboBoxTedTip.DropDownStyle = ComboBoxStyle.DropDownList;
+			comboBoxTedTip.FormattingEnabled = true;
+			comboBoxTedTip.Location = new Point(244, 133);
+			comboBoxTedTip.Name = "comboBoxTedTip";
+			comboBoxTedTip.Size = new Size(151, 28);
+			comboBoxTedTip.TabIndex = 27;
 			// 
 			// label1
 			// 
@@ -267,14 +276,6 @@
 			comboBoxDil.Name = "comboBoxDil";
 			comboBoxDil.Size = new Size(173, 28);
 			comboBoxDil.TabIndex = 26;
-			// 
-			// comboBoxTedTip
-			// 
-			comboBoxTedTip.FormattingEnabled = true;
-			comboBoxTedTip.Location = new Point(244, 133);
-			comboBoxTedTip.Name = "comboBoxTedTip";
-			comboBoxTedTip.Size = new Size(151, 28);
-			comboBoxTedTip.TabIndex = 27;
 			// 
 			// comboBoxUrnAgcRota
 			// 
