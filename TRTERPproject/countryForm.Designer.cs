@@ -28,18 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             label1 = new Label();
             firmCodeTextBox = new TextBox();
             countryCodeTextBox = new TextBox();
             label2 = new Label();
             countryNameTextBox = new TextBox();
             label3 = new Label();
-            CountryDataGridView = new DataGridView();
             btnGet = new Button();
             btnEdit = new Button();
             btnAdd = new Button();
             btnDel = new Button();
-            ((System.ComponentModel.ISupportInitialize)CountryDataGridView).BeginInit();
+            countryDataGridView = new DataGridView();
+            ((System.ComponentModel.ISupportInitialize)countryDataGridView).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -96,16 +97,6 @@
             label3.TabIndex = 0;
             label3.Text = "Ülke Adı";
             // 
-            // CountryDataGridView
-            // 
-            CountryDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            CountryDataGridView.Location = new Point(26, 239);
-            CountryDataGridView.Name = "CountryDataGridView";
-            CountryDataGridView.RowHeadersWidth = 51;
-            CountryDataGridView.RowTemplate.Height = 29;
-            CountryDataGridView.Size = new Size(915, 239);
-            CountryDataGridView.TabIndex = 2;
-            // 
             // btnGet
             // 
             btnGet.ForeColor = SystemColors.ActiveCaptionText;
@@ -150,17 +141,35 @@
             btnDel.UseVisualStyleBackColor = true;
             btnDel.Click += btnDel_Click;
             // 
+            // countryDataGridView
+            // 
+            countryDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Window;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = SystemColors.ControlLightLight;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
+            countryDataGridView.DefaultCellStyle = dataGridViewCellStyle1;
+            countryDataGridView.Location = new Point(36, 246);
+            countryDataGridView.Name = "countryDataGridView";
+            countryDataGridView.RowHeadersWidth = 51;
+            countryDataGridView.RowTemplate.Height = 29;
+            countryDataGridView.Size = new Size(914, 272);
+            countryDataGridView.TabIndex = 11;
+            // 
             // countryForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(981, 530);
+            Controls.Add(countryDataGridView);
             Controls.Add(btnDel);
             Controls.Add(btnAdd);
             Controls.Add(btnEdit);
             Controls.Add(btnGet);
-            Controls.Add(CountryDataGridView);
             Controls.Add(countryNameTextBox);
             Controls.Add(countryCodeTextBox);
             Controls.Add(label2);
@@ -170,7 +179,8 @@
             ForeColor = SystemColors.ControlLightLight;
             Name = "countryForm";
             Text = "Country Form";
-            ((System.ComponentModel.ISupportInitialize)CountryDataGridView).EndInit();
+            Load += countryForm_Load;
+            ((System.ComponentModel.ISupportInitialize)countryDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -183,10 +193,10 @@
         private Label label2;
         private TextBox countryNameTextBox;
         private Label label3;
-        private DataGridView CountryDataGridView;
         private Button btnGet;
         private Button btnEdit;
         private Button btnAdd;
         private Button btnDel;
+        private DataGridView countryDataGridView;
     }
 }

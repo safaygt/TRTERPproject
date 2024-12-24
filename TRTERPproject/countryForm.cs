@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
+using System.Windows.Forms;
 using TRTERPproject.Helpers;
 
 namespace TRTERPproject
@@ -41,7 +42,7 @@ namespace TRTERPproject
                 da.Fill(ds);
 
                 // DataGridView'e veri bağla
-                CountryDataGridView.DataSource = ds.Tables[0];  // Veritabanından çekilen ilk tabloyu DataGridView'e bağla
+                countryDataGridView.DataSource = ds.Tables[0];  // Veritabanından çekilen ilk tabloyu DataGridView'e bağla
             }
             catch (Exception ex)
             {
@@ -239,5 +240,24 @@ namespace TRTERPproject
             }
         }
 
+        private void countryForm_Load(object sender, EventArgs e)
+        {
+            // DataGridView hücre stilini ayarla
+            countryDataGridView.DefaultCellStyle.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            countryDataGridView.DefaultCellStyle.ForeColor = Color.Black;
+            countryDataGridView.DefaultCellStyle.BackColor = Color.White;
+            countryDataGridView.DefaultCellStyle.SelectionBackColor = Color.Blue;
+            countryDataGridView.DefaultCellStyle.SelectionForeColor = Color.White;
+
+            // Satır başlıklarının stilini ayarla
+            countryDataGridView.RowHeadersDefaultCellStyle.BackColor = Color.LightGray;
+            countryDataGridView.RowHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+
+            // Başlık stilini ayarla
+            countryDataGridView.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            countryDataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+            countryDataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.DarkBlue;
+            countryDataGridView.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+        }
     }
 }
