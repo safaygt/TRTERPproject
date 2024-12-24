@@ -95,6 +95,7 @@
             // 
             // prodDoctypeTextTextBox
             // 
+            prodDoctypeTextTextBox.BackColor = SystemColors.ControlLightLight;
             prodDoctypeTextTextBox.Location = new Point(332, 53);
             prodDoctypeTextTextBox.Name = "prodDoctypeTextTextBox";
             prodDoctypeTextTextBox.Size = new Size(196, 27);
@@ -102,6 +103,7 @@
             // 
             // prodDoctypeTextBox
             // 
+            prodDoctypeTextBox.BackColor = SystemColors.ControlLightLight;
             prodDoctypeTextBox.Location = new Point(185, 53);
             prodDoctypeTextBox.Name = "prodDoctypeTextBox";
             prodDoctypeTextBox.Size = new Size(127, 27);
@@ -119,6 +121,7 @@
             // 
             // firmCodeTextBox
             // 
+            firmCodeTextBox.BackColor = SystemColors.ControlLightLight;
             firmCodeTextBox.Location = new Point(34, 53);
             firmCodeTextBox.Name = "firmCodeTextBox";
             firmCodeTextBox.Size = new Size(127, 27);
