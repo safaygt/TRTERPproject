@@ -80,6 +80,7 @@
 
 
 
+
 		private void oprtipBut_Click(object sender, EventArgs e)
 		{
 			oprForm OprForm = new oprForm();
@@ -90,6 +91,7 @@
 			MatForm matForm = new MatForm();
 			matForm.Show();
 		}
+
 
 
 
