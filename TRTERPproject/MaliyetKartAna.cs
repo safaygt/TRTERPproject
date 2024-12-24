@@ -6,6 +6,7 @@ using TRTERPproject.Helpers;
 
 namespace TRTERPproject
 {
+
     public partial class MaliyetKartAna : Form
     {
         private readonly SqlConnection _connection = new SqlConnection(ConnectionHelper.ConnectionString);
@@ -265,4 +266,5 @@ namespace TRTERPproject
             }
         }
     }
+
 }

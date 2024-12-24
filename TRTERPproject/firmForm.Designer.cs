@@ -32,7 +32,6 @@
             btnAdd = new Button();
             btnEdit = new Button();
             btnGet = new Button();
-            CountryDataGridView = new DataGridView();
             address1TextBox = new TextBox();
             firmNameTextBox = new TextBox();
             firmCodeTextBox = new TextBox();
@@ -45,7 +44,8 @@
             cityCodeTextBox = new TextBox();
             label6 = new Label();
             countryCodeTextBox = new TextBox();
-            ((System.ComponentModel.ISupportInitialize)CountryDataGridView).BeginInit();
+            firmFormDataGridView = new DataGridView();
+            ((System.ComponentModel.ISupportInitialize)firmFormDataGridView).BeginInit();
             SuspendLayout();
             // 
             // btnDel
@@ -91,16 +91,6 @@
             btnGet.Text = "Getir";
             btnGet.UseVisualStyleBackColor = true;
             btnGet.Click += btnGet_Click;
-            // 
-            // CountryDataGridView
-            // 
-            CountryDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            CountryDataGridView.Location = new Point(12, 302);
-            CountryDataGridView.Name = "CountryDataGridView";
-            CountryDataGridView.RowHeadersWidth = 51;
-            CountryDataGridView.RowTemplate.Height = 29;
-            CountryDataGridView.Size = new Size(970, 239);
-            CountryDataGridView.TabIndex = 21;
             // 
             // address1TextBox
             // 
@@ -210,17 +200,27 @@
             countryCodeTextBox.Size = new Size(127, 27);
             countryCodeTextBox.TabIndex = 18;
             // 
+            // firmFormDataGridView
+            // 
+            firmFormDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            firmFormDataGridView.Location = new Point(25, 304);
+            firmFormDataGridView.Name = "firmFormDataGridView";
+            firmFormDataGridView.RowHeadersWidth = 51;
+            firmFormDataGridView.RowTemplate.Height = 29;
+            firmFormDataGridView.Size = new Size(962, 272);
+            firmFormDataGridView.TabIndex = 26;
+            // 
             // firmForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(1031, 588);
+            Controls.Add(firmFormDataGridView);
             Controls.Add(btnDel);
             Controls.Add(btnAdd);
             Controls.Add(btnEdit);
             Controls.Add(btnGet);
-            Controls.Add(CountryDataGridView);
             Controls.Add(countryCodeTextBox);
             Controls.Add(cityCodeTextBox);
             Controls.Add(address2TextBox);
@@ -236,7 +236,8 @@
             ForeColor = SystemColors.ControlLightLight;
             Name = "firmForm";
             Text = "firmForm";
-            ((System.ComponentModel.ISupportInitialize)CountryDataGridView).EndInit();
+            Load += firmForm_Load;
+            ((System.ComponentModel.ISupportInitialize)firmFormDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -247,7 +248,6 @@
         private Button btnAdd;
         private Button btnEdit;
         private Button btnGet;
-        private DataGridView CountryDataGridView;
         private TextBox address1TextBox;
         private TextBox firmNameTextBox;
         private TextBox firmCodeTextBox;
@@ -260,5 +260,6 @@
         private TextBox cityCodeTextBox;
         private Label label6;
         private TextBox countryCodeTextBox;
+        private DataGridView firmFormDataGridView;
     }
 }
