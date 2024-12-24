@@ -46,7 +46,7 @@ namespace TRTERPproject
                 da.Fill(ds);
 
                 // DataGridView'e veri bağla
-                CountryDataGridView.DataSource = ds.Tables[0];  // Veritabanından çekilen ilk tabloyu DataGridView'e bağla
+                firmFormDataGridView.DataSource = ds.Tables[0];  // Veritabanından çekilen ilk tabloyu DataGridView'e bağla
             }
             catch (Exception ex)
             {
@@ -259,6 +259,26 @@ namespace TRTERPproject
             }
 
 
+        }
+
+        private void firmForm_Load(object sender, EventArgs e)
+        {
+            // DataGridView hücre stilini ayarla
+            firmFormDataGridView.DefaultCellStyle.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            firmFormDataGridView.DefaultCellStyle.ForeColor = Color.Black;
+            firmFormDataGridView.DefaultCellStyle.BackColor = Color.White;
+            firmFormDataGridView.DefaultCellStyle.SelectionBackColor = Color.Blue;
+            firmFormDataGridView.DefaultCellStyle.SelectionForeColor = Color.White;
+
+            // Satır başlıklarının stilini ayarla
+            firmFormDataGridView.RowHeadersDefaultCellStyle.BackColor = Color.LightGray;
+            firmFormDataGridView.RowHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+
+            // Başlık stilini ayarla
+            firmFormDataGridView.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            firmFormDataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+            firmFormDataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.DarkBlue;
+            firmFormDataGridView.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
         }
     }
 }
