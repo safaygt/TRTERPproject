@@ -4,7 +4,7 @@
 	{
 
 
-		public static string ConnectionString { get; } = "Server=LAPTOP-KJPATGFL;Database=TRTdb;Integrated Security=True;";
+		public static string ConnectionString { get; } = "Server=MSI\\SQLEXPRESS;Database=TRTdb;Integrated Security=True;";
 
 
 
