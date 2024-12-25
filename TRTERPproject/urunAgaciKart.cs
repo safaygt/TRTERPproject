@@ -289,6 +289,8 @@ namespace TRTERPproject
                 return;
             }
 
+
+
             // CheckBox değerleri
             bool isPassive = checkboxpas.Checked; // Pasif mi?
             bool isDeleted = deletedlbl.Checked; // Silindi mi?

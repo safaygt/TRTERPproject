@@ -185,24 +185,27 @@
             addBut.TabIndex = 18;
             addBut.Text = "Ekle";
             addBut.UseVisualStyleBackColor = true;
+            addBut.Click += addBut_Click;
             // 
             // DelBut
             // 
-            DelBut.Location = new Point(520, 214);
+            DelBut.Location = new Point(675, 214);
             DelBut.Name = "DelBut";
             DelBut.Size = new Size(125, 38);
             DelBut.TabIndex = 19;
             DelBut.Text = "Sil";
             DelBut.UseVisualStyleBackColor = true;
+            DelBut.Click += DelBut_Click;
             // 
             // duzBut
             // 
-            duzBut.Location = new Point(684, 214);
+            duzBut.Location = new Point(513, 214);
             duzBut.Name = "duzBut";
             duzBut.Size = new Size(125, 38);
             duzBut.TabIndex = 20;
             duzBut.Text = "Düzenle";
             duzBut.UseVisualStyleBackColor = true;
+            duzBut.Click += duzBut_Click;
             // 
             // isDeletedCheckBox
             // 

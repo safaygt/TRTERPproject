@@ -317,5 +317,117 @@ namespace TRTERPproject
                 con.Close();
             }
         }
+
+        private void addBut_Click(object sender, EventArgs e)
+        {
+            matAddForm MatAddForm = new matAddForm();
+            MatAddForm.Show();
+
+        }
+
+
+        private void DelBut_Click(object sender, EventArgs e)
+        {
+            // DataGridView'den seçilen satırı kontrol et
+            if (malKartAna.SelectedRows.Count > 0)
+            {
+                // Seçilen satırdaki "Malzeme Numarası" bilgisini al
+                DataGridViewRow selectedRow = malKartAna.SelectedRows[0];
+                string matDocNum = selectedRow.Cells["Malzeme Numarası"].Value.ToString();
+
+                // Kullanıcıdan onay al
+                DialogResult dialogResult = MessageBox.Show(
+                    $"Malzeme Numarası {matDocNum} olan veriyi silmek istediğinize emin misiniz?",
+                    "Silme Onayı",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (dialogResult == DialogResult.Yes)
+                {
+                    try
+                    {
+                        con.Open();
+
+                        // BSMGRTRTMATHEAD tablosundan silme sorgusu
+                        string deleteFromMatHead = "DELETE FROM BSMGRTRTMATHEAD WHERE MATDOCNUM = @MATDOCNUM";
+                        SqlCommand cmdMatHead = new SqlCommand(deleteFromMatHead, con);
+                        cmdMatHead.Parameters.AddWithValue("@MATDOCNUM", matDocNum);
+                        cmdMatHead.ExecuteNonQuery();
+
+                        // BSMGRTRTMATTEXT tablosundan silme sorgusu
+                        string deleteFromMatText = "DELETE FROM BSMGRTRTMATTEXT WHERE MATDOCNUM = @MATDOCNUM";
+                        SqlCommand cmdMatText = new SqlCommand(deleteFromMatText, con);
+                        cmdMatText.Parameters.AddWithValue("@MATDOCNUM", matDocNum);
+                        cmdMatText.ExecuteNonQuery();
+
+                        // Başarılı silme mesajı
+                        MessageBox.Show("Seçilen veri başarıyla silindi.", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // DataGridView'i güncelle
+                        malKartAna.Rows.Remove(selectedRow);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Hata: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    finally
+                    {
+                        con.Close();
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Lütfen silmek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+
+        private void duzBut_Click(object sender, EventArgs e)
+        {
+            // DataGridView'den seçilen satırı kontrol et
+            if (malKartAna.SelectedRows.Count > 0)
+            {
+                DataGridViewRow selectedRow = malKartAna.SelectedRows[0];
+
+                // Yeni bir edit form oluştur ve seçilen veriyi aktar
+                malzemeAnaTabloEdit MalzemeAnaTabloEdit = new malzemeAnaTabloEdit();
+
+                // Formdaki alanlara DataGridView'deki değerleri aktar
+                MalzemeAnaTabloEdit.Firma = selectedRow.Cells["Firma"].Value.ToString();
+                MalzemeAnaTabloEdit.MatdocType = selectedRow.Cells["Malzeme Tipi"].Value.ToString();
+                MalzemeAnaTabloEdit.MatCode = Convert.ToInt32(selectedRow.Cells["Malzeme Numarası"].Value);
+                MalzemeAnaTabloEdit.GecerliBaslangic = Convert.ToDateTime(selectedRow.Cells["Geçerlilik Başlangıç"].Value);
+                MalzemeAnaTabloEdit.GecerliBitis = Convert.ToDateTime(selectedRow.Cells["Geçerlilik Bitiş"].Value);
+                MalzemeAnaTabloEdit.supplytype = Convert.ToInt32(selectedRow.Cells["Tedarik Tipi"].Value);
+                MalzemeAnaTabloEdit.malzemeStokBirimi = selectedRow.Cells["Stok Birimi"].Value.ToString();
+                MalzemeAnaTabloEdit.netWeight = selectedRow.Cells["Net Ağırlık"].Value != DBNull.Value
+                ? Convert.ToInt32(selectedRow.Cells["Net Ağırlık"].Value) : 0;
+                // Varsayılan değer olarak 0 atanabilir
+
+                MalzemeAnaTabloEdit.netWeightUnit = selectedRow.Cells["Net Ağırlık Birimi"].Value.ToString();
+                MalzemeAnaTabloEdit.brutWeight = selectedRow.Cells["Brüt Ağırlık"].Value != DBNull.Value
+                ? Convert.ToInt32(selectedRow.Cells["Brüt Ağırlık"].Value) : 0;
+
+                MalzemeAnaTabloEdit.brutWeightUnit = selectedRow.Cells["Brüt Ağırlık Birimi"].Value.ToString();
+                MalzemeAnaTabloEdit.isTree = Convert.ToBoolean(selectedRow.Cells["Ürün Ağacı Var mı?"].Value);
+                MalzemeAnaTabloEdit.treeType = selectedRow.Cells["Ürün Ağacı Tipi"].Value.ToString();
+                MalzemeAnaTabloEdit.treeCode = selectedRow.Cells["Ürün Ağacı Kodu"].Value.ToString();
+                MalzemeAnaTabloEdit.isRot = Convert.ToBoolean(selectedRow.Cells["Rota Var mı?"].Value);
+                MalzemeAnaTabloEdit.rotType = selectedRow.Cells["Rota Tipi"].Value.ToString();
+                MalzemeAnaTabloEdit.rotCode = selectedRow.Cells["Rota Kodu"].Value.ToString();
+                MalzemeAnaTabloEdit.IsDeleted = Convert.ToBoolean(selectedRow.Cells["Silindi mi?"].Value);
+                MalzemeAnaTabloEdit.IsPassive = Convert.ToBoolean(selectedRow.Cells["Pasif mi?"].Value);
+                MalzemeAnaTabloEdit.Dil = selectedRow.Cells["Dil"].Value.ToString();
+
+                // Edit formu göster
+                MalzemeAnaTabloEdit.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Lütfen düzenlemek için bir satır seçin.");
+            }
+        }
+
     }
 }
