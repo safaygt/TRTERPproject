@@ -113,7 +113,7 @@ namespace TRTERPproject
         {
             // Temel SQL sorgusu
             string query = @"
-        SELECT 
+            SELECT 
             COMCODE AS 'Firma', 
             BOMDOCTYPE AS 'Ürün Ağacı Tipi', 
             BOMDOCNUM AS 'Ürün Ağacı Numarası', 
@@ -125,7 +125,7 @@ namespace TRTERPproject
             DRAWNUM AS 'Çizim Numarası',
             ISDELETED AS 'Silindi mi?',
             ISPASSIVE AS 'Pasif mi?'
-        FROM BSMGRTRTBOMHEAD";
+            FROM BSMGRTRTBOMHEAD";
 
             // Filtreleme koşulları
             List<string> filters = new List<string>();
