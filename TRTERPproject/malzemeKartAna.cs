@@ -17,58 +17,64 @@ namespace TRTERPproject
 
             // ComboBox leave eventlerini bağla
             comboBoxMalzFirm.Leave += (s, e) => ValidateAndAddData(comboBoxMalzFirm, "COMCODE");
-            malzTipcombo.Leave += (s, e) => ValidateAndAddData(malzTipcombo, "MATDOCTYPE");
+            malzTipcombo.Leave += (s, e) => ValidateAndAddData(malzTipcombo, "DOCTYPE");
             comboBoxTedTip.Leave += (s, e) => ValidateAndAddData(comboBoxTedTip, "SUPPLYTYPE");
             comboBoxDil.Leave += (s, e) => ValidateAndAddData(comboBoxDil, "LANCODE");
         }
-        private void LoadComboBoxData()
+
+
+        private void LoadComboBox(ComboBox comboBox, string query, string displayMember, string valueMember)
         {
             try
             {
-                con.Open();
-
-                // Firma verilerini doldur
-                string queryFirma = "SELECT DISTINCT COMCODE FROM BSMGRTRTMATHEAD";
-                SqlDataAdapter daFirma = new SqlDataAdapter(queryFirma, con);
-                DataTable dtFirma = new DataTable();
-                daFirma.Fill(dtFirma);
-                comboBoxMalzFirm.DataSource = dtFirma;
-                comboBoxMalzFirm.DisplayMember = "COMCODE";
-                comboBoxMalzFirm.ValueMember = "COMCODE";
-                comboBoxMalzFirm.DropDownStyle = ComboBoxStyle.DropDown; // Yeni veri girilebilir
-
-                string queryMtip = "SELECT DISTINCT MATDOCTYPE FROM BSMGRTRTMATHEAD"; // Tablo ve sütun adını kontrol edin
-                SqlDataAdapter daMtip = new SqlDataAdapter(queryMtip, con);
-                DataTable dtMtip = new DataTable();
-                daMtip.Fill(dtMtip);
-                malzTipcombo.DataSource = dtMtip;
-                malzTipcombo.DisplayMember = "MATDOCTYPE";
-                malzTipcombo.ValueMember = "MATDOCTYPE";
-                malzTipcombo.DropDownStyle = ComboBoxStyle.DropDown;
-
-                string queryTtip = "SELECT DISTINCT SUPPLYTYPE FROM BSMGRTRTMATHEAD"; // Tablo ve sütun adını kontrol edin
-                SqlDataAdapter daTtip = new SqlDataAdapter(queryTtip, con);
-                DataTable dtTtip = new DataTable();
-                daTtip.Fill(dtTtip);
-                comboBoxTedTip.DataSource = dtTtip;
-                comboBoxTedTip.DisplayMember = "SUPPLYTYPE";
-                comboBoxTedTip.ValueMember = "SUPPLYTYPE";
-                comboBoxTedTip.DropDownStyle = ComboBoxStyle.DropDown;
-
-                string queryLtip = "SELECT DISTINCT LANCODE FROM BSMGRTRTGEN002"; // Tablo ve sütun adını kontrol edin
-                SqlDataAdapter daLtip = new SqlDataAdapter(queryLtip, con);
-                DataTable dtLtip = new DataTable();
-                daLtip.Fill(dtLtip); // Hata burada düzeltiliyor
-                comboBoxDil.DataSource = dtLtip;
-                comboBoxDil.DisplayMember = "LANCODE";
-                comboBoxDil.ValueMember = "LANCODE";
-                comboBoxDil.DropDownStyle = ComboBoxStyle.DropDown;
-
-
+                using (SqlDataAdapter da = new SqlDataAdapter(query, con))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    comboBox.DataSource = dt;
+                    comboBox.DisplayMember = displayMember;
+                    comboBox.ValueMember = valueMember;
+                    comboBox.DropDownStyle = ComboBoxStyle.DropDown;
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Veriler yüklenirken hata oluştu: {ex.Message}");
+                MessageBox.Show($"ComboBox verileri yüklenirken hata: {ex.Message}");
+            }
+        }
+
+
+        private void LoadComboBoxData()
+        {
+            string[] queries = new string[]
+    {
+        "SELECT DISTINCT COMCODE FROM BSMGRTRTGEN001",
+        "SELECT DISTINCT DOCTYPE FROM BSMGRTRTMAT001",
+        "SELECT DISTINCT SUPPLYTYPE FROM BSMGRTRTMATHEAD",
+        "SELECT DISTINCT LANCODE FROM BSMGRTRTGEN002"
+    };
+
+            ComboBox[] comboBoxes = new ComboBox[]
+            {
+        comboBoxMalzFirm,
+        malzTipcombo,
+        comboBoxTedTip,
+        comboBoxDil
+            };
+
+            string[] displayValueMembers = new string[] { "COMCODE", "DOCTYPE", "SUPPLYTYPE", "LANCODE" };
+
+            try
+            {
+                con.Open();
+                for (int i = 0; i < queries.Length; i++)
+                {
+                    LoadComboBox(comboBoxes[i], queries[i], displayValueMembers[i], displayValueMembers[i]);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"ComboBox verileri yüklenirken hata: {ex.Message}");
             }
             finally
             {
@@ -77,26 +83,26 @@ namespace TRTERPproject
         }
         private void ValidateAndAddData(ComboBox comboBox, string columnName)
         {
-            string checkQuery = $"SELECT COUNT(*) FROM BSMGRTRTMATHEAD WHERE {columnName} = @userInput";
-            con = new SqlConnection(ConnectionHelper.ConnectionString);
-            cmd = new SqlCommand();
-            cmd.Connection = con;
-            cmd.CommandText = checkQuery;
-            string userInput = comboBox.Text;
-            if (string.IsNullOrEmpty(userInput)) return;
+            string checkQuery = $@"
+        SELECT COUNT(*) 
+        FROM BSMGRTRTMATHEAD 
+        WHERE {columnName} = @userInput";
+
+            if (string.IsNullOrEmpty(comboBox.Text)) return;
 
             try
             {
                 con.Open();
-
-                SqlCommand checkCmd = new SqlCommand(checkQuery, con);
-                checkCmd.Parameters.AddWithValue("@userInput", userInput);
-
-                int count = (int)checkCmd.ExecuteScalar();
-                if (count == 0)
+                using (SqlCommand checkCmd = new SqlCommand(checkQuery, con))
                 {
-                    MessageBox.Show($"{columnName} '{userInput}' tablodaki verilerle uyuşmuyor.");
-                    comboBox.Text = string.Empty; // Kullanıcının yanlış girişini temizler
+                    checkCmd.Parameters.AddWithValue("@userInput", comboBox.Text);
+                    int count = (int)checkCmd.ExecuteScalar();
+
+                    if (count == 0)
+                    {
+                        MessageBox.Show($"{columnName} '{comboBox.Text}' tablodaki verilerle uyuşmuyor.");
+                        comboBox.Text = string.Empty; // Kullanıcının yanlış girişini temizler
+                    }
                 }
             }
             catch (Exception ex)

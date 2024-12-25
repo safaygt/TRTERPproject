@@ -22,11 +22,112 @@ namespace TRTERPproject
         public matAddForm()
         {
             InitializeComponent();
+            this.Load += (s, e) => LoadComboBoxData();
+            
+
+            firmCodeComboBox.Leave += (s, e) => ValidateAndAddData(firmCodeComboBox, "COMCODE");
+            matTypeComboBox.Leave += (s, e) => ValidateAndAddData(matTypeComboBox, "MATDOCTYPE");
+            supplyTypeComboBox.Leave += (s, e) => ValidateAndAddData(supplyTypeComboBox, "SUPPLYTYPE");
+            lanComboBox.Leave += (s, e) => ValidateAndAddData(lanComboBox, "LANCODE");
+            routeTypeComboBox.Leave += (s, e) => ValidateAndAddData(routeTypeComboBox, "ROTDOCTYPE");
+            productTreeTypeComboBox.Leave += (s, e) => ValidateAndAddData(productTreeTypeComboBox, "BOMDOCTYPE");
         }
+
+        private void LoadComboBox(ComboBox comboBox, string query, string columnName)
+        {
+            using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+            {
+                using (SqlDataAdapter adapter = new SqlDataAdapter(query, con))
+                {
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    comboBox.DataSource = dt;
+                    comboBox.DisplayMember = columnName;
+                    comboBox.ValueMember = columnName;
+                    comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+
+                    // Seçilen değeri doğru şekilde ata
+                    if (comboBox.SelectedValue == null && dt.Rows.Count > 0)
+                    {
+                        comboBox.SelectedValue = dt.Rows[0][columnName]; // Varsayılan değeri ilk satır olarak ayarlayın
+                    }
+                }
+            }
+        }
+
+
+
+        private void matAddForm_Load(object sender, EventArgs e)
+        {
+            LoadComboBoxData();
+        }
+
+        private void LoadComboBoxData()
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    con.Open();
+
+                    // Firma verileri
+                    LoadComboBox(firmCodeComboBox, "SELECT DISTINCT COMCODE FROM BSMGRTRTGEN001", "COMCODE");
+
+                    // İş Merkezi Tipi
+                    LoadComboBox(matTypeComboBox, "SELECT DISTINCT DOCTYPE FROM BSMGRTRTMAT001", "DOCTYPE");
+
+                    // Dil Kodları
+                    LoadComboBox(lanComboBox, "SELECT DISTINCT LANCODE FROM BSMGRTRTGEN002", "LANCODE");
+
+                    // Operasyon Kodu
+                    LoadComboBox(routeTypeComboBox, "SELECT DISTINCT DOCTYPE FROM BSMGRTRTROT001", "DOCTYPE");
+
+                    // Maliyet Merkezi
+                    LoadComboBox(productTreeTypeComboBox, "SELECT DISTINCT DOCTYPE FROM BSMGRTRTBOM001", "DOCTYPE");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Veriler yüklenirken hata oluştu: {ex.Message}");
+            }
+        }
+
 
         private void label7_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void ValidateAndAddData(ComboBox comboBox, string columnName)
+        {
+            string userInput = comboBox.Text.Trim();
+            if (string.IsNullOrEmpty(userInput))
+                return;
+
+            string checkQuery = $"SELECT COUNT(*) FROM BSMGRTRTMATHEAD WHERE {columnName} = @userInput";
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    using (SqlCommand checkCmd = new SqlCommand(checkQuery, con))
+                    {
+                        checkCmd.Parameters.AddWithValue("@userInput", userInput);
+                        con.Open();
+
+                        int count = (int)checkCmd.ExecuteScalar();
+                        if (count == 0)
+                        {
+                            MessageBox.Show($"'{userInput}' değeri {columnName} sütunu için geçerli değil.", "Geçersiz Giriş", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            comboBox.Text = string.Empty;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Hata: {ex.Message}");
+            }
         }
 
         private void btnKaydet_Click(object sender, EventArgs e)
@@ -191,9 +292,6 @@ namespace TRTERPproject
 
         }
 
-        private void matAddForm_Load(object sender, EventArgs e)
-        {
 
-        }
     }
 }
