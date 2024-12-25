@@ -37,29 +37,30 @@
 			addBut = new Button();
 			getBut = new Button();
 			ismerkData = new DataGridView();
-			bitistarTxtBox = new TextBox();
-			basTarTxtBox = new TextBox();
-			ismerktipTxtBox = new TextBox();
 			ismerkodtxtBox = new TextBox();
 			dillbl = new Label();
 			label6 = new Label();
 			label5 = new Label();
 			label4 = new Label();
 			label3 = new Label();
-			maliylbl = new Label();
 			label1 = new Label();
 			comboBoxOprCode = new ComboBox();
 			label2 = new Label();
 			label7 = new Label();
 			operasTxtBox = new TextBox();
 			comboBoxIsMerTip = new ComboBox();
+			geAllBut = new Button();
+			dateTimeBas = new DateTimePicker();
+			dateTimeBit = new DateTimePicker();
+			comboBoxMalytMer = new ComboBox();
+			label8 = new Label();
 			((System.ComponentModel.ISupportInitialize)ismerkData).BeginInit();
 			SuspendLayout();
 			// 
 			// dilBox
 			// 
 			dilBox.FormattingEnabled = true;
-			dilBox.Location = new Point(426, 137);
+			dilBox.Location = new Point(412, 137);
 			dilBox.Name = "dilBox";
 			dilBox.Size = new Size(174, 28);
 			dilBox.TabIndex = 68;
@@ -77,7 +78,7 @@
 			checkboxpas.AutoSize = true;
 			checkboxpas.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
 			checkboxpas.ForeColor = SystemColors.Control;
-			checkboxpas.Location = new Point(885, 202);
+			checkboxpas.Location = new Point(880, 180);
 			checkboxpas.Name = "checkboxpas";
 			checkboxpas.Size = new Size(109, 29);
 			checkboxpas.TabIndex = 66;
@@ -89,7 +90,7 @@
 			deletedlbl.AutoSize = true;
 			deletedlbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
 			deletedlbl.ForeColor = SystemColors.Control;
-			deletedlbl.Location = new Point(885, 237);
+			deletedlbl.Location = new Point(717, 180);
 			deletedlbl.Name = "deletedlbl";
 			deletedlbl.Size = new Size(120, 29);
 			deletedlbl.TabIndex = 65;
@@ -98,34 +99,37 @@
 			// 
 			// duzBut
 			// 
-			duzBut.Location = new Point(544, 237);
+			duzBut.Location = new Point(520, 233);
 			duzBut.Name = "duzBut";
 			duzBut.Size = new Size(125, 38);
 			duzBut.TabIndex = 64;
 			duzBut.Text = "Düzenle";
 			duzBut.UseVisualStyleBackColor = true;
+			duzBut.Click += duzBut_Click;
 			// 
 			// DelBut
 			// 
-			DelBut.Location = new Point(380, 237);
+			DelBut.Location = new Point(676, 233);
 			DelBut.Name = "DelBut";
 			DelBut.Size = new Size(125, 38);
 			DelBut.TabIndex = 63;
 			DelBut.Text = "Sil";
 			DelBut.UseVisualStyleBackColor = true;
+			DelBut.Click += DelBut_Click;
 			// 
 			// addBut
 			// 
-			addBut.Location = new Point(212, 237);
+			addBut.Location = new Point(361, 233);
 			addBut.Name = "addBut";
 			addBut.Size = new Size(125, 38);
 			addBut.TabIndex = 62;
 			addBut.Text = "Ekle";
 			addBut.UseVisualStyleBackColor = true;
+			addBut.Click += addBut_Click;
 			// 
 			// getBut
 			// 
-			getBut.Location = new Point(44, 237);
+			getBut.Location = new Point(201, 233);
 			getBut.Name = "getBut";
 			getBut.Size = new Size(125, 38);
 			getBut.TabIndex = 61;
@@ -143,27 +147,6 @@
 			ismerkData.Size = new Size(1024, 337);
 			ismerkData.TabIndex = 60;
 			// 
-			// bitistarTxtBox
-			// 
-			bitistarTxtBox.Location = new Point(880, 137);
-			bitistarTxtBox.Name = "bitistarTxtBox";
-			bitistarTxtBox.Size = new Size(158, 27);
-			bitistarTxtBox.TabIndex = 58;
-			// 
-			// basTarTxtBox
-			// 
-			basTarTxtBox.Location = new Point(880, 52);
-			basTarTxtBox.Name = "basTarTxtBox";
-			basTarTxtBox.Size = new Size(163, 27);
-			basTarTxtBox.TabIndex = 57;
-			// 
-			// ismerktipTxtBox
-			// 
-			ismerktipTxtBox.Location = new Point(35, 138);
-			ismerktipTxtBox.Name = "ismerktipTxtBox";
-			ismerktipTxtBox.Size = new Size(367, 27);
-			ismerktipTxtBox.TabIndex = 56;
-			// 
 			// ismerkodtxtBox
 			// 
 			ismerkodtxtBox.Location = new Point(426, 50);
@@ -176,7 +159,7 @@
 			dillbl.AutoSize = true;
 			dillbl.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
 			dillbl.ForeColor = Color.GhostWhite;
-			dillbl.Location = new Point(465, 112);
+			dillbl.Location = new Point(451, 112);
 			dillbl.Name = "dillbl";
 			dillbl.Size = new Size(80, 23);
 			dillbl.TabIndex = 54;
@@ -225,17 +208,6 @@
 			label3.Size = new Size(138, 23);
 			label3.TabIndex = 50;
 			label3.Text = "İş Merkezi Kodu";
-			// 
-			// maliylbl
-			// 
-			maliylbl.AutoSize = true;
-			maliylbl.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
-			maliylbl.ForeColor = Color.GhostWhite;
-			maliylbl.Location = new Point(144, 112);
-			maliylbl.Name = "maliylbl";
-			maliylbl.Size = new Size(182, 23);
-			maliylbl.TabIndex = 49;
-			maliylbl.Text = "İş Merkezi Açıklaması";
 			// 
 			// label1
 			// 
@@ -293,12 +265,61 @@
 			comboBoxIsMerTip.Size = new Size(167, 28);
 			comboBoxIsMerTip.TabIndex = 74;
 			// 
+			// geAllBut
+			// 
+			geAllBut.Location = new Point(41, 233);
+			geAllBut.Name = "geAllBut";
+			geAllBut.Size = new Size(125, 38);
+			geAllBut.TabIndex = 75;
+			geAllBut.Text = "Hepsini Getir";
+			geAllBut.UseVisualStyleBackColor = true;
+			geAllBut.Click += geAllBut_Click;
+			// 
+			// dateTimeBas
+			// 
+			dateTimeBas.Location = new Point(864, 52);
+			dateTimeBas.Name = "dateTimeBas";
+			dateTimeBas.Size = new Size(210, 27);
+			dateTimeBas.TabIndex = 76;
+			dateTimeBas.Value = new DateTime(2024, 1, 1, 0, 0, 0, 0);
+			// 
+			// dateTimeBit
+			// 
+			dateTimeBit.Location = new Point(864, 136);
+			dateTimeBit.Name = "dateTimeBit";
+			dateTimeBit.Size = new Size(210, 27);
+			dateTimeBit.TabIndex = 77;
+			// 
+			// comboBoxMalytMer
+			// 
+			comboBoxMalytMer.FormattingEnabled = true;
+			comboBoxMalytMer.Location = new Point(62, 138);
+			comboBoxMalytMer.Name = "comboBoxMalytMer";
+			comboBoxMalytMer.Size = new Size(255, 28);
+			comboBoxMalytMer.TabIndex = 79;
+			// 
+			// label8
+			// 
+			label8.AutoSize = true;
+			label8.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
+			label8.ForeColor = Color.GhostWhite;
+			label8.Location = new Point(105, 111);
+			label8.Name = "label8";
+			label8.Size = new Size(175, 23);
+			label8.TabIndex = 78;
+			label8.Text = "Maliyet Merkezi Tipi";
+			// 
 			// isMerkeziKart
 			// 
 			AutoScaleDimensions = new SizeF(8F, 20F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.FromArgb(197, 110, 51);
 			ClientSize = new Size(1102, 654);
+			Controls.Add(comboBoxMalytMer);
+			Controls.Add(label8);
+			Controls.Add(dateTimeBit);
+			Controls.Add(dateTimeBas);
+			Controls.Add(geAllBut);
 			Controls.Add(comboBoxIsMerTip);
 			Controls.Add(operasTxtBox);
 			Controls.Add(label7);
@@ -313,16 +334,12 @@
 			Controls.Add(addBut);
 			Controls.Add(getBut);
 			Controls.Add(ismerkData);
-			Controls.Add(bitistarTxtBox);
-			Controls.Add(basTarTxtBox);
-			Controls.Add(ismerktipTxtBox);
 			Controls.Add(ismerkodtxtBox);
 			Controls.Add(dillbl);
 			Controls.Add(label6);
 			Controls.Add(label5);
 			Controls.Add(label4);
 			Controls.Add(label3);
-			Controls.Add(maliylbl);
 			Controls.Add(label1);
 			Name = "isMerkeziKart";
 			Text = "isMerkeziKart";
@@ -342,21 +359,22 @@
 		private Button addBut;
 		private Button getBut;
 		private DataGridView ismerkData;
-		private TextBox bitistarTxtBox;
-		private TextBox basTarTxtBox;
-		private TextBox ismerktipTxtBox;
 		private TextBox ismerkodtxtBox;
 		private Label dillbl;
 		private Label label6;
 		private Label label5;
 		private Label label4;
 		private Label label3;
-		private Label maliylbl;
 		private Label label1;
 		private ComboBox comboBoxOprCode;
 		private Label label2;
 		private Label label7;
 		private TextBox operasTxtBox;
 		private ComboBox comboBoxIsMerTip;
+		private Button geAllBut;
+		private DateTimePicker dateTimeBas;
+		private DateTimePicker dateTimeBit;
+		private ComboBox comboBoxMalytMer;
+		private Label label8;
 	}
 }
