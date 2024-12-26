@@ -120,6 +120,7 @@ namespace TRTERPproject
             // Temel SQL sorgusu
             string query = @"
             SELECT 
+
                         H.COMCODE AS 'Firma', 
                         H.BOMDOCTYPE AS 'Ürün Ağacı Tipi', 
                         H.BOMDOCNUM AS 'Ürün Ağacı Numarası', 
@@ -132,6 +133,7 @@ namespace TRTERPproject
                         H.ISPASSIVE AS 'Pasif mi?',
                         H.DRAWNUM AS 'Çizim Numarası'
                     FROM BSMGRTRTBOMHEAD H ";
+
 
             // Filtreleme koşulları
             List<string> filters = new List<string>();
@@ -264,8 +266,12 @@ namespace TRTERPproject
 
         private void addBut_Click(object sender, EventArgs e)
         {
+
             urunAgaciKartAdd urunAgaciKartAdd = new urunAgaciKartAdd(bomDocNum);
             urunAgaciKartAdd.Show();
+
+            // Kullanıcıdan alınacak form verilerini okuma
+            
         }
 
         private void basTarTxtBox_TextChanged(object sender, EventArgs e)

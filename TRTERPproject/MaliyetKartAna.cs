@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
 using System.Windows.Forms;
 using TRTERPproject.Helpers;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace TRTERPproject
 {
@@ -10,6 +12,8 @@ namespace TRTERPproject
     public partial class MaliyetKartAna : Form
     {
         private readonly SqlConnection _connection = new SqlConnection(ConnectionHelper.ConnectionString);
+        private SqlConnection con;
+        private SqlCommand cmd;
 
         public MaliyetKartAna()
         {
@@ -43,7 +47,7 @@ namespace TRTERPproject
             }
         }
 
-        private void PopulateComboBox(string query, ComboBox comboBox, string displayMember)
+        private void PopulateComboBox(string query, System.Windows.Forms.ComboBox comboBox, string displayMember)
         {
             SqlDataAdapter adapter = new SqlDataAdapter(query, _connection);
             DataTable dataTable = new DataTable();
@@ -54,7 +58,7 @@ namespace TRTERPproject
             comboBox.DropDownStyle = ComboBoxStyle.DropDown;
         }
 
-        private void ValidateAndAddData(ComboBox comboBox, string columnName)
+        private void ValidateAndAddData(System.Windows.Forms.ComboBox comboBox, string columnName)
         {
             if (string.IsNullOrEmpty(comboBox.Text)) return;
 
@@ -87,6 +91,7 @@ namespace TRTERPproject
 
         private void getBut_Click(object sender, EventArgs e)
         {
+            // Temel SQL sorgusu
             string query = @"SELECT 
                                 COMCODE AS 'Firma', 
                                 CCMDOCTYPE AS 'Maliyet Merkezi Tipi', 
@@ -99,22 +104,114 @@ namespace TRTERPproject
                                 ISPASSIVE AS 'Pasif mi?'
                             FROM BSMGRTRTCCMHEAD";
 
-            try
-            {
-                _connection.Open();
+            // Filtreleme koşulları
+            List<string> filters = new List<string>();
 
-                SqlDataAdapter adapter = new SqlDataAdapter(query, _connection);
-                DataSet dataSet = new DataSet();
-                adapter.Fill(dataSet);
-                maliyetdata.DataSource = dataSet.Tables[0];
-            }
-            catch (Exception ex)
+            // Firma filtresi
+            if (!string.IsNullOrEmpty(firmComboBox.Text))
             {
-                MessageBox.Show($"Hata: {ex.Message}");
+                filters.Add("COMCODE = @COMCODE");
             }
-            finally
+
+            // Maliyet Merkezi Tipi filtresi
+            if (!string.IsNullOrEmpty(comboBoxMalMerTip.Text))
             {
-                _connection.Close();
+                filters.Add("CCMDOCTYPE = @CCMDOCTYPE");
+            }
+
+            // Maliyet Merkezi Numarası filtresi
+            if (!string.IsNullOrEmpty(malNotxtBox.Text))
+            {
+                filters.Add("CCMDOCNUM = @CCMDOCNUM");
+            }
+
+            // Ana Maliyet Merkezi Tipi filtresi
+            if (!string.IsNullOrEmpty(maliyTxtBox.Text))
+            {
+                filters.Add("MAINCCMDOCNUM = @MAINCCMDOCNUM");
+            }
+
+
+            // Tarih aralığı filtresi
+            if (dateTimePickerBaslangic.Value.Date != DateTime.MinValue.Date && dateTimePickerBitis.Value.Date != DateTime.MinValue.Date)
+            {
+                filters.Add("CCMDOCFROM >= @CCMDOCFROM AND CCMDOCUNTIL <= @CCMDOCUNTIL");
+            }
+
+            // Pasiflik kontrolü
+            if (checkboxpas.Checked)
+            {
+                filters.Add("ISPASSIVE = 1");
+            }
+
+            // Silinmişlik kontrolü
+            if (deletedlbl.Checked)
+            {
+                filters.Add("ISDELETED = 1");
+            }
+
+            // Filtreleri sorguya ekle
+            if (filters.Count > 0)
+            {
+                query += " WHERE " + string.Join(" AND ", filters);
+            }
+
+            // SQL bağlantısı ve komutu
+            using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                // Parametreleri ekle
+                if (!string.IsNullOrEmpty(firmComboBox.Text))
+                {
+                    cmd.Parameters.AddWithValue("@COMCODE", firmComboBox.Text);
+                }
+
+                if (!string.IsNullOrEmpty(comboBoxMalMerTip.Text))
+                {
+                    cmd.Parameters.AddWithValue("@CCMDOCTYPE", comboBoxMalMerTip.Text);
+                }
+
+                if (!string.IsNullOrEmpty(malNotxtBox.Text))
+                {
+                    cmd.Parameters.AddWithValue("@CCMDOCNUM", malNotxtBox.Text);
+                }
+
+                if (!string.IsNullOrEmpty(maliyTxtBox.Text))
+                {
+                    cmd.Parameters.AddWithValue("@MAINCCMDOCNUM", maliyTxtBox.Text);
+                }
+
+
+                if (dateTimePickerBaslangic.Value.Date != DateTime.MinValue.Date && dateTimePickerBitis.Value.Date != DateTime.MinValue.Date)
+                {
+                    cmd.Parameters.AddWithValue("@CCMDOCFROM", dateTimePickerBaslangic.Value.Date);
+                    cmd.Parameters.AddWithValue("@CCMDOCUNTIL", dateTimePickerBitis.Value.Date);
+                }
+
+                try
+                {
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataSet dt = new DataSet();
+                    da.Fill(dt);
+
+                    // DataGridView'e sonuçları bağla
+                    maliyetdata.DataSource = dt.Tables[0];
+
+                    // Veri olmadığında kullanıcıyı bilgilendir
+                    if (dt.Tables[0].Rows.Count == 0)
+                    {
+                        MessageBox.Show("Filtrelerinizle eşleşen bir veri bulunamadı.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Hata: {ex.Message}");
+                }
+                finally
+                {
+                    _connection.Close();
+                }
             }
         }
 
@@ -123,13 +220,13 @@ namespace TRTERPproject
             string comCode = firmComboBox.Text.Trim();
             string malMerType = comboBoxMalMerTip.Text.Trim();
             string malMerCode = malNotxtBox.Text.Trim();
-            string startDate = basTarTxtBox.Text.Trim();
-            string lastDate = bitistarTxtBox.Text.Trim();
+            string startDate = dateTimePickerBaslangic.Text.Trim();
+            string lastDate = dateTimePickerBitis.Text.Trim();
             string malDes = maliyTxtBox.Text.Trim();
             int isMainUnit = checkboxpas.Checked ? 1 : 0;
             int isDelUnit = deletedlbl.Checked ? 1 : 0;
 
-            if (string.IsNullOrEmpty(comCode) || string.IsNullOrEmpty(malMerType) || string.IsNullOrEmpty(malMerCode) ||
+            if (string.IsNullOrEmpty(comCode) || string.IsNullOrEmpty(malMerType) || string.IsNullOrEmpty(malMerCode) || string.IsNullOrEmpty(malDes) ||
                 string.IsNullOrEmpty(startDate) || string.IsNullOrEmpty(lastDate))
             {
                 MessageBox.Show("Lütfen tüm alanları doldurun!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -204,8 +301,8 @@ namespace TRTERPproject
             comboBoxMalMerTip.SelectedIndex = -1;
             malNotxtBox.Clear();
             maliyTxtBox.Clear();
-            basTarTxtBox.Clear();
-            bitistarTxtBox.Clear();
+            dateTimePickerBaslangic.Checked = false;
+            dateTimePickerBitis.Checked = false;
             checkboxpas.Checked = false;
             deletedlbl.Checked = false;
         }
@@ -217,6 +314,20 @@ namespace TRTERPproject
             if (string.IsNullOrEmpty(malMerCode))
             {
                 MessageBox.Show("Lütfen bir Maliyet Merkezi Numarası giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Kullanıcıdan onay alıyoruz
+            DialogResult result = MessageBox.Show(
+                "Bu kaydı silmek istediğinizden emin misiniz?",
+                "Onay",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (result != DialogResult.Yes)
+            {
+                // Kullanıcı "Hayır" seçtiyse işlemi iptal ediyoruz
+                MessageBox.Show("Silme işlemi iptal edildi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -266,8 +377,94 @@ namespace TRTERPproject
             }
         }
 
+
         private void firmComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+
+}
+        private void getAll_Click(object sender, EventArgs e)
+        {
+            string query = @"SELECT 
+                                COMCODE AS 'Firma', 
+                                CCMDOCTYPE AS 'Maliyet Merkezi Tipi', 
+                                CCMDOCNUM AS 'Maliyet Merkezi Numarası', 
+                                CCMDOCFROM AS 'Geçerlilik Başlangıç',
+                                CCMDOCUNTIL AS 'Geçerlilik Bitiş',
+                                MAINCCMDOCTYPE AS 'Ana Maliyet Merkezi Tipi', 
+                                MAINCCMDOCNUM AS 'Ana Maliyet Merkezi Numarası', 
+                                ISDELETED AS 'Silindi mi?',
+                                ISPASSIVE AS 'Pasif mi?'
+                            FROM BSMGRTRTCCMHEAD";
+
+            try
+            {
+                _connection.Open();
+
+                SqlDataAdapter adapter = new SqlDataAdapter(query, _connection);
+                DataSet dataSet = new DataSet();
+                adapter.Fill(dataSet);
+                maliyetdata.DataSource = dataSet.Tables[0];
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Hata: {ex.Message}");
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
+
+        private void ClearFormFields()
+        {
+            firmComboBox.Text = string.Empty;
+            comboBoxMalMerTip.Text = string.Empty;
+            maliyTxtBox.Text = string.Empty;
+            malNotxtBox.Text = string.Empty;
+            dateTimePickerBaslangic.Value = DateTime.Now;
+            dateTimePickerBitis.Value = DateTime.Now;
+            checkboxpas.Checked = false;
+            deletedlbl.Checked = false;
+        }
+
+        private void duzBut_Click(object sender, EventArgs e)
+        {
+            string malCarNum = malNotxtBox.Text; // Ürün Ağacı Numarası alınır
+
+            if (string.IsNullOrEmpty(malCarNum))
+            {
+                MessageBox.Show("Lütfen bir Maliyet Merkezi Kodu giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+            {
+                string query = "SELECT COUNT(*) FROM BSMGRTRTCCMHEAD WHERE CCMDOCNUM = @CCMDOCNUM";
+                cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@CCMDOCNUM", malCarNum);
+
+                try
+                {
+                    con.Open();  
+                    int recordExists = (int)cmd.ExecuteScalar();
+
+                    if (recordExists > 0)
+                    {
+                        
+                        MaliyetKartAnaEdit MaliyetKartForm = new MaliyetKartAnaEdit(malCarNum);
+                        MaliyetKartForm.Show();
+                    }
+                    else
+                    {
+                        // Kayıt bulunamadı
+                        MessageBox.Show("Belirtilen Maliyet Merkezi Kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
 
         }
     }

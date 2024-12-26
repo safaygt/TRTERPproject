@@ -16,96 +16,94 @@ namespace TRTERPproject
             this.Load += (s, e) => LoadComboBoxData();
 
             // ComboBox leave eventlerini bağla
-            comboBoxMalzFirm.Leave += (s, e) => ValidateAndAddData(comboBoxMalzFirm, "COMCODE");
-            malzTipcombo.Leave += (s, e) => ValidateAndAddData(malzTipcombo, "MATDOCTYPE");
-            comboBoxTedTip.Leave += (s, e) => ValidateAndAddData(comboBoxTedTip, "SUPPLYTYPE");
-            comboBoxDil.Leave += (s, e) => ValidateAndAddData(comboBoxDil, "LANCODE");
+            comboBoxMalzFirm.Leave += (s, e) => ValidateAndAddData(comboBoxMalzFirm, "COMCODE", "BSMGRTRTGEN001");
+            malzTipcombo.Leave += (s, e) => ValidateAndAddData(malzTipcombo, "DOCTYPE", "BSMGRTRTMAT001");
+            comboBoxTedTip.Leave += (s, e) => ValidateAndAddData(comboBoxTedTip, "SUPPLYTYPE", "BSMGRTRTMATHEAD");
+            comboBoxDil.Leave += (s, e) => ValidateAndAddData(comboBoxDil, "LANCODE", "BSMGRTRTGEN002");
         }
+
+
+        private void LoadComboBox(ComboBox comboBox, string query, string columnName)
+        {
+            using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+            {
+                using (SqlDataAdapter adapter = new SqlDataAdapter(query, con))
+                {
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    comboBox.DataSource = dt;
+                    comboBox.DisplayMember = columnName;
+                    comboBox.ValueMember = columnName;
+                    comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+
+                    // Seçilen değeri doğru şekilde ata
+                    if (comboBox.SelectedValue == null && dt.Rows.Count > 0)
+                    {
+                        comboBox.SelectedValue = dt.Rows[0][columnName]; // Varsayılan değeri ilk satır olarak ayarlayın
+                    }
+                }
+            }
+        }
+
+
         private void LoadComboBoxData()
         {
             try
             {
-                con.Open();
+                using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    con.Open();
 
-                // Firma verilerini doldur
-                string queryFirma = "SELECT DISTINCT COMCODE FROM BSMGRTRTMATHEAD";
-                SqlDataAdapter daFirma = new SqlDataAdapter(queryFirma, con);
-                DataTable dtFirma = new DataTable();
-                daFirma.Fill(dtFirma);
-                comboBoxMalzFirm.DataSource = dtFirma;
-                comboBoxMalzFirm.DisplayMember = "COMCODE";
-                comboBoxMalzFirm.ValueMember = "COMCODE";
-                comboBoxMalzFirm.DropDownStyle = ComboBoxStyle.DropDown; // Yeni veri girilebilir
+                    
+                    LoadComboBox(comboBoxMalzFirm, "SELECT DISTINCT COMCODE FROM BSMGRTRTGEN001", "COMCODE");
 
-                string queryMtip = "SELECT DISTINCT MATDOCTYPE FROM BSMGRTRTMATHEAD"; // Tablo ve sütun adını kontrol edin
-                SqlDataAdapter daMtip = new SqlDataAdapter(queryMtip, con);
-                DataTable dtMtip = new DataTable();
-                daMtip.Fill(dtMtip);
-                malzTipcombo.DataSource = dtMtip;
-                malzTipcombo.DisplayMember = "MATDOCTYPE";
-                malzTipcombo.ValueMember = "MATDOCTYPE";
-                malzTipcombo.DropDownStyle = ComboBoxStyle.DropDown;
+                    
+                    LoadComboBox(malzTipcombo, "SELECT DISTINCT DOCTYPE FROM BSMGRTRTMAT001", "DOCTYPE");
 
-                string queryTtip = "SELECT DISTINCT SUPPLYTYPE FROM BSMGRTRTMATHEAD"; // Tablo ve sütun adını kontrol edin
-                SqlDataAdapter daTtip = new SqlDataAdapter(queryTtip, con);
-                DataTable dtTtip = new DataTable();
-                daTtip.Fill(dtTtip);
-                comboBoxTedTip.DataSource = dtTtip;
-                comboBoxTedTip.DisplayMember = "SUPPLYTYPE";
-                comboBoxTedTip.ValueMember = "SUPPLYTYPE";
-                comboBoxTedTip.DropDownStyle = ComboBoxStyle.DropDown;
+                    
+                    LoadComboBox(comboBoxDil, "SELECT DISTINCT LANCODE FROM BSMGRTRTGEN002", "LANCODE");
 
-                string queryLtip = "SELECT DISTINCT LANCODE FROM BSMGRTRTGEN002"; // Tablo ve sütun adını kontrol edin
-                SqlDataAdapter daLtip = new SqlDataAdapter(queryLtip, con);
-                DataTable dtLtip = new DataTable();
-                daLtip.Fill(dtLtip); // Hata burada düzeltiliyor
-                comboBoxDil.DataSource = dtLtip;
-                comboBoxDil.DisplayMember = "LANCODE";
-                comboBoxDil.ValueMember = "LANCODE";
-                comboBoxDil.DropDownStyle = ComboBoxStyle.DropDown;
+                    LoadComboBox(comboBoxTedTip, "SELECT DISTINCT SUPPLYTYPE FROM BSMGRTRTMATHEAD", "SUPPLYTYPE");
 
-
+                   
+                   
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Veriler yüklenirken hata oluştu: {ex.Message}");
             }
-            finally
-            {
-                con.Close();
-            }
         }
-        private void ValidateAndAddData(ComboBox comboBox, string columnName)
+        private void ValidateAndAddData(ComboBox comboBox, string columnName, string tableName)
         {
-            string checkQuery = $"SELECT COUNT(*) FROM BSMGRTRTMATHEAD WHERE {columnName} = @userInput";
-            con = new SqlConnection(ConnectionHelper.ConnectionString);
-            cmd = new SqlCommand();
-            cmd.Connection = con;
-            cmd.CommandText = checkQuery;
-            string userInput = comboBox.Text;
-            if (string.IsNullOrEmpty(userInput)) return;
+            string checkQuery = $@"
+SELECT COUNT(*) 
+FROM {tableName} 
+WHERE {columnName} = @userInput";
+
+            if (string.IsNullOrEmpty(comboBox.Text)) return;
 
             try
             {
-                con.Open();
-
-                SqlCommand checkCmd = new SqlCommand(checkQuery, con);
-                checkCmd.Parameters.AddWithValue("@userInput", userInput);
-
-                int count = (int)checkCmd.ExecuteScalar();
-                if (count == 0)
+                using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
                 {
-                    MessageBox.Show($"{columnName} '{userInput}' tablodaki verilerle uyuşmuyor.");
-                    comboBox.Text = string.Empty; // Kullanıcının yanlış girişini temizler
+                    con.Open();
+                    using (SqlCommand checkCmd = new SqlCommand(checkQuery, con))
+                    {
+                        checkCmd.Parameters.AddWithValue("@userInput", comboBox.Text);
+                        int count = (int)checkCmd.ExecuteScalar();
+
+                        if (count == 0)
+                        {
+                            MessageBox.Show($"{columnName} '{comboBox.Text}' tablodaki verilerle uyuşmuyor.");
+                            comboBox.Text = string.Empty; // Kullanıcının yanlış girişini temizler
+                        }
+                    }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Hata: {ex.Message}");
-            }
-            finally
-            {
-                con.Close();
             }
         }
 
@@ -317,5 +315,213 @@ namespace TRTERPproject
                 con.Close();
             }
         }
-    }
+
+        private void addBut_Click(object sender, EventArgs e)
+        {
+            matAddForm MatAddForm = new matAddForm();
+            MatAddForm.Show();
+
+        }
+
+
+        private void DelBut_Click(object sender, EventArgs e)
+        {
+            // DataGridView'den seçilen satırı kontrol et
+            if (malKartAna.SelectedRows.Count > 0)
+            {
+                // Seçilen satırdaki "Malzeme Numarası" bilgisini al
+                DataGridViewRow selectedRow = malKartAna.SelectedRows[0];
+
+                // "Malzeme Numarası" hücresinin değeri boşsa (null ya da boş)
+                if (selectedRow.Cells["Malzeme Numarası"].Value == null || string.IsNullOrWhiteSpace(selectedRow.Cells["Malzeme Numarası"].Value.ToString()))
+                {
+                    MessageBox.Show("Boş bir satır seçemezsiniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return; // Boş satırda işlem yapılmasın
+                }
+
+                string matDocNum = selectedRow.Cells["Malzeme Numarası"].Value.ToString();
+
+                // Kullanıcıdan onay al
+                DialogResult dialogResult = MessageBox.Show(
+                    $"Malzeme Numarası {matDocNum} olan veriyi silmek istediğinize emin misiniz?",
+                    "Silme Onayı",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (dialogResult == DialogResult.Yes)
+                {
+                    try
+                    {
+                        con.Open();
+
+                        // BSMGRTRTMATHEAD tablosundan silme sorgusu
+                        string deleteFromMatHead = "DELETE FROM BSMGRTRTMATHEAD WHERE MATDOCNUM = @MATDOCNUM";
+                        SqlCommand cmdMatHead = new SqlCommand(deleteFromMatHead, con);
+                        cmdMatHead.Parameters.AddWithValue("@MATDOCNUM", matDocNum);
+                        cmdMatHead.ExecuteNonQuery();
+
+                        // BSMGRTRTMATTEXT tablosundan silme sorgusu
+                        string deleteFromMatText = "DELETE FROM BSMGRTRTMATTEXT WHERE MATDOCNUM = @MATDOCNUM";
+                        SqlCommand cmdMatText = new SqlCommand(deleteFromMatText, con);
+                        cmdMatText.Parameters.AddWithValue("@MATDOCNUM", matDocNum);
+                        cmdMatText.ExecuteNonQuery();
+
+                        // Başarılı silme mesajı
+                        MessageBox.Show("Seçilen veri başarıyla silindi.", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // DataGridView'i güncelle
+                        malKartAna.Rows.Remove(selectedRow);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Hata: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    finally
+                    {
+                        con.Close();
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Lütfen silmek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+        }
+
+
+        private void duzBut_Click(object sender, EventArgs e)
+        {
+            // DataGridView'den seçilen satırı kontrol et
+            if (malKartAna.SelectedRows.Count > 0)
+            {
+                DataGridViewRow selectedRow = malKartAna.SelectedRows[0];
+
+                // Yeni bir edit form oluştur ve seçilen veriyi aktar
+                malzemeAnaTabloEdit MalzemeAnaTabloEdit = new malzemeAnaTabloEdit();
+
+                // Formdaki alanlara DataGridView'deki değerleri aktar
+                MalzemeAnaTabloEdit.Firma = selectedRow.Cells["Firma"].Value != DBNull.Value
+                    ? selectedRow.Cells["Firma"].Value.ToString()
+                    : string.Empty;
+
+                MalzemeAnaTabloEdit.MatdocType = selectedRow.Cells["Malzeme Tipi"].Value != DBNull.Value
+                    ? selectedRow.Cells["Malzeme Tipi"].Value.ToString()
+                    : string.Empty;
+
+                MalzemeAnaTabloEdit.MatCode = selectedRow.Cells["Malzeme Numarası"].Value != DBNull.Value
+                    ? Convert.ToInt32(selectedRow.Cells["Malzeme Numarası"].Value)
+                    : 0;
+
+                MalzemeAnaTabloEdit.GecerliBaslangic = selectedRow.Cells["Geçerlilik Başlangıç"].Value != DBNull.Value
+                    ? Convert.ToDateTime(selectedRow.Cells["Geçerlilik Başlangıç"].Value)
+                    : DateTime.MinValue;
+
+                MalzemeAnaTabloEdit.GecerliBitis = selectedRow.Cells["Geçerlilik Bitiş"].Value != DBNull.Value
+                    ? Convert.ToDateTime(selectedRow.Cells["Geçerlilik Bitiş"].Value)
+                    : DateTime.MaxValue;
+
+                MalzemeAnaTabloEdit.supplytype = selectedRow.Cells["Tedarik Tipi"].Value != DBNull.Value
+                    ? Convert.ToInt32(selectedRow.Cells["Tedarik Tipi"].Value)
+                    : 0;
+
+                MalzemeAnaTabloEdit.malzemeStokBirimi = selectedRow.Cells["Stok Birimi"].Value != DBNull.Value
+                    ? selectedRow.Cells["Stok Birimi"].Value.ToString()
+                    : string.Empty;
+
+                MalzemeAnaTabloEdit.netWeight = selectedRow.Cells["Net Ağırlık"].Value != DBNull.Value
+                    ? Convert.ToInt32(selectedRow.Cells["Net Ağırlık"].Value)
+                    : (int?)null;
+
+                MalzemeAnaTabloEdit.netWeightUnit = selectedRow.Cells["Net Ağırlık Birimi"].Value != DBNull.Value
+                    ? selectedRow.Cells["Net Ağırlık Birimi"].Value.ToString()
+                    : string.Empty;
+
+                // MATSTEXT ve MATLTEXT verilerini al
+                string selectMatsText = "SELECT MATSTEXT, MATLTEXT FROM BSMGRTRTMATTEXT WHERE MATDOCNUM = @MATDOCNUM";
+
+                // Ensure the connection is opened before executing the command
+
+                /*
+                using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    con.Open();  // Open the connection
+
+                    using (SqlCommand cmdMatText = new SqlCommand(selectMatsText, con))
+                    {
+                        cmdMatText.Parameters.AddWithValue("@MATDOCNUM", selectedRow.Cells["Malzeme Numarası"].Value != DBNull.Value
+                            ? Convert.ToInt32(selectedRow.Cells["Malzeme Numarası"].Value)
+                            : 0);
+
+                        using (SqlDataReader reader = cmdMatText.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                // MATSTEXT ve MATLTEXT verilerini al
+                                MalzemeAnaTabloEdit.kisaAciklama = reader["MATSTEXT"] != DBNull.Value.ToString()
+                                    ? reader["MATSTEXT"].ToString()
+                                    : string.Empty;
+
+                                // Set MATLTEXT value as well
+                                MalzemeAnaTabloEdit.uzunAciklama = reader["MATLTEXT"] != DBNull.Value.ToString()
+                                    ? reader["MATLTEXT"].ToString()
+                                    : string.Empty;
+                            }
+                        }
+                    }
+                }
+
+                */
+
+                // Other fields assignment
+                MalzemeAnaTabloEdit.brutWeightUnit = selectedRow.Cells["Brüt Ağırlık Birimi"].Value != DBNull.Value
+                    ? selectedRow.Cells["Brüt Ağırlık Birimi"].Value.ToString()
+                    : string.Empty;
+
+                MalzemeAnaTabloEdit.isTree = selectedRow.Cells["Ürün Ağacı Var mı?"].Value != DBNull.Value
+                    ? Convert.ToBoolean(selectedRow.Cells["Ürün Ağacı Var mı?"].Value)
+                    : false;
+
+                MalzemeAnaTabloEdit.treeType = selectedRow.Cells["Ürün Ağacı Tipi"].Value != DBNull.Value
+                    ? selectedRow.Cells["Ürün Ağacı Tipi"].Value.ToString()
+                    : string.Empty;
+
+                MalzemeAnaTabloEdit.treeCode = selectedRow.Cells["Ürün Ağacı Kodu"].Value != DBNull.Value
+                    ? selectedRow.Cells["Ürün Ağacı Kodu"].Value.ToString()
+                    : string.Empty;
+
+                MalzemeAnaTabloEdit.isRot = selectedRow.Cells["Rota Var mı?"].Value != DBNull.Value
+                    ? Convert.ToBoolean(selectedRow.Cells["Rota Var mı?"].Value)
+                    : false;
+
+                MalzemeAnaTabloEdit.rotType = selectedRow.Cells["Rota Tipi"].Value != DBNull.Value
+                    ? selectedRow.Cells["Rota Tipi"].Value.ToString()
+                    : string.Empty;
+
+                MalzemeAnaTabloEdit.rotCode = selectedRow.Cells["Rota Kodu"].Value != DBNull.Value
+                    ? selectedRow.Cells["Rota Kodu"].Value.ToString()
+                    : string.Empty;
+
+                MalzemeAnaTabloEdit.IsDeleted = selectedRow.Cells["Silindi mi?"].Value != DBNull.Value
+                    ? Convert.ToBoolean(selectedRow.Cells["Silindi mi?"].Value)
+                    : false;
+
+                MalzemeAnaTabloEdit.IsPassive = selectedRow.Cells["Pasif mi?"].Value != DBNull.Value
+                    ? Convert.ToBoolean(selectedRow.Cells["Pasif mi?"].Value)
+                    : false;
+
+                MalzemeAnaTabloEdit.Dil = selectedRow.Cells["Dil"].Value != DBNull.Value
+                    ? selectedRow.Cells["Dil"].Value.ToString()
+                    : string.Empty;
+
+                // Edit formu göster
+                MalzemeAnaTabloEdit.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Lütfen düzenlemek için bir satır seçin.");
+            }
+        }
+
+        }
 }
