@@ -19,11 +19,11 @@ namespace TRTERPproject
 			InitializeComponent();
 			this.Load += (s, e) => LoadComboBoxData();
 
-			firmbox.Leave += (s, e) => ValidateAndAddData(firmbox, "COMCODE");
-			comboBoxIsMerTip.Leave += (s, e) => ValidateAndAddData(comboBoxIsMerTip, "DOCTYPE");
-			dilBox.Leave += (s, e) => ValidateAndAddData(dilBox, "LANCODE");
-			comboBoxOprCode.Leave += (s, e) => ValidateAndAddData(comboBoxOprCode, "DOCTYPE");
-			comboBoxMaliMerk.Leave += (s, e) => ValidateAndAddData(comboBoxMaliMerk, "DOCTYPE");
+			firmbox.Leave += (s, e) => ValidateAndAddData(firmbox, "COMCODE","BSMGRTRTGEN001");
+			comboBoxIsMerTip.Leave += (s, e) => ValidateAndAddData(comboBoxIsMerTip, "DOCTYPE", "BSMGRTRTWCM001");
+			dilBox.Leave += (s, e) => ValidateAndAddData(dilBox, "LANCODE", "BSMGRTRTGEN002");
+			comboBoxOprCode.Leave += (s, e) => ValidateAndAddData(comboBoxOprCode, "DOCTYPE", "BSMGRTRTOPR001");
+			comboBoxMaliMerk.Leave += (s, e) => ValidateAndAddData(comboBoxMaliMerk, "DOCTYPE", "BSMGRTRTCCM001");
 		}
 
 		private void LoadComboBoxData()
@@ -68,31 +68,38 @@ namespace TRTERPproject
 					comboBox.DisplayMember = columnName;
 					comboBox.ValueMember = columnName;
 					comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+
+					// Seçilen değeri doğru şekilde ata
+					if (comboBox.SelectedValue == null && dt.Rows.Count > 0)
+					{
+						comboBox.SelectedValue = dt.Rows[0][columnName]; // Varsayılan değeri ilk satır olarak ayarlayın
+					}
 				}
 			}
 		}
-		private void ValidateAndAddData(ComboBox comboBox, string columnName)
+		private void ValidateAndAddData(ComboBox comboBox, string columnName, string tableName)
 		{
-			string userInput = comboBox.Text.Trim();
-			if (string.IsNullOrEmpty(userInput))
-				return;
+			string checkQuery = $@"
+SELECT COUNT(*) 
+FROM {tableName} 
+WHERE {columnName} = @userInput";
 
-			string checkQuery = $"SELECT COUNT(*) FROM BSMGRTRTWCMHEAD WHERE {columnName} = @userInput";
+			if (string.IsNullOrEmpty(comboBox.Text)) return;
 
 			try
 			{
 				using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
 				{
+					con.Open();
 					using (SqlCommand checkCmd = new SqlCommand(checkQuery, con))
 					{
-						checkCmd.Parameters.AddWithValue("@userInput", userInput);
-						con.Open();
-
+						checkCmd.Parameters.AddWithValue("@userInput", comboBox.Text);
 						int count = (int)checkCmd.ExecuteScalar();
+
 						if (count == 0)
 						{
-							MessageBox.Show($"'{userInput}' değeri {columnName} sütunu için geçerli değil.", "Geçersiz Giriş", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-							comboBox.Text = string.Empty;
+							MessageBox.Show($"{columnName} '{comboBox.Text}' tablodaki verilerle uyuşmuyor.");
+							comboBox.Text = string.Empty; // Kullanıcının yanlış girişini temizler
 						}
 					}
 				}
@@ -192,14 +199,6 @@ namespace TRTERPproject
 				return false;
 			}
 
-			// Mantıksal değerlerin doğru olduğunu kontrol et
-			if (!checkboxpas.Checked && !deletedlbl.Checked)
-			{
-				MessageBox.Show("İş merkezi durumu (aktif/pasif) belirtilmelidir.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				checkboxpas.Focus();
-				return false;
-			}
-
 			// Günlük çalışma saati kontrolü
 			if (string.IsNullOrEmpty(textBoxGunlukCal.Text.Trim()))
 			{
@@ -213,13 +212,13 @@ namespace TRTERPproject
 
 		private void saveBut_Click_1(object sender, EventArgs e)
 		{
-			// Alanları kontrol et
+			// 1. Aşama: Alanları kontrol et
 			if (!ValidateFields())
 			{
 				return;
 			}
 
-			// Veritabanına kaydetme işlemleri
+			// Veritabanına kaydetme işlemleri için veri ataması
 			string Firma = firmbox.Text.Trim();
 			string IsMerkeziTipi = comboBoxIsMerTip.Text.Trim();
 			string IsMerkeziNumarasi = ismerkodtxtBox.Text.Trim();
@@ -233,9 +232,22 @@ namespace TRTERPproject
 			string IMKA = ismerkKATxtBox.Text.Trim();
 			string IMUA = ismerkUAtextBox.Text.Trim();
 			string Dil = dilBox.Text.Trim();
-			bool IsDeleted = deletedlbl.Checked;
-			bool IsPassive = checkboxpas.Checked;
 			string Worktime = textBoxGunlukCal.Text.Trim();
+			// 3. Aşama: Durum kontrolü (checkbox pasif ve silme durumları)
+			bool IsDeleted = deletedlbl.Checked; ;  // Eğer işaretli değilse, false olacak
+			bool IsPassive = checkboxpas.Checked; // Eğer işaretli değilse, false olacak
+
+			// 2. Aşama: Veritabanında veri kontrolü
+			if (!CheckIfDataExists("BSMGRTRTGEN001", "COMCODE", Firma) ||
+				!CheckIfDataExists("BSMGRTRTWCM001", "DOCTYPE", IsMerkeziTipi) ||
+				!CheckIfDataExists("BSMGRTRTGEN002", "LANCODE", Dil) ||
+				!CheckIfDataExists("BSMGRTRTOPR001", "DOCTYPE", OperasyonKodu) ||
+				!CheckIfDataExists("BSMGRTRTCCM001", "DOCTYPE", MaliMerTip))
+			{
+				return;
+			}
+
+
 
 			try
 			{
@@ -243,7 +255,7 @@ namespace TRTERPproject
 				{
 					con.Open();
 
-					// BSMGRTRTWCMHEAD Tablosuna Ekleme
+					// 4. Aşama: Veritabanı güncelleme (Veri ekleme)
 					string query1 = @"
                 INSERT INTO BSMGRTRTWCMHEAD (
                     COMCODE, WCMDOCTYPE, WCMDOCNUM, CCMDOCTYPE, CCMDOCNUM, 
@@ -256,45 +268,53 @@ namespace TRTERPproject
 
 					using (SqlCommand command1 = new SqlCommand(query1, con))
 					{
-						command1.Parameters.AddWithValue("@COMCODE", firmbox.Text ?? (object)DBNull.Value);
-						command1.Parameters.AddWithValue("@WCMDOCTYPE", comboBoxIsMerTip.Text ?? (object)DBNull.Value);
-						command1.Parameters.AddWithValue("@WCMDOCNUM", ismerkodtxtBox.Text ?? (object)DBNull.Value);
-						command1.Parameters.AddWithValue("@CCMDOCTYPE", comboBoxMaliMerk.Text ?? (object)DBNull.Value);
-						command1.Parameters.AddWithValue("@CCMDOCNUM", maliyMerkTxtBox.Text ?? (object)DBNull.Value);
-						command1.Parameters.AddWithValue("@WCMDOCFROM", DateTime.TryParse(dateTimeBas.Text, out DateTime fromDate) ? fromDate : (object)DBNull.Value);
-						command1.Parameters.AddWithValue("@WCMDOCUNTIL", DateTime.TryParse(dateTimeBit.Text, out DateTime untilDate) ? untilDate : (object)DBNull.Value);
-						command1.Parameters.AddWithValue("@MAINWCMDOCTYPE", anaismertip.Text ?? (object)DBNull.Value);
-						command1.Parameters.AddWithValue("@MAINWCMDOCNUM", anaismerkod.Text ?? (object)DBNull.Value);
-						command1.Parameters.AddWithValue("@WORKTIME", textBoxGunlukCal.Text ?? (object)DBNull.Value);
-						command1.Parameters.AddWithValue("@ISDELETED", checkboxpas.Checked ? 1 : 0);
-						command1.Parameters.AddWithValue("@ISPASSIVE", deletedlbl.Checked ? 1 : 0);
+						command1.Parameters.AddWithValue("@COMCODE", Firma);
+						command1.Parameters.AddWithValue("@WCMDOCTYPE", IsMerkeziTipi);
+						command1.Parameters.AddWithValue("@WCMDOCNUM", IsMerkeziNumarasi);
+						command1.Parameters.AddWithValue("@CCMDOCTYPE", MaliMerTip);
+						command1.Parameters.AddWithValue("@CCMDOCNUM", MaliMerKod);
+						command1.Parameters.AddWithValue("@WCMDOCFROM", GecerliBaslangic);
+						command1.Parameters.AddWithValue("@WCMDOCUNTIL", GecerliBitis);
+						command1.Parameters.AddWithValue("@MAINWCMDOCTYPE", AnaIsMerkeziTipi);
+						command1.Parameters.AddWithValue("@MAINWCMDOCNUM", AnaIsMerkeziNumarasi);
+						command1.Parameters.AddWithValue("@WORKTIME", Worktime);
+						command1.Parameters.AddWithValue("@ISDELETED", IsDeleted ? 1 : 0);  // Eğer işaretli değilse 0 olacak
+						command1.Parameters.AddWithValue("@ISPASSIVE", IsPassive ? 1 : 0);  // Eğer işaretli değilse 0 olacak
 
 						command1.ExecuteNonQuery();
 					}
 
-					// BSMGRTRTWCMTEXT Tablosuna Ekleme
+					// Diğer tabloları güncelleme
 					string query2 = @"
-                INSERT INTO BSMGRTRTWCMTEXT (WCMDOCNUM, WCMSTEXT, WCMLTEXT)
-                VALUES (@WCMDOCNUM, @WCMSTEXT, @WCMLTEXT);";
+                INSERT INTO BSMGRTRTWCMTEXT (COMCODE, WCMDOCTYPE, WCMDOCNUM, WCMDOCFROM, WCMDOCUNTIL, LANCODE, WCMSTEXT, WCMLTEXT)
+                VALUES (@COMCODE, @WCMDOCTYPE, @WCMDOCNUM, @WCMDOCFROM, @WCMDOCUNTIL, @LANCODE, @WCMSTEXT, @WCMLTEXT);";
 
 					using (SqlCommand command2 = new SqlCommand(query2, con))
 					{
-						command2.Parameters.AddWithValue("@WCMDOCNUM", ismerkodtxtBox.Text ?? (object)DBNull.Value);
-						command2.Parameters.AddWithValue("@WCMSTEXT", ismerkKATxtBox.Text ?? (object)DBNull.Value);
-						command2.Parameters.AddWithValue("@WCMLTEXT", ismerkUAtextBox.Text ?? (object)DBNull.Value);
+						command2.Parameters.AddWithValue("@COMCODE", Firma);
+						command2.Parameters.AddWithValue("@WCMDOCTYPE", IsMerkeziTipi);
+						command2.Parameters.AddWithValue("@WCMDOCNUM", IsMerkeziNumarasi);
+						command2.Parameters.AddWithValue("@WCMDOCFROM", GecerliBaslangic);
+						command2.Parameters.AddWithValue("@WCMDOCUNTIL", GecerliBitis);
+						command2.Parameters.AddWithValue("@LANCODE", Dil);
+						command2.Parameters.AddWithValue("@WCMSTEXT", IMKA);
+						command2.Parameters.AddWithValue("@WCMLTEXT", IMUA);
 
 						command2.ExecuteNonQuery();
 					}
 
-					// BSMGRTRTWCMOPR Tablosuna Ekleme
 					string query3 = @"
-                INSERT INTO BSMGRTRTWCMOPR (WCMDOCNUM, OPRDOCTYPE)
-                VALUES (@WCMDOCNUM, @OPRDOCTYPE);";
+                INSERT INTO BSMGRTRTWCMOPR (COMCODE, WCMDOCTYPE, WCMDOCNUM, WCMDOCFROM, WCMDOCUNTIL, OPRDOCTYPE)
+                VALUES (@COMCODE, @WCMDOCTYPE, @WCMDOCNUM, @WCMDOCFROM, @WCMDOCUNTIL, @OPRDOCTYPE);";
 
 					using (SqlCommand command3 = new SqlCommand(query3, con))
 					{
-						command3.Parameters.AddWithValue("@WCMDOCNUM", ismerkodtxtBox.Text ?? (object)DBNull.Value);
-						command3.Parameters.AddWithValue("@OPRDOCTYPE", comboBoxOprCode.Text ?? (object)DBNull.Value);
+						command3.Parameters.AddWithValue("@COMCODE", Firma);
+						command3.Parameters.AddWithValue("@WCMDOCTYPE", IsMerkeziTipi);
+						command3.Parameters.AddWithValue("@WCMDOCNUM", IsMerkeziNumarasi);
+						command3.Parameters.AddWithValue("@WCMDOCFROM", GecerliBaslangic);
+						command3.Parameters.AddWithValue("@WCMDOCUNTIL", GecerliBitis);
+						command3.Parameters.AddWithValue("@OPRDOCTYPE", OperasyonKodu);
 
 						command3.ExecuteNonQuery();
 					}
@@ -304,9 +324,48 @@ namespace TRTERPproject
 			}
 			catch (Exception ex)
 			{
+				// 4. Aşama: Hata yönetimi
 				MessageBox.Show($"Bir hata oluştu: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
+
+
+		// Veritabanında veri kontrolü (aşama 2)
+		private bool CheckIfDataExists(string tableName, string columnName, string value)
+		{
+			string query = $@"
+        SELECT COUNT(*) 
+        FROM {tableName} 
+        WHERE {columnName} = @userInput";
+
+			if (string.IsNullOrEmpty(value)) return false;
+
+			try
+			{
+				using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+				{
+					con.Open();
+					using (SqlCommand checkCmd = new SqlCommand(query, con))
+					{
+						checkCmd.Parameters.AddWithValue("@userInput", value);
+						int count = (int)checkCmd.ExecuteScalar();
+
+						if (count == 0)
+						{
+							MessageBox.Show($"{columnName} '{value}' tablodaki verilerle uyuşmuyor.");
+							return false;
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show($"Hata: {ex.Message}");
+				return false;
+			}
+			return true;
+		}
+
 
 	}
 }

@@ -46,8 +46,6 @@
 			label1 = new Label();
 			comboBoxOprCode = new ComboBox();
 			label2 = new Label();
-			label7 = new Label();
-			operasTxtBox = new TextBox();
 			comboBoxIsMerTip = new ComboBox();
 			geAllBut = new Button();
 			dateTimeBas = new DateTimePicker();
@@ -59,6 +57,7 @@
 			// 
 			// dilBox
 			// 
+			dilBox.DropDownStyle = ComboBoxStyle.DropDownList;
 			dilBox.FormattingEnabled = true;
 			dilBox.Location = new Point(412, 137);
 			dilBox.Name = "dilBox";
@@ -67,6 +66,7 @@
 			// 
 			// firmbox
 			// 
+			firmbox.DropDownStyle = ComboBoxStyle.DropDownList;
 			firmbox.FormattingEnabled = true;
 			firmbox.Location = new Point(35, 50);
 			firmbox.Name = "firmbox";
@@ -78,7 +78,7 @@
 			checkboxpas.AutoSize = true;
 			checkboxpas.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
 			checkboxpas.ForeColor = SystemColors.Control;
-			checkboxpas.Location = new Point(880, 180);
+			checkboxpas.Location = new Point(676, 160);
 			checkboxpas.Name = "checkboxpas";
 			checkboxpas.Size = new Size(109, 29);
 			checkboxpas.TabIndex = 66;
@@ -90,7 +90,7 @@
 			deletedlbl.AutoSize = true;
 			deletedlbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
 			deletedlbl.ForeColor = SystemColors.Control;
-			deletedlbl.Location = new Point(717, 180);
+			deletedlbl.Location = new Point(676, 105);
 			deletedlbl.Name = "deletedlbl";
 			deletedlbl.Size = new Size(120, 29);
 			deletedlbl.TabIndex = 65;
@@ -222,6 +222,7 @@
 			// 
 			// comboBoxOprCode
 			// 
+			comboBoxOprCode.DropDownStyle = ComboBoxStyle.DropDownList;
 			comboBoxOprCode.FormattingEnabled = true;
 			comboBoxOprCode.Location = new Point(644, 51);
 			comboBoxOprCode.Name = "comboBoxOprCode";
@@ -239,26 +240,9 @@
 			label2.TabIndex = 69;
 			label2.Text = "Operasyon Kodu";
 			// 
-			// label7
-			// 
-			label7.AutoSize = true;
-			label7.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
-			label7.ForeColor = Color.GhostWhite;
-			label7.Location = new Point(644, 111);
-			label7.Name = "label7";
-			label7.Size = new Size(186, 23);
-			label7.TabIndex = 71;
-			label7.Text = "Operasyon Açıklaması";
-			// 
-			// operasTxtBox
-			// 
-			operasTxtBox.Location = new Point(649, 138);
-			operasTxtBox.Name = "operasTxtBox";
-			operasTxtBox.Size = new Size(181, 27);
-			operasTxtBox.TabIndex = 73;
-			// 
 			// comboBoxIsMerTip
 			// 
+			comboBoxIsMerTip.DropDownStyle = ComboBoxStyle.DropDownList;
 			comboBoxIsMerTip.FormattingEnabled = true;
 			comboBoxIsMerTip.Location = new Point(230, 49);
 			comboBoxIsMerTip.Name = "comboBoxIsMerTip";
@@ -292,6 +276,7 @@
 			// 
 			// comboBoxMalytMer
 			// 
+			comboBoxMalytMer.DropDownStyle = ComboBoxStyle.DropDownList;
 			comboBoxMalytMer.FormattingEnabled = true;
 			comboBoxMalytMer.Location = new Point(62, 138);
 			comboBoxMalytMer.Name = "comboBoxMalytMer";
@@ -321,8 +306,6 @@
 			Controls.Add(dateTimeBas);
 			Controls.Add(geAllBut);
 			Controls.Add(comboBoxIsMerTip);
-			Controls.Add(operasTxtBox);
-			Controls.Add(label7);
 			Controls.Add(comboBoxOprCode);
 			Controls.Add(label2);
 			Controls.Add(dilBox);
@@ -368,8 +351,6 @@
 		private Label label1;
 		private ComboBox comboBoxOprCode;
 		private Label label2;
-		private Label label7;
-		private TextBox operasTxtBox;
 		private ComboBox comboBoxIsMerTip;
 		private Button geAllBut;
 		private DateTimePicker dateTimeBas;

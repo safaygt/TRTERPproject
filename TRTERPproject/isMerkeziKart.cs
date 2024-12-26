@@ -15,11 +15,11 @@ namespace TRTERPproject
 			this.Load += (s, e) => LoadComboBoxData();
 
 			// ComboBox leave eventlerini bağla
-			firmbox.Leave += (s, e) => ValidateAndAddData(firmbox, "COMCODE");
-			comboBoxIsMerTip.Leave += (s, e) => ValidateAndAddData(comboBoxIsMerTip, "DOCTYPE");
-			comboBoxOprCode.Leave += (s, e) => ValidateAndAddData(comboBoxOprCode, "DOCTYPE");
-			dilBox.Leave += (s, e) => ValidateAndAddData(dilBox, "LANCODE");
-			comboBoxMalytMer.Leave += (s, e) => ValidateAndAddData(comboBoxMalytMer, "DOCTYPE");
+			firmbox.Leave += (s, e) => ValidateAndAddData(firmbox, "COMCODE", "BSMGRTRTGEN001");
+			comboBoxIsMerTip.Leave += (s, e) => ValidateAndAddData(comboBoxIsMerTip, "DOCTYPE", "BSMGRTRTWCM001");
+			dilBox.Leave += (s, e) => ValidateAndAddData(dilBox, "LANCODE", "BSMGRTRTGEN002");
+			comboBoxOprCode.Leave += (s, e) => ValidateAndAddData(comboBoxOprCode, "DOCTYPE", "BSMGRTRTOPR001");
+			comboBoxMalytMer.Leave += (s, e) => ValidateAndAddData(comboBoxMalytMer, "DOCTYPE", "BSMGRTRTCCM001");
 		}
 		private void LoadComboBoxData()
 		{
@@ -35,7 +35,6 @@ namespace TRTERPproject
 				firmbox.DataSource = dtFirma;
 				firmbox.DisplayMember = "COMCODE";
 				firmbox.ValueMember = "COMCODE";
-				firmbox.DropDownStyle = ComboBoxStyle.DropDown;
 
 				// İş Merkezi Tipi verilerini doldur
 				string queryisMtip = "SELECT DISTINCT DOCTYPE FROM BSMGRTRTWCM001";
@@ -45,7 +44,6 @@ namespace TRTERPproject
 				comboBoxIsMerTip.DataSource = dtisMtip;
 				comboBoxIsMerTip.DisplayMember = "DOCTYPE";
 				comboBoxIsMerTip.ValueMember = "DOCTYPE";
-				comboBoxIsMerTip.DropDownStyle = ComboBoxStyle.DropDown;
 
 				// Dil Kodları verilerini doldur
 				string queryTtip = "SELECT DISTINCT LANCODE FROM BSMGRTRTGEN002";
@@ -55,7 +53,6 @@ namespace TRTERPproject
 				dilBox.DataSource = dtTtip;
 				dilBox.DisplayMember = "LANCODE";
 				dilBox.ValueMember = "LANCODE";
-				dilBox.DropDownStyle = ComboBoxStyle.DropDown;
 
 				// Operasyon Kodu verilerini doldur
 				string queryOprtip = "SELECT DISTINCT DOCTYPE FROM BSMGRTRTOPR001";
@@ -65,8 +62,6 @@ namespace TRTERPproject
 				comboBoxOprCode.DataSource = dtOprtip;
 				comboBoxOprCode.DisplayMember = "DOCTYPE";
 				comboBoxOprCode.ValueMember = "DOCTYPE";
-				comboBoxOprCode.DropDownStyle = ComboBoxStyle.DropDown;
-
 				// Maliyet Merkezi verilerini doldur
 				string queryMaltip = "SELECT DISTINCT DOCTYPE FROM BSMGRTRTCCM001";
 				SqlDataAdapter daMaltip = new SqlDataAdapter(queryMaltip, con);
@@ -75,7 +70,6 @@ namespace TRTERPproject
 				comboBoxMalytMer.DataSource = dtMaltip;
 				comboBoxMalytMer.DisplayMember = "DOCTYPE";
 				comboBoxMalytMer.ValueMember = "DOCTYPE";
-				comboBoxMalytMer.DropDownStyle = ComboBoxStyle.DropDown;
 			}
 			catch (Exception ex)
 			{
@@ -87,29 +81,191 @@ namespace TRTERPproject
 			}
 		}
 
-		private void ValidateAndAddData(ComboBox comboBox, string columnName)
+		private void ValidateAndAddData(ComboBox comboBox, string columnName, string tableName)
 		{
-			string checkQuery = $"SELECT COUNT(*) FROM BSMGRTRTWCMHEAD WHERE {columnName} = @userInput";
-			con = new SqlConnection(ConnectionHelper.ConnectionString);
-			cmd = new SqlCommand();
-			cmd.Connection = con;
-			cmd.CommandText = checkQuery;
-			string userInput = comboBox.Text;
-			if (string.IsNullOrEmpty(userInput)) return;
+			string checkQuery = $@"
+SELECT COUNT(*) 
+FROM {tableName} 
+WHERE {columnName} = @userInput";
+
+			if (string.IsNullOrEmpty(comboBox.Text)) return;
 
 			try
 			{
-				con.Open();
-
-				SqlCommand checkCmd = new SqlCommand(checkQuery, con);
-				checkCmd.Parameters.AddWithValue("@userInput", userInput);
-
-				int count = (int)checkCmd.ExecuteScalar();
-				if (count == 0)
+				using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
 				{
-					MessageBox.Show($"{columnName} '{userInput}' tablodaki verilerle uyuşmuyor.");
-					comboBox.Text = string.Empty; // Kullanıcının yanlış girişini temizler
+					con.Open();
+					using (SqlCommand checkCmd = new SqlCommand(checkQuery, con))
+					{
+						checkCmd.Parameters.AddWithValue("@userInput", comboBox.Text);
+						int count = (int)checkCmd.ExecuteScalar();
+
+						if (count == 0)
+						{
+							MessageBox.Show($"{columnName} '{comboBox.Text}' tablodaki verilerle uyuşmuyor.");
+							comboBox.Text = string.Empty; // Kullanıcının yanlış girişini temizler
+						}
+					}
 				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show($"Hata: {ex.Message}");
+			}
+		}
+
+		private void getBut_Click_1(object sender, EventArgs e)
+		{
+			// Temel SQL sorgusu
+			string query = @"
+SELECT 
+    WH.COMCODE AS 'Firma', 
+    WH.WCMDOCTYPE AS 'İş Merkezi Tipi', 
+    WH.WCMDOCNUM AS 'İş Merkezi  Numarası',
+    O1.DOCTYPE AS 'Operasyon Kodu', 
+    WH.CCMDOCTYPE AS 'Maliyet Merkezi Tipi', 
+    WH.CCMDOCNUM AS 'Maliyet Merkezi Kodu', 
+    WH.WCMDOCFROM AS 'Geçerlilik Başlangıç', 
+    WH.WCMDOCUNTIL AS 'Geçerlilik Bitiş', 
+    WH.MAINWCMDOCTYPE AS 'Ana İş Merkezi Tipi', 
+    WH.MAINWCMDOCNUM AS 'Ana İş Merkezi Numarası', 
+    WT.WCMSTEXT AS 'İş Merkezi Kısa Açıklama', 
+    WT.WCMLTEXT AS 'İş Merkezi Uzun Açıklama', 
+    WH.WORKTIME AS 'Çalışma Süresi (Saat)',
+    WH.ISDELETED AS 'Silindi mi?', 
+    WH.ISPASSIVE AS 'Pasif mi?', 
+    G2.LANCODE AS 'Dil' 
+FROM 
+    BSMGRTRTWCMHEAD WH
+INNER JOIN 
+    BSMGRTRTWCMTEXT WT ON WH.WCMDOCNUM = WT.WCMDOCNUM
+INNER JOIN 
+    BSMGRTRTGEN002 G2 ON WT.LANCODE = G2.LANCODE
+INNER JOIN 
+    BSMGRTRTWCMOPR WO ON WH.WCMDOCNUM = WO.WCMDOCNUM
+INNER JOIN
+    BSMGRTRTOPR001 O1 ON WO.OPRDOCTYPE = O1.DOCTYPE";
+
+			// Filtreleme koşulları
+			List<string> filters = new List<string>();
+
+			// Firma filtresi
+			if (!string.IsNullOrEmpty(firmbox.Text))
+			{
+				filters.Add("WH.COMCODE = @COMCODE");
+			}
+
+			// İş merkezi tipi filtresi
+			if (!string.IsNullOrEmpty(comboBoxIsMerTip.Text))
+			{
+				filters.Add("WH.WCMDOCTYPE = @WCMDOCTYPE");
+			}
+
+			// İş merkezi kodu filtresi
+			if (!string.IsNullOrEmpty(ismerkodtxtBox.Text))
+			{
+				filters.Add("WH.WCMDOCNUM = @WCMDOCNUM");
+			}
+
+			// Operasyon kodu filtresi
+			if (!string.IsNullOrEmpty(comboBoxOprCode.Text))
+			{
+				filters.Add("O1.DOCTYPE = @DOCTYPE");
+			}
+
+			// Dil filtresi
+			if (!string.IsNullOrEmpty(dilBox.Text))
+			{
+				filters.Add("G2.LANCODE = @LANCODE");
+			}
+
+			// Maliyet merkezi tipi filtresi
+			if (!string.IsNullOrEmpty(comboBoxMalytMer.Text))
+			{
+				filters.Add("WH.CCMDOCTYPE = @CCMDOCTYPE");
+			}
+
+			// Tarih aralığı filtresi
+			if (dateTimeBas.Value != DateTime.MinValue && dateTimeBit.Value != DateTime.MinValue)
+			{
+				filters.Add("WH.WCMDOCFROM >= @WCMDOCFROM AND WH.WCMDOCUNTIL <= @WCMDOCUNTIL");
+			}
+
+			// Pasif mi filtresi
+			if (checkboxpas.Checked)
+			{
+				filters.Add("WH.ISPASSIVE = 1");
+			}
+			else
+			{
+				filters.Add("WH.ISPASSIVE = 0");
+			}
+
+			// Silindi mi filtresi
+			if (deletedlbl.Checked)
+			{
+				filters.Add("WH.ISDELETED = 1");
+			}
+			else
+			{
+				filters.Add("WH.ISDELETED = 0");
+			}
+
+			// Filtreleri sorguya ekle
+			if (filters.Count > 0)
+			{
+				query += " WHERE " + string.Join(" AND ", filters);
+			}
+
+			// SQL bağlantısı ve komutu
+			con = new SqlConnection(ConnectionHelper.ConnectionString);
+			cmd = new SqlCommand(query, con);
+
+			// Parametreleri ekle
+			if (!string.IsNullOrEmpty(firmbox.Text))
+			{
+				cmd.Parameters.AddWithValue("@COMCODE", firmbox.Text);
+			}
+
+			if (!string.IsNullOrEmpty(comboBoxIsMerTip.Text))
+			{
+				cmd.Parameters.AddWithValue("@WCMDOCTYPE", comboBoxIsMerTip.Text);
+			}
+
+			if (!string.IsNullOrEmpty(comboBoxMalytMer.Text))
+			{
+				cmd.Parameters.AddWithValue("@CCMDOCTYPE", comboBoxMalytMer.Text);
+			}
+
+			if (!string.IsNullOrEmpty(ismerkodtxtBox.Text))
+			{
+				cmd.Parameters.AddWithValue("@WCMDOCNUM", ismerkodtxtBox.Text);
+			}
+
+			if (!string.IsNullOrEmpty(comboBoxOprCode.Text))
+			{
+				cmd.Parameters.AddWithValue("@DOCTYPE", comboBoxOprCode.Text);
+			}
+
+			if (!string.IsNullOrEmpty(dilBox.Text))
+			{
+				cmd.Parameters.AddWithValue("@LANCODE", dilBox.Text);
+			}
+
+			if (dateTimeBas.Value != DateTime.MinValue && dateTimeBit.Value != DateTime.MinValue)
+			{
+				cmd.Parameters.AddWithValue("@WCMDOCFROM", dateTimeBas.Value);
+				cmd.Parameters.AddWithValue("@WCMDOCUNTIL", dateTimeBit.Value);
+			}
+
+			// Verileri getir
+			try
+			{
+				con.Open();
+				SqlDataAdapter da = new SqlDataAdapter(cmd);
+				DataSet dt = new DataSet();
+				da.Fill(dt);
+				ismerkData.DataSource = dt.Tables[0];
 			}
 			catch (Exception ex)
 			{
@@ -119,12 +275,9 @@ namespace TRTERPproject
 			{
 				con.Close();
 			}
+
 		}
 
-		private void getBut_Click_1(object sender, EventArgs e)
-		{
-			
-		}
 
 		private void duzBut_Click(object sender, EventArgs e)
 		{

@@ -42,11 +42,11 @@ namespace TRTERPproject
 			InitializeComponent();
 			this.Load += (s, e) => LoadComboBoxData();
 
-			firmbox.Leave += (s, e) => ValidateAndAddData(firmbox, "COMCODE");
-			comboBoxIsMerTip.Leave += (s, e) => ValidateAndAddData(comboBoxIsMerTip, "DOCTYPE");
-			comboBoxOprCode.Leave += (s, e) => ValidateAndAddData(comboBoxOprCode, "DOCTYPE");
-			dilBox.Leave += (s, e) => ValidateAndAddData(dilBox, "LANCODE");
-			comboBoxMaliMerk.Leave += (s, e) => ValidateAndAddData(comboBoxMaliMerk, "DOCTYPE");
+			firmbox.Leave += (s, e) => ValidateAndAddData(firmbox, "COMCODE", "BSMGRTRTGEN001");
+			comboBoxIsMerTip.Leave += (s, e) => ValidateAndAddData(comboBoxIsMerTip, "DOCTYPE", "BSMGRTRTWCM001");
+			dilBox.Leave += (s, e) => ValidateAndAddData(dilBox, "LANCODE", "BSMGRTRTGEN002");
+			comboBoxOprCode.Leave += (s, e) => ValidateAndAddData(comboBoxOprCode, "DOCTYPE", "BSMGRTRTOPR001");
+			comboBoxMaliMerk.Leave += (s, e) => ValidateAndAddData(comboBoxMaliMerk, "DOCTYPE", "BSMGRTRTCCM001");
 		}
 
 		private void LoadComboBoxData()
@@ -102,28 +102,29 @@ namespace TRTERPproject
 		}
 
 
-		private void ValidateAndAddData(ComboBox comboBox, string columnName)
+		private void ValidateAndAddData(ComboBox comboBox, string columnName, string tableName)
 		{
-			string userInput = comboBox.Text.Trim();
-			if (string.IsNullOrEmpty(userInput))
-				return;
+			string checkQuery = $@"
+SELECT COUNT(*) 
+FROM {tableName} 
+WHERE {columnName} = @userInput";
 
-			string checkQuery = $"SELECT COUNT(*) FROM BSMGRTRTWCMHEAD WHERE {columnName} = @userInput";
+			if (string.IsNullOrEmpty(comboBox.Text)) return;
 
 			try
 			{
 				using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
 				{
+					con.Open();
 					using (SqlCommand checkCmd = new SqlCommand(checkQuery, con))
 					{
-						checkCmd.Parameters.AddWithValue("@userInput", userInput);
-						con.Open();
-
+						checkCmd.Parameters.AddWithValue("@userInput", comboBox.Text);
 						int count = (int)checkCmd.ExecuteScalar();
+
 						if (count == 0)
 						{
-							MessageBox.Show($"'{userInput}' değeri {columnName} sütunu için geçerli değil.", "Geçersiz Giriş", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-							comboBox.Text = string.Empty;
+							MessageBox.Show($"{columnName} '{comboBox.Text}' tablodaki verilerle uyuşmuyor.");
+							comboBox.Text = string.Empty; // Kullanıcının yanlış girişini temizler
 						}
 					}
 				}
