@@ -165,7 +165,8 @@ namespace TRTERPproject
 
 		private void addBut_Click(object sender, EventArgs e)
 		{
-			
+			isMerkeziAddForm isMerkeziAddForm = new isMerkeziAddForm();
+			isMerkeziAddForm.ShowDialog();
 
 		}
 
