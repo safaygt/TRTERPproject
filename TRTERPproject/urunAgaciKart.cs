@@ -6,6 +6,7 @@ namespace TRTERPproject
 {
     public partial class urunAgaciKart : Form
     {
+        private string bomDocNum;
         SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString);
         SqlDataReader reader;
         SqlCommand cmd;
@@ -17,18 +18,17 @@ namespace TRTERPproject
             // ComboBox Leave eventlerini bağla
             firmbox.Leave += (s, e) => ValidateAndAddData(firmbox, "COMCODE");
             urnagamalztipbox.Leave += (s, e) => ValidateAndAddData(urnagamalztipbox, "MATDOCTYPE");
-            urnmalznumBox.Leave += (s, e) => ValidateAndAddData(urnmalznumBox, "MATDOCNUM");
+            urnmalzemenumBox.Leave += (s, e) => ValidateAndAddData(urnmalzemenumBox, "MATDOCNUM");
             urnAgaTipBox.Leave += (s, e) => ValidateAndAddData(urnAgaTipBox, "BOMDOCTYPE");
         }
         private void LoadComboBoxData()
         {
-
             try
             {
                 con.Open();
 
                 // Firma verilerini doldur
-                string queryFirma = "SELECT DISTINCT COMCODE FROM BSMGRTRTBOMHEAD";
+                string queryFirma = "SELECT DISTINCT COMCODE FROM BSMGRTRTGEN001";
                 SqlDataAdapter daFirma = new SqlDataAdapter(queryFirma, con);
                 DataTable dtFirma = new DataTable();
                 daFirma.Fill(dtFirma);
@@ -37,31 +37,31 @@ namespace TRTERPproject
                 firmbox.ValueMember = "COMCODE";
                 firmbox.DropDownStyle = ComboBoxStyle.DropDown; // Yeni veri girilebilir
 
-                string queryMtip = "SELECT DISTINCT MATDOCTYPE FROM BSMGRTRTBOMHEAD"; // Tablo ve sütun adını kontrol edin
+                string queryMtip = "SELECT DISTINCT DOCTYPE FROM BSMGRTRTMAT001"; // Tablo ve sütun adını kontrol edin
                 SqlDataAdapter daMtip = new SqlDataAdapter(queryMtip, con);
                 DataTable dtMtip = new DataTable();
                 daMtip.Fill(dtMtip);
                 urnagamalztipbox.DataSource = dtMtip;
-                urnagamalztipbox.DisplayMember = "MATDOCTYPE";
-                urnagamalztipbox.ValueMember = "MATDOCTYPE";
+                urnagamalztipbox.DisplayMember = "DOCTYPE";
+                urnagamalztipbox.ValueMember = "DOCTYPE";
                 urnagamalztipbox.DropDownStyle = ComboBoxStyle.DropDown;
 
-                string queryTtip = "SELECT DISTINCT MATDOCNUM FROM BSMGRTRTBOMHEAD"; // Tablo ve sütun adını kontrol edin
-                SqlDataAdapter daTtip = new SqlDataAdapter(queryTtip, con);
-                DataTable dtTtip = new DataTable();
-                daTtip.Fill(dtTtip);
-                urnmalznumBox.DataSource = dtTtip;
-                urnmalznumBox.DisplayMember = "MATDOCNUM";
-                urnmalznumBox.ValueMember = "MATDOCNUM";
-                urnmalznumBox.DropDownStyle = ComboBoxStyle.DropDown;
+                string queryUrnMalNum = "SELECT DISTINCT MATDOCNUM FROM BSMGRTRTMATHEAD"; // Tablo ve sütun adını kontrol edin
+                SqlDataAdapter daUrnMalNum = new SqlDataAdapter(queryUrnMalNum, con);
+                DataTable dtUrnMalNum = new DataTable();
+                daUrnMalNum.Fill(dtUrnMalNum);
+                urnmalzemenumBox.DataSource = dtUrnMalNum;
+                urnmalzemenumBox.DisplayMember = "MATDOCNUM";
+                urnmalzemenumBox.ValueMember = "MATDOCNUM";
+                urnmalzemenumBox.DropDownStyle = ComboBoxStyle.DropDown;
 
-                string queryGtip = "SELECT DISTINCT BOMDOCTYPE FROM BSMGRTRTBOMHEAD"; // Tablo ve sütun adını kontrol edin
+                string queryGtip = "SELECT DISTINCT DOCTYPE FROM BSMGRTRTBOM001"; // Tablo ve sütun adını kontrol edin
                 SqlDataAdapter daGtip = new SqlDataAdapter(queryGtip, con);
                 DataTable dtGtip = new DataTable();
                 daGtip.Fill(dtGtip);
                 urnAgaTipBox.DataSource = dtGtip;
-                urnAgaTipBox.DisplayMember = "BOMDOCTYPE";
-                urnAgaTipBox.ValueMember = "BOMDOCTYPE";
+                urnAgaTipBox.DisplayMember = "DOCTYPE";
+                urnAgaTipBox.ValueMember = "DOCTYPE";
                 urnAgaTipBox.DropDownStyle = ComboBoxStyle.DropDown;
             }
             catch (Exception ex)
@@ -75,7 +75,13 @@ namespace TRTERPproject
         }
         private void ValidateAndAddData(ComboBox comboBox, string columnName)
         {
-            string checkQuery = $"SELECT COUNT(*) FROM BSMGRTRTBOMHEAD WHERE {columnName} = @userInput";
+            // Sorgu, hem BSMGRTRTBOMHEAD hem de BSMGRTRTBOMCONTENT tablolarını kontrol eder
+            string checkQuery = $@"
+            SELECT COUNT(*) 
+            FROM BSMGRTRTBOMHEAD H
+            LEFT JOIN BSMGRTRTBOMCONTENT C ON H.BOMDOCTYPE = C.BOMDOCTYPE AND H.BOMDOCNUM = C.BOMDOCNUM
+            WHERE H.{columnName} = @userInput OR C.{columnName} = @userInput";
+
             con = new SqlConnection(ConnectionHelper.ConnectionString);
             cmd = new SqlCommand();
             cmd.Connection = con;
@@ -108,24 +114,24 @@ namespace TRTERPproject
             }
         }
 
-
+        
         private void getBut_Click(object sender, EventArgs e)
         {
             // Temel SQL sorgusu
             string query = @"
-        SELECT 
-            COMCODE AS 'Firma', 
-            BOMDOCTYPE AS 'Ürün Ağacı Tipi', 
-            BOMDOCNUM AS 'Ürün Ağacı Numarası', 
-            BOMDOCFROM AS 'Geçerlilik Başlangıç',
-            BOMDOCUNTIL AS 'Geçerlilik Bitiş',
-            MATDOCTYPE AS 'Malzeme Tipi', 
-            MATDOCNUM AS 'Malzeme Numarası', 
-            QUANTITY AS 'Temel Miktar',
-            DRAWNUM AS 'Çizim Numarası',
-            ISDELETED AS 'Silindi mi?',
-            ISPASSIVE AS 'Pasif mi?'
-        FROM BSMGRTRTBOMHEAD";
+            SELECT 
+                        H.COMCODE AS 'Firma', 
+                        H.BOMDOCTYPE AS 'Ürün Ağacı Tipi', 
+                        H.BOMDOCNUM AS 'Ürün Ağacı Numarası', 
+                        H.BOMDOCFROM AS 'Geçerlilik Başlangıç',
+                        H.BOMDOCUNTIL AS 'Geçerlilik Bitiş',
+                        H.MATDOCTYPE AS 'Malzeme Tipi', 
+                        H.MATDOCNUM AS 'Malzeme Numarası', 
+                        H.QUANTITY AS 'Temel Miktar',
+                        H.ISDELETED AS 'Silindi mi?',
+                        H.ISPASSIVE AS 'Pasif mi?',
+                        H.DRAWNUM AS 'Çizim Numarası'
+                    FROM BSMGRTRTBOMHEAD H ";
 
             // Filtreleme koşulları
             List<string> filters = new List<string>();
@@ -143,7 +149,7 @@ namespace TRTERPproject
             }
 
             // Malzeme numarası filtresi
-            if (!string.IsNullOrEmpty(urnmalznumBox.Text))
+            if (!string.IsNullOrEmpty(urnmalzemenumBox.Text))
             {
                 filters.Add("MATDOCNUM = @MATDOCNUM");
             }
@@ -153,6 +159,7 @@ namespace TRTERPproject
             {
                 filters.Add("BOMDOCTYPE = @BOMDOCTYPE");
             }
+
 
             if (!string.IsNullOrEmpty(textBox1.Text))
             {
@@ -200,9 +207,9 @@ namespace TRTERPproject
                     cmd.Parameters.AddWithValue("@MATDOCTYPE", urnagamalztipbox.Text);
                 }
 
-                if (!string.IsNullOrEmpty(urnmalznumBox.Text))
+                if (!string.IsNullOrEmpty(urnmalzemenumBox.Text))
                 {
-                    cmd.Parameters.AddWithValue("@MATDOCNUM", urnmalznumBox.Text);
+                    cmd.Parameters.AddWithValue("@MATDOCNUM", urnmalzemenumBox.Text);
                 }
 
                 if (!string.IsNullOrEmpty(urnAgaTipBox.Text))
@@ -213,6 +220,17 @@ namespace TRTERPproject
                 if (!string.IsNullOrEmpty(textBox1.Text))
                 {
                     cmd.Parameters.AddWithValue("@BOMDOCNUM", textBox1.Text);
+                }
+
+
+                if (!string.IsNullOrEmpty(textBox1.Text))
+                {
+                    cmd.Parameters.AddWithValue("@QUANTITY", temelmikBox.Text);
+                }
+               
+                if (!string.IsNullOrEmpty(textBox1.Text))
+                {
+                    cmd.Parameters.AddWithValue("@DRAWNUM", cizmikBox.Text);
                 }
 
                 if (dateTimePickerBaslangic.Value.Date != DateTime.MinValue.Date && dateTimePickerBitis.Value.Date != DateTime.MinValue.Date)
@@ -244,140 +262,11 @@ namespace TRTERPproject
             }
         }
 
-
-
-
-
-
         private void addBut_Click(object sender, EventArgs e)
         {
-            // Kullanıcıdan alınacak form verilerini okuma
-            string comCode = firmbox.Text.Trim(); // Firma
-            string matDocType = urnagamalztipbox.Text.Trim(); // Malzeme Tipi
-            string matDocNum = urnmalznumBox.Text.Trim(); // Malzeme Numarası
-            string bomDocType = urnAgaTipBox.Text.Trim(); // Ürün Ağacı Tipi
-            string bomDocNum = textBox1.Text.Trim(); // Ürün Ağacı Numarası
-            string drawNum = cizmikBox.Text.Trim(); // Çizim Numarası
-            string quantityText = temelmikBox.Text.Trim(); // Temel Miktar
-            DateTime bomDocFrom = dateTimePickerBaslangic.Value; // Başlangıç Tarihi
-            DateTime bomDocUntil = dateTimePickerBitis.Value; // Bitiş Tarihi
-
-            // Alanların boş olup olmadığını kontrol etme
-            if (string.IsNullOrWhiteSpace(comCode) ||
-                string.IsNullOrWhiteSpace(matDocType) ||
-                string.IsNullOrWhiteSpace(matDocNum) ||
-                string.IsNullOrWhiteSpace(bomDocType) ||
-                string.IsNullOrWhiteSpace(bomDocNum) || // Ürün Ağacı Numarası zorunlu
-                string.IsNullOrWhiteSpace(drawNum) || // Çizim Numarası zorunlu
-                string.IsNullOrWhiteSpace(quantityText))
-            {
-                MessageBox.Show("Tüm alanların doldurulması gerekiyor!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // Temel miktarı kontrol etme ve dönüştürme
-            if (!decimal.TryParse(quantityText, out decimal quantity))
-            {
-                MessageBox.Show("Geçerli bir temel miktar girin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // Tarihler arasındaki mantık hatasını kontrol etme
-            if (bomDocFrom >= bomDocUntil)
-            {
-                MessageBox.Show("Başlangıç tarihi, bitiş tarihinden önce olmalıdır!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // CheckBox değerleri
-            bool isPassive = checkboxpas.Checked; // Pasif mi?
-            bool isDeleted = deletedlbl.Checked; // Silindi mi?
-
-            // Veritabanı sorgusu
-            string query = @"
-    INSERT INTO BSMGRTRTBOMHEAD
-    (COMCODE, MATDOCTYPE, MATDOCNUM, BOMDOCTYPE, BOMDOCNUM, BOMDOCFROM, BOMDOCUNTIL, DRAWNUM, QUANTITY, ISPASSIVE, ISDELETED)
-    VALUES
-    (@COMCODE, @MATDOCTYPE, @MATDOCNUM, @BOMDOCTYPE, @BOMDOCNUM, @BOMDOCFROM, @BOMDOCUNTIL, @DRAWNUM, @QUANTITY, @ISPASSIVE, @ISDELETED)";
-
-            // Bağlantı nesnesi
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
-            using (cmd = new SqlCommand(query, con))
-            {
-                // Parametreleri ekleme
-                cmd.Parameters.Add("@COMCODE", SqlDbType.VarChar).Value = comCode;
-                cmd.Parameters.Add("@MATDOCTYPE", SqlDbType.VarChar).Value = matDocType;
-                cmd.Parameters.Add("@MATDOCNUM", SqlDbType.VarChar).Value = matDocNum;
-                cmd.Parameters.Add("@BOMDOCTYPE", SqlDbType.VarChar).Value = bomDocType;
-                cmd.Parameters.Add("@BOMDOCNUM", SqlDbType.VarChar).Value = bomDocNum;
-                cmd.Parameters.Add("@BOMDOCFROM", SqlDbType.DateTime).Value = bomDocFrom;
-                cmd.Parameters.Add("@BOMDOCUNTIL", SqlDbType.DateTime).Value = bomDocUntil;
-                cmd.Parameters.Add("@DRAWNUM", SqlDbType.VarChar).Value = drawNum;
-                cmd.Parameters.Add("@QUANTITY", SqlDbType.Decimal).Value = quantity;
-                cmd.Parameters.Add("@ISPASSIVE", SqlDbType.Bit).Value = isPassive;
-                cmd.Parameters.Add("@ISDELETED", SqlDbType.Bit).Value = isDeleted;
-
-                try
-                {
-                    con.Open();
-                    int rowsAffected = cmd.ExecuteNonQuery();
-
-                    if (rowsAffected > 0)
-                    {
-                        MessageBox.Show("Kayıt başarıyla eklendi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        // Tüm alanları temizle
-                        ClearFormFields();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Kayıt eklenemedi. Lütfen girdiğiniz bilgileri kontrol edin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
-                }
-                catch (SqlException sqlEx)
-                {
-                    string errorMessage = "Bir veritabanı hatası oluştu. Lütfen tekrar deneyin.";
-                    // SQL hata koduna göre mesajları özelleştir
-                    switch (sqlEx.Number)
-                    {
-                        case 2627: // Primary Key violation
-                            errorMessage = "Böyle bir ürün ağacı zaten kayıtlı. Lütfen farklı bir numara veya tarih girin.";
-                            break;
-                        case 547: // Foreign Key violation
-                            errorMessage = "Girilen bilgiler veritabanındaki diğer kayıtlarla uyumlu değil. Lütfen kontrol edin.";
-                            break;
-
-                        default:
-                            errorMessage = $"Veritabanı hatası: {sqlEx.Message}";
-                            break;
-                    }
-                    MessageBox.Show(errorMessage, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Bir hata oluştu. Lütfen girdiğiniz bilgileri kontrol edin ve tekrar deneyin.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            urunAgaciKartAdd urunAgaciKartAdd = new urunAgaciKartAdd(bomDocNum);
+            urunAgaciKartAdd.Show();
         }
-
-
-
-        // Form alanlarını temizleme metodu
-        private void ClearFormFields()
-        {
-            firmbox.Text = string.Empty;
-            urnagamalztipbox.Text = string.Empty;
-            urnmalznumBox.Text = string.Empty;
-            urnAgaTipBox.Text = string.Empty;
-            textBox1.Text = string.Empty;
-            cizmikBox.Text = string.Empty;
-            temelmikBox.Text = string.Empty;
-            dateTimePickerBaslangic.Value = DateTime.Now;
-            dateTimePickerBitis.Value = DateTime.Now;
-            checkboxpas.Checked = false;
-            deletedlbl.Checked = false;
-        }
-
 
         private void basTarTxtBox_TextChanged(object sender, EventArgs e)
         {
@@ -386,86 +275,101 @@ namespace TRTERPproject
 
         private void DelBut_Click(object sender, EventArgs e)
         {
-            // Silme butonuna basıldığında çalışacak kod
-            string bomDocNum = textBox1.Text; // Silinecek BOMDOCNUM değeri
 
-            if (string.IsNullOrWhiteSpace(bomDocNum))
+            // DataGridView'den seçilen satırı kontrol et
+            if (urnAgcData.SelectedRows.Count > 0)
             {
-                MessageBox.Show("Silinecek Ürün Ağacı Numarasını giriniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                // Seçilen satırdaki "Malzeme Numarası" bilgisini al
+                DataGridViewRow selectedRow = urnAgcData.SelectedRows[0];
+                string bomDocNum = selectedRow.Cells["Ürün Ağacı Numarası"].Value.ToString(); // doğru sütunu kontrol edin
 
-            // Veritabanı sorgusu
-            string query = "DELETE FROM BSMGRTRTBOMHEAD WHERE BOMDOCNUM = @BOMDOCNUM";
+                // Kullanıcıdan onay al
+                DialogResult dialogResult = MessageBox.Show(
+                    $"Ürün Ağacı Kodu {bomDocNum} olan veriyi silmek istediğinize emin misiniz?",
+                    "Silme Onayı",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
 
-            // Bağlantı nesnesi
-            con = new SqlConnection(ConnectionHelper.ConnectionString);
-            cmd = new SqlCommand(query, con);
-
-            // Parametreyi ekleme
-            cmd.Parameters.AddWithValue("@BOMDOCNUM", bomDocNum);
-
-            try
-            {
-                using (con)
+                if (dialogResult == DialogResult.Yes)
                 {
-                    con.Open();
-                    int rowsAffected = cmd.ExecuteNonQuery();
+                    try
+                    {
+                        // Bağlantı dizesinin null veya boş olmadığını kontrol et
+                        if (string.IsNullOrEmpty(ConnectionHelper.ConnectionString))
+                        {
+                            MessageBox.Show("Bağlantı dizesi doğru şekilde ayarlanmamış.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
 
-                    if (rowsAffected > 0)
-                    {
-                        MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        // Bağlantıyı oluştur ve aç
+                        using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+                        {
+                            con.Open();
+
+                            // BSMGRTRTMBOMHEAD tablosundan silme sorgusu
+                            string deleteFromMatHead = "DELETE FROM BSMGRTRTBOMHEAD WHERE BOMDOCNUM = @BOMDOCNUM";
+                            SqlCommand cmdMatHead = new SqlCommand(deleteFromMatHead, con);
+                            cmdMatHead.Parameters.AddWithValue("@BOMDOCNUM", bomDocNum);
+                            cmdMatHead.ExecuteNonQuery();
+
+                            // BSMGRTRTBOMCONTENT tablosundan silme sorgusu
+                            string deleteFromMatText = "DELETE FROM BSMGRTRTBOMCONTENT WHERE BOMDOCNUM = @BOMDOCNUM";
+                            SqlCommand cmdMatText = new SqlCommand(deleteFromMatText, con);
+                            cmdMatText.Parameters.AddWithValue("@BOMDOCNUM", bomDocNum);
+                            cmdMatText.ExecuteNonQuery();
+
+                            // Başarılı silme mesajı
+                            MessageBox.Show("Seçilen veri başarıyla silindi.", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            // DataGridView'i güncelle
+                            urnAgcData.Rows.Remove(selectedRow);
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        MessageBox.Show("Silinecek kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show($"Hata: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
-            catch (Exception ex)
+            else
             {
-                // Hata durumunda mesaj gösterme
-                MessageBox.Show($"Hata: {ex.Message}");
+                MessageBox.Show("Lütfen silmek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-
+        
         private void duzBut_Click(object sender, EventArgs e)
         {
-            string bomDocNum = textBox1.Text; // Ürün Ağacı Numarası alınır
 
-            if (string.IsNullOrEmpty(bomDocNum))
+            // DataGridView'den seçilen satırı kontrol et
+            if (urnAgcData.SelectedRows.Count > 0)
             {
-                MessageBox.Show("Lütfen bir Ürün Ağacı Numarası giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                DataGridViewRow selectedRow = urnAgcData.SelectedRows[0];
+
+                // Yeni bir edit form oluştur ve seçilen veriyi aktar
+                urunAgaciKartEdit urunAgaciForm = new urunAgaciKartEdit();
+
+                // DataGridView'den alınan verileri, UrunAgaciForm'a aktar
+                urunAgaciForm.Firma = selectedRow.Cells["Firma"].Value.ToString();
+                urunAgaciForm.UrunAgaciTipi = selectedRow.Cells["Ürün Ağacı Tipi"].Value.ToString();
+                urunAgaciForm.UrunAgaciNumarasi = selectedRow.Cells["Ürün Ağacı Numarası"].Value.ToString();
+                urunAgaciForm.MalzemeTipi = selectedRow.Cells["Malzeme Tipi"].Value.ToString();
+                urunAgaciForm.MalzemeNumarasi = selectedRow.Cells["Malzeme Numarası"].Value.ToString();
+                urunAgaciForm.TemelMiktar = Convert.ToDecimal(selectedRow.Cells["Temel Miktar"].Value);
+                urunAgaciForm.CizimNumarasi = selectedRow.Cells["Çizim Numarası"].Value.ToString();
+                urunAgaciForm.IcerikNumarasi = selectedRow.Cells["İçerik Numarası"].Value.ToString();
+                urunAgaciForm.GecerlilikBaslangic = Convert.ToDateTime(selectedRow.Cells["Geçerlilik Başlangıç"].Value);
+                urunAgaciForm.GecerlilikBitis = Convert.ToDateTime(selectedRow.Cells["Geçerlilik Bitiş"].Value);
+                urunAgaciForm.IsDeleted = Convert.ToBoolean(selectedRow.Cells["Silindi mi?"].Value);
+                urunAgaciForm.IsPassive = Convert.ToBoolean(selectedRow.Cells["Pasif mi?"].Value);
+                urunAgaciForm.BilesenKodu = selectedRow.Cells["Bileşen Kodu"].Value.ToString();
+                urunAgaciForm.KalemUrunAgaciTipi = selectedRow.Cells["Kalem Ürün Ağacı Tipi"].Value.ToString();
+                urunAgaciForm.KalemUrunAgaciNumarasi = selectedRow.Cells["Kalem Ürün Ağacı Numarası"].Value.ToString();
+                // Edit formu göster
+                urunAgaciForm.ShowDialog();
             }
-
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+            else
             {
-                string query = "SELECT COUNT(*) FROM BSMGRTRTBOMHEAD WHERE BOMDOCNUM = @BOMDOCNUM";
-                cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@BOMDOCNUM", bomDocNum);
-
-                try
-                {
-                    con.Open();
-                    int recordExists = (int)cmd.ExecuteScalar();
-
-                    if (recordExists > 0)
-                    {
-                        // Kayıt bulundu, urunAgaciKartEdit formuna geçiş yap ve parametre ile aç
-                        urunAgaciKartEdit UrunAgaciForm = new urunAgaciKartEdit(bomDocNum);
-                        UrunAgaciForm.Show();
-                    }
-                    else
-                    {
-                        // Kayıt bulunamadı
-                        MessageBox.Show("Belirtilen Ürün Ağacı Numarası için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show("Lütfen düzenlemek için bir satır seçin.");
             }
         }
 
@@ -473,23 +377,44 @@ namespace TRTERPproject
         {
 
             string query = @"
-                        SELECT 
-							COMCODE AS 'Firma', 
-                            BOMDOCTYPE AS 'Ürün Ağacı Tipi', 
-                            BOMDOCNUM AS 'Ürün Ağacı Numarası', 
-                            BOMDOCFROM AS 'Geçerlilik Başlangıç',
-							BOMDOCUNTIL	AS 'Geçerlilik Bitiş',
-                            MATDOCTYPE AS 'Malzeme Tipi', 
-                            MATDOCNUM AS 'Malzeme Numarası', 
-						    QUANTITY AS 'Temel Miktar',
-						    DRAWNUM AS 'Çizim Numarası',
-							ISDELETED AS 'Silindi mi?',
-							ISPASSIVE AS 'Pasif mi?'
-                        FROM BSMGRTRTBOMHEAD";
+                                   SELECT 
+                        H.COMCODE AS 'Firma', 
+                        H.BOMDOCTYPE AS 'Ürün Ağacı Tipi', 
+                        H.BOMDOCNUM AS 'Ürün Ağacı Numarası', 
+                        H.BOMDOCFROM AS 'Geçerlilik Başlangıç',
+                        H.BOMDOCUNTIL AS 'Geçerlilik Bitiş',
+                        H.MATDOCTYPE AS 'Malzeme Tipi', 
+                        H.MATDOCNUM AS 'Malzeme Numarası', 
+                        H.QUANTITY AS 'Temel Miktar',
+                        H.ISDELETED AS 'Silindi mi?',
+                        H.ISPASSIVE AS 'Pasif mi?',
+                        H.DRAWNUM AS 'Çizim Numarası',
+
+                        C.CONTENTNUM AS 'İçerik Numarası',
+                        C.COMPONENT AS 'Bileşen Kodu',
+                        C.COMPBOMDOCTYPE AS 'Kalem Ürün Ağacı Tipi',
+                        C.COMPBOMDOCNUM AS 'Kalem Ürün Ağacı Numarası',
+
+                        D.DOCTYPE AS 'Ürün Ağacı Tipi',
+                        D.DOCTYPETEXT AS 'Ürün Ağacı Tipi Açıklaması'
+                    FROM 
+                        BSMGRTRTBOMHEAD H
+                    INNER JOIN 
+                        BSMGRTRTBOMCONTENT C 
+                        ON H.BOMDOCNUM = C.BOMDOCNUM 
+                    INNER JOIN 
+                        BSMGRTRTBOM001 D 
+                        ON H.BOMDOCTYPE = D.DOCTYPE;
+
+
+
+                ";
+
             con = new SqlConnection(ConnectionHelper.ConnectionString);
             cmd = new SqlCommand();
             cmd.Connection = con;
             cmd.CommandText = query;
+
             try
             {
                 using (con)
@@ -509,7 +434,28 @@ namespace TRTERPproject
                 // Hata mesajı
                 MessageBox.Show($"Hata: {ex.Message}");
             }
+
+        }
+
+        private void urnAgaTipBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void urunAgaciKart_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void firmbox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void urnagamalztipbox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
-    
+
 }

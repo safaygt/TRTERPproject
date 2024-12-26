@@ -265,6 +265,11 @@ namespace TRTERPproject
                 _connection.Close();
             }
         }
+
+        private void firmComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 
 }
