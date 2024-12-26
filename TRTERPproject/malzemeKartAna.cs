@@ -331,6 +331,14 @@ WHERE {columnName} = @userInput";
             {
                 // Seçilen satırdaki "Malzeme Numarası" bilgisini al
                 DataGridViewRow selectedRow = malKartAna.SelectedRows[0];
+
+                // "Malzeme Numarası" hücresinin değeri boşsa (null ya da boş)
+                if (selectedRow.Cells["Malzeme Numarası"].Value == null || string.IsNullOrWhiteSpace(selectedRow.Cells["Malzeme Numarası"].Value.ToString()))
+                {
+                    MessageBox.Show("Boş bir satır seçemezsiniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return; // Boş satırda işlem yapılmasın
+                }
+
                 string matDocNum = selectedRow.Cells["Malzeme Numarası"].Value.ToString();
 
                 // Kullanıcıdan onay al
@@ -378,6 +386,7 @@ WHERE {columnName} = @userInput";
             {
                 MessageBox.Show("Lütfen silmek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+
         }
 
 
@@ -393,8 +402,8 @@ WHERE {columnName} = @userInput";
 
                 // Formdaki alanlara DataGridView'deki değerleri aktar
                 MalzemeAnaTabloEdit.Firma = selectedRow.Cells["Firma"].Value != DBNull.Value
-    ? selectedRow.Cells["Firma"].Value.ToString()
-    : string.Empty;
+                    ? selectedRow.Cells["Firma"].Value.ToString()
+                    : string.Empty;
 
                 MalzemeAnaTabloEdit.MatdocType = selectedRow.Cells["Malzeme Tipi"].Value != DBNull.Value
                     ? selectedRow.Cells["Malzeme Tipi"].Value.ToString()
@@ -428,17 +437,50 @@ WHERE {columnName} = @userInput";
                     ? selectedRow.Cells["Net Ağırlık Birimi"].Value.ToString()
                     : string.Empty;
 
-                MalzemeAnaTabloEdit.brutWeight = selectedRow.Cells["Brüt Ağırlık"].Value != DBNull.Value
-                    ? Convert.ToInt32(selectedRow.Cells["Brüt Ağırlık"].Value)
-                    : (int?)null;
+                // MATSTEXT ve MATLTEXT verilerini al
+                string selectMatsText = "SELECT MATSTEXT, MATLTEXT FROM BSMGRTRTMATTEXT WHERE MATDOCNUM = @MATDOCNUM";
 
+                // Ensure the connection is opened before executing the command
+
+                /*
+                using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    con.Open();  // Open the connection
+
+                    using (SqlCommand cmdMatText = new SqlCommand(selectMatsText, con))
+                    {
+                        cmdMatText.Parameters.AddWithValue("@MATDOCNUM", selectedRow.Cells["Malzeme Numarası"].Value != DBNull.Value
+                            ? Convert.ToInt32(selectedRow.Cells["Malzeme Numarası"].Value)
+                            : 0);
+
+                        using (SqlDataReader reader = cmdMatText.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                // MATSTEXT ve MATLTEXT verilerini al
+                                MalzemeAnaTabloEdit.kisaAciklama = reader["MATSTEXT"] != DBNull.Value.ToString()
+                                    ? reader["MATSTEXT"].ToString()
+                                    : string.Empty;
+
+                                // Set MATLTEXT value as well
+                                MalzemeAnaTabloEdit.uzunAciklama = reader["MATLTEXT"] != DBNull.Value.ToString()
+                                    ? reader["MATLTEXT"].ToString()
+                                    : string.Empty;
+                            }
+                        }
+                    }
+                }
+
+                */
+
+                // Other fields assignment
                 MalzemeAnaTabloEdit.brutWeightUnit = selectedRow.Cells["Brüt Ağırlık Birimi"].Value != DBNull.Value
                     ? selectedRow.Cells["Brüt Ağırlık Birimi"].Value.ToString()
                     : string.Empty;
 
                 MalzemeAnaTabloEdit.isTree = selectedRow.Cells["Ürün Ağacı Var mı?"].Value != DBNull.Value
-    ? Convert.ToBoolean(selectedRow.Cells["Ürün Ağacı Var mı?"].Value)
-    : false;
+                    ? Convert.ToBoolean(selectedRow.Cells["Ürün Ağacı Var mı?"].Value)
+                    : false;
 
                 MalzemeAnaTabloEdit.treeType = selectedRow.Cells["Ürün Ağacı Tipi"].Value != DBNull.Value
                     ? selectedRow.Cells["Ürün Ağacı Tipi"].Value.ToString()
@@ -472,7 +514,6 @@ WHERE {columnName} = @userInput";
                     ? selectedRow.Cells["Dil"].Value.ToString()
                     : string.Empty;
 
-
                 // Edit formu göster
                 MalzemeAnaTabloEdit.ShowDialog();
             }
@@ -482,5 +523,5 @@ WHERE {columnName} = @userInput";
             }
         }
 
-    }
+        }
 }
