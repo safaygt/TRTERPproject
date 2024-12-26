@@ -46,7 +46,6 @@
             textBox1 = new TextBox();
             label7 = new Label();
             urnagamalztipbox = new ComboBox();
-            urnmalznumBox = new ComboBox();
             temelmikBox = new TextBox();
             cizmikBox = new TextBox();
             label8 = new Label();
@@ -54,6 +53,7 @@
             dateTimePickerBaslangic = new DateTimePicker();
             dateTimePickerBitis = new DateTimePicker();
             getAll = new Button();
+            urnmalzemenumBox = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)urnAgcData).BeginInit();
             SuspendLayout();
             // 
@@ -64,6 +64,7 @@
             urnAgaTipBox.Name = "urnAgaTipBox";
             urnAgaTipBox.Size = new Size(186, 28);
             urnAgaTipBox.TabIndex = 96;
+            urnAgaTipBox.SelectedIndexChanged += urnAgaTipBox_SelectedIndexChanged;
             // 
             // label2
             // 
@@ -81,15 +82,16 @@
             firmbox.FormattingEnabled = true;
             firmbox.Location = new Point(18, 74);
             firmbox.Name = "firmbox";
-            firmbox.Size = new Size(167, 28);
+            firmbox.Size = new Size(186, 28);
             firmbox.TabIndex = 93;
+            firmbox.SelectedIndexChanged += firmbox_SelectedIndexChanged;
             // 
             // checkboxpas
             // 
             checkboxpas.AutoSize = true;
             checkboxpas.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
             checkboxpas.ForeColor = SystemColors.Control;
-            checkboxpas.Location = new Point(870, 136);
+            checkboxpas.Location = new Point(896, 136);
             checkboxpas.Name = "checkboxpas";
             checkboxpas.Size = new Size(109, 29);
             checkboxpas.TabIndex = 92;
@@ -101,7 +103,7 @@
             deletedlbl.AutoSize = true;
             deletedlbl.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
             deletedlbl.ForeColor = SystemColors.Control;
-            deletedlbl.Location = new Point(870, 171);
+            deletedlbl.Location = new Point(896, 171);
             deletedlbl.Name = "deletedlbl";
             deletedlbl.Size = new Size(120, 29);
             deletedlbl.TabIndex = 91;
@@ -238,27 +240,20 @@
             urnagamalztipbox.Name = "urnagamalztipbox";
             urnagamalztipbox.Size = new Size(186, 28);
             urnagamalztipbox.TabIndex = 99;
-            // 
-            // urnmalznumBox
-            // 
-            urnmalznumBox.FormattingEnabled = true;
-            urnmalznumBox.Location = new Point(451, 77);
-            urnmalznumBox.Name = "urnmalznumBox";
-            urnmalznumBox.Size = new Size(186, 28);
-            urnmalznumBox.TabIndex = 100;
+            urnagamalztipbox.SelectedIndexChanged += urnagamalztipbox_SelectedIndexChanged;
             // 
             // temelmikBox
             // 
             temelmikBox.Location = new Point(451, 162);
             temelmikBox.Name = "temelmikBox";
-            temelmikBox.Size = new Size(163, 27);
+            temelmikBox.Size = new Size(186, 27);
             temelmikBox.TabIndex = 101;
             // 
             // cizmikBox
             // 
-            cizmikBox.Location = new Point(646, 162);
+            cizmikBox.Location = new Point(655, 161);
             cizmikBox.Name = "cizmikBox";
-            cizmikBox.Size = new Size(163, 27);
+            cizmikBox.Size = new Size(209, 27);
             cizmikBox.TabIndex = 102;
             // 
             // label8
@@ -307,12 +302,21 @@
             getAll.UseVisualStyleBackColor = true;
             getAll.Click += getAll_Click;
             // 
+            // urnmalzemenumBox
+            // 
+            urnmalzemenumBox.FormattingEnabled = true;
+            urnmalzemenumBox.Location = new Point(451, 78);
+            urnmalzemenumBox.Name = "urnmalzemenumBox";
+            urnmalzemenumBox.Size = new Size(186, 28);
+            urnmalzemenumBox.TabIndex = 175;
+            // 
             // urunAgaciKart
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(1071, 673);
+            Controls.Add(urnmalzemenumBox);
             Controls.Add(getAll);
             Controls.Add(dateTimePickerBitis);
             Controls.Add(dateTimePickerBaslangic);
@@ -320,7 +324,6 @@
             Controls.Add(label8);
             Controls.Add(cizmikBox);
             Controls.Add(temelmikBox);
-            Controls.Add(urnmalznumBox);
             Controls.Add(urnagamalztipbox);
             Controls.Add(textBox1);
             Controls.Add(label7);
@@ -341,6 +344,7 @@
             Controls.Add(label1);
             Name = "urunAgaciKart";
             Text = "urunAgaciKart";
+            Load += urunAgaciKart_Load;
             ((System.ComponentModel.ISupportInitialize)urnAgcData).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -365,7 +369,6 @@
 		private TextBox textBox1;
 		private Label label7;
 		private ComboBox urnagamalztipbox;
-		private ComboBox urnmalznumBox;
         private TextBox temelmikBox;
         private TextBox cizmikBox;
         private Label label8;
@@ -373,5 +376,6 @@
         private DateTimePicker dateTimePickerBaslangic;
         private DateTimePicker dateTimePickerBitis;
         private Button getAll;
+        private ComboBox urnmalzemenumBox;
     }
 }

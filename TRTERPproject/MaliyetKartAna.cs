@@ -377,6 +377,11 @@ namespace TRTERPproject
             }
         }
 
+
+        private void firmComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+}
         private void getAll_Click(object sender, EventArgs e)
         {
             string query = @"SELECT 
@@ -460,6 +465,7 @@ namespace TRTERPproject
                     MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+
         }
     }
 

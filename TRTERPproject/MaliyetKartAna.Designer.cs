@@ -225,6 +225,7 @@
             firmComboBox.Name = "firmComboBox";
             firmComboBox.Size = new Size(167, 28);
             firmComboBox.TabIndex = 46;
+            firmComboBox.SelectedIndexChanged += firmComboBox_SelectedIndexChanged;
             // 
             // dilCombo
             // 
