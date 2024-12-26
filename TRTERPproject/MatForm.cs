@@ -197,7 +197,7 @@ namespace TRTERPproject
                     // 2. Kayıt Kontrolü
                     string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTMAT001 WHERE DOCTYPE = @DOCTYPE";
                     cmd = new SqlCommand(checkQuery, con);
-                    cmd.Parameters.AddWithValue("@COUNTRYCODE", MatCode);
+                    cmd.Parameters.AddWithValue("@DOCTYPE", MatCode);
 
                     int recordExists = (int)cmd.ExecuteScalar();
 
@@ -211,7 +211,7 @@ namespace TRTERPproject
                     // 3. Silme İşlemi
                     string deleteQuery = "DELETE FROM BSMGRTRTMAT001 WHERE DOCTYPE = @DOCTYPE";
                     cmd = new SqlCommand(deleteQuery, con);
-                    cmd.Parameters.AddWithValue("@COUNTRYCODE", MatCode);
+                    cmd.Parameters.AddWithValue("@DOCTYPE", MatCode);
 
                     int rowsAffected = cmd.ExecuteNonQuery();
 
