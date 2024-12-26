@@ -35,8 +35,6 @@
             addBut = new Button();
             getBut = new Button();
             maliyetdata = new DataGridView();
-            bitistarTxtBox = new TextBox();
-            basTarTxtBox = new TextBox();
             maliyTxtBox = new TextBox();
             malNotxtBox = new TextBox();
             dillbl = new Label();
@@ -49,6 +47,9 @@
             firmComboBox = new ComboBox();
             dilCombo = new ComboBox();
             comboBoxMalMerTip = new ComboBox();
+            getAll = new Button();
+            dateTimePickerBaslangic = new DateTimePicker();
+            dateTimePickerBitis = new DateTimePicker();
             ((System.ComponentModel.ISupportInitialize)maliyetdata).BeginInit();
             SuspendLayout();
             // 
@@ -78,16 +79,17 @@
             // 
             // duzBut
             // 
-            duzBut.Location = new Point(523, 236);
+            duzBut.Location = new Point(684, 227);
             duzBut.Name = "duzBut";
             duzBut.Size = new Size(125, 38);
             duzBut.TabIndex = 43;
             duzBut.Text = "Düzenle";
             duzBut.UseVisualStyleBackColor = true;
+            duzBut.Click += duzBut_Click;
             // 
             // DelBut
             // 
-            DelBut.Location = new Point(359, 236);
+            DelBut.Location = new Point(520, 227);
             DelBut.Name = "DelBut";
             DelBut.Size = new Size(125, 38);
             DelBut.TabIndex = 42;
@@ -97,7 +99,7 @@
             // 
             // addBut
             // 
-            addBut.Location = new Point(191, 236);
+            addBut.Location = new Point(352, 227);
             addBut.Name = "addBut";
             addBut.Size = new Size(125, 38);
             addBut.TabIndex = 41;
@@ -107,7 +109,7 @@
             // 
             // getBut
             // 
-            getBut.Location = new Point(23, 236);
+            getBut.Location = new Point(184, 227);
             getBut.Name = "getBut";
             getBut.Size = new Size(125, 38);
             getBut.TabIndex = 40;
@@ -125,25 +127,11 @@
             maliyetdata.Size = new Size(1024, 337);
             maliyetdata.TabIndex = 39;
             // 
-            // bitistarTxtBox
-            // 
-            bitistarTxtBox.Location = new Point(864, 127);
-            bitistarTxtBox.Name = "bitistarTxtBox";
-            bitistarTxtBox.Size = new Size(158, 27);
-            bitistarTxtBox.TabIndex = 35;
-            // 
-            // basTarTxtBox
-            // 
-            basTarTxtBox.Location = new Point(859, 50);
-            basTarTxtBox.Name = "basTarTxtBox";
-            basTarTxtBox.Size = new Size(163, 27);
-            basTarTxtBox.TabIndex = 34;
-            // 
             // maliyTxtBox
             // 
-            maliyTxtBox.Location = new Point(14, 137);
+            maliyTxtBox.Location = new Point(41, 139);
             maliyTxtBox.Name = "maliyTxtBox";
-            maliyTxtBox.Size = new Size(401, 27);
+            maliyTxtBox.Size = new Size(216, 27);
             maliyTxtBox.TabIndex = 33;
             // 
             // malNotxtBox
@@ -213,11 +201,11 @@
             maliylbl.AutoSize = true;
             maliylbl.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
             maliylbl.ForeColor = Color.GhostWhite;
-            maliylbl.Location = new Point(123, 111);
+            maliylbl.Location = new Point(41, 113);
             maliylbl.Name = "maliylbl";
-            maliylbl.Size = new Size(161, 23);
+            maliylbl.Size = new Size(216, 23);
             maliylbl.TabIndex = 24;
-            maliylbl.Text = "Maliyet Açıklaması";
+            maliylbl.Text = "Ana Maliyet Merkezi Tipi ";
             // 
             // label1
             // 
@@ -254,12 +242,41 @@
             comboBoxMalMerTip.Size = new Size(175, 28);
             comboBoxMalMerTip.TabIndex = 48;
             // 
+            // getAll
+            // 
+            getAll.Location = new Point(20, 227);
+            getAll.Name = "getAll";
+            getAll.Size = new Size(140, 34);
+            getAll.TabIndex = 108;
+            getAll.Text = "Hepsini Getir";
+            getAll.UseVisualStyleBackColor = true;
+            getAll.Click += getAll_Click;
+            // 
+            // dateTimePickerBaslangic
+            // 
+            dateTimePickerBaslangic.Location = new Point(841, 50);
+            dateTimePickerBaslangic.Name = "dateTimePickerBaslangic";
+            dateTimePickerBaslangic.Size = new Size(203, 27);
+            dateTimePickerBaslangic.TabIndex = 109;
+            dateTimePickerBaslangic.Value = new DateTime(2024, 1, 1, 0, 0, 0, 0);
+            // 
+            // dateTimePickerBitis
+            // 
+            dateTimePickerBitis.Location = new Point(841, 137);
+            dateTimePickerBitis.Name = "dateTimePickerBitis";
+            dateTimePickerBitis.Size = new Size(203, 27);
+            dateTimePickerBitis.TabIndex = 110;
+            dateTimePickerBitis.Value = new DateTime(2024, 12, 1, 0, 0, 0, 0);
+            // 
             // MaliyetKartAna
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(1059, 637);
+            Controls.Add(dateTimePickerBitis);
+            Controls.Add(dateTimePickerBaslangic);
+            Controls.Add(getAll);
             Controls.Add(comboBoxMalMerTip);
             Controls.Add(dilCombo);
             Controls.Add(firmComboBox);
@@ -270,8 +287,6 @@
             Controls.Add(addBut);
             Controls.Add(getBut);
             Controls.Add(maliyetdata);
-            Controls.Add(bitistarTxtBox);
-            Controls.Add(basTarTxtBox);
             Controls.Add(maliyTxtBox);
             Controls.Add(malNotxtBox);
             Controls.Add(dillbl);
@@ -297,8 +312,6 @@
 		private Button addBut;
 		private Button getBut;
 		private DataGridView maliyetdata;
-		private TextBox bitistarTxtBox;
-		private TextBox basTarTxtBox;
 		private TextBox maliyTxtBox;
 		private TextBox malNotxtBox;
 		private Label dillbl;
@@ -311,5 +324,8 @@
 		private ComboBox firmComboBox;
 		private ComboBox dilCombo;
 		private ComboBox comboBoxMalMerTip;
-	}
+        private Button getAll;
+        private DateTimePicker dateTimePickerBaslangic;
+        private DateTimePicker dateTimePickerBitis;
+    }
 }
