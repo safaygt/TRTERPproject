@@ -23,14 +23,14 @@ namespace TRTERPproject
         {
             InitializeComponent();
             this.Load += (s, e) => LoadComboBoxData();
-            
 
-            firmCodeComboBox.Leave += (s, e) => ValidateAndAddData(firmCodeComboBox, "COMCODE");
-            matTypeComboBox.Leave += (s, e) => ValidateAndAddData(matTypeComboBox, "MATDOCTYPE");
-            supplyTypeComboBox.Leave += (s, e) => ValidateAndAddData(supplyTypeComboBox, "SUPPLYTYPE");
-            lanComboBox.Leave += (s, e) => ValidateAndAddData(lanComboBox, "LANCODE");
-            routeTypeComboBox.Leave += (s, e) => ValidateAndAddData(routeTypeComboBox, "ROTDOCTYPE");
-            productTreeTypeComboBox.Leave += (s, e) => ValidateAndAddData(productTreeTypeComboBox, "BOMDOCTYPE");
+
+            firmCodeComboBox.Leave += (s, e) => ValidateAndAddData(firmCodeComboBox, "COMCODE", "BSMGRTRTGEN001");
+            matTypeComboBox.Leave += (s, e) => ValidateAndAddData(matTypeComboBox, "DOCTYPE", "BSMGRTRTMAT001");
+            supplyTypeComboBox.Leave += (s, e) => ValidateAndAddData(supplyTypeComboBox, "SUPPLYTYPE", "BSMGRTRTMATHEAD");
+            lanComboBox.Leave += (s, e) => ValidateAndAddData(lanComboBox, "LANCODE", "BSMGRTRTGEN002");
+            routeTypeComboBox.Leave += (s, e) => ValidateAndAddData(routeTypeComboBox, "DOCTYPE", "BSMGRTRTROT001");
+            productTreeTypeComboBox.Leave += (s, e) => ValidateAndAddData(productTreeTypeComboBox, "DOCTYPE", "BSMGRTRTBOM001");
         }
 
         private void LoadComboBox(ComboBox comboBox, string query, string columnName)
@@ -98,28 +98,29 @@ namespace TRTERPproject
 
         }
 
-        private void ValidateAndAddData(ComboBox comboBox, string columnName)
+        private void ValidateAndAddData(ComboBox comboBox, string columnName, string tableName)
         {
-            string userInput = comboBox.Text.Trim();
-            if (string.IsNullOrEmpty(userInput))
-                return;
+            string checkQuery = $@"
+            SELECT COUNT(*) 
+            FROM {tableName} 
+            WHERE {columnName} = @userInput";
 
-            string checkQuery = $"SELECT COUNT(*) FROM BSMGRTRTMATHEAD WHERE {columnName} = @userInput";
+            if (string.IsNullOrEmpty(comboBox.Text)) return;
 
             try
             {
                 using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
                 {
+                    con.Open();
                     using (SqlCommand checkCmd = new SqlCommand(checkQuery, con))
                     {
-                        checkCmd.Parameters.AddWithValue("@userInput", userInput);
-                        con.Open();
-
+                        checkCmd.Parameters.AddWithValue("@userInput", comboBox.Text);
                         int count = (int)checkCmd.ExecuteScalar();
+
                         if (count == 0)
                         {
-                            MessageBox.Show($"'{userInput}' değeri {columnName} sütunu için geçerli değil.", "Geçersiz Giriş", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            comboBox.Text = string.Empty;
+                            MessageBox.Show($"{columnName} '{comboBox.Text}' tablodaki verilerle uyuşmuyor.");
+                            comboBox.Text = string.Empty; // Kullanıcının yanlış girişini temizler
                         }
                     }
                 }
@@ -170,7 +171,6 @@ namespace TRTERPproject
             }
 
             int supplyTypeValue;
-
             if (!int.TryParse(supplyType, out supplyTypeValue))
             {
                 MessageBox.Show("Tedarik türü geçerli bir sayı olmalıdır.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -201,92 +201,80 @@ namespace TRTERPproject
                 brutWeightValue = parsedBrutWeight;
             }
 
-
-
-
-            // Veritabanı sorgusu
-            string query = @"
-        INSERT INTO BSMGRTRTMATHEAD 
-        (COMCODE, MATDOCTYPE, MATDOCNUM, MATDOCFROM, MATDOCUNTIL, SUPPLYTYPE, STUNIT, NETWEIGHT, NWUNIT, 
-        BRUTWEIGHT, BWUNIT, ISBOM, BOMDOCTYPE, BOMDOCNUM, ISROUTE, ROTDOCTYPE, ROTDOCNUM, ISDELETED, ISPASSIVE) 
-        VALUES 
-        (@COMCODE, @MATDOCTYPE, @MATDOCNUM, @MATDOCFROM, @MATDOCUNTIL, @SUPPLYTYPE, @STUNIT, @NETWEIGHT, @NWUNIT, 
-        @BRUTWEIGHT, @BWUNIT, @ISBOM, @BOMDOCTYPE, @BOMDOCNUM, @ISROUTE, @ROTDOCTYPE, @ROTDOCNUM, @ISDELETED, @ISPASSIVE)";
-
-
-
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
-            using (cmd = new SqlCommand(query, con))
+            using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
             {
-                cmd.Parameters.AddWithValue("@COMCODE", SqlDbType.VarChar).Value = comCode;
-                cmd.Parameters.AddWithValue("@MATDOCTYPE", SqlDbType.VarChar).Value = matDocType;
-                cmd.Parameters.AddWithValue("@MATDOCNUM", SqlDbType.VarChar).Value = matDocNum;
-                cmd.Parameters.AddWithValue("@MATDOCFROM", SqlDbType.DateTime).Value = matDocFrom;
-                cmd.Parameters.AddWithValue("@MATDOCUNTIL", SqlDbType.DateTime).Value = matDocUntil;
-                cmd.Parameters.AddWithValue("@SUPPLYTYPE", SqlDbType.Int).Value = supplyTypeValue;
-                cmd.Parameters.AddWithValue("@STUNIT", SqlDbType.VarChar).Value = matStockUnit;
-                cmd.Parameters.Add(new SqlParameter("@NETWEIGHT", SqlDbType.Decimal)
-                {
-                    Value = netWeightValue.HasValue ? (object)netWeightValue.Value : DBNull.Value
-                }); ;
-                cmd.Parameters.AddWithValue("@NWUNIT", SqlDbType.VarChar).Value = netWeightUnit;
-                cmd.Parameters.Add(new SqlParameter("@BRUTWEIGHT", SqlDbType.Decimal)
-                {
-                    Value = brutWeightValue.HasValue ? (object)brutWeightValue.Value : DBNull.Value
-                });
-                cmd.Parameters.AddWithValue("@BWUNIT", SqlDbType.VarChar).Value = brutWeightUnit;
-                cmd.Parameters.AddWithValue("@ISBOM", SqlDbType.Int).Value = isTree ? 1 : 0; ;
-                cmd.Parameters.AddWithValue("@BOMDOCTYPE", SqlDbType.VarChar).Value = productTreeType;
-                cmd.Parameters.AddWithValue("@BOMDOCNUM", SqlDbType.VarChar).Value = productTreeCode;
-                cmd.Parameters.AddWithValue("@ISROUTE", SqlDbType.Int).Value = isRoute ? 1 : 0;
-                cmd.Parameters.AddWithValue("@ROTDOCTYPE", SqlDbType.VarChar).Value = routeType;
-                cmd.Parameters.AddWithValue("@ROTDOCNUM", SqlDbType.VarChar).Value = routeCode;
-                cmd.Parameters.AddWithValue("@ISDELETED", SqlDbType.Int).Value = isDeleted;
-                cmd.Parameters.AddWithValue("@ISPASSIVE", SqlDbType.Int).Value = isPassive;
-
+                con.Open();
+                SqlTransaction transaction = con.BeginTransaction();
 
                 try
                 {
-                    con.Open();
-                    int rowsAffected = cmd.ExecuteNonQuery();
-                    MessageBox.Show(rowsAffected > 0 ? "Kayıt başarıyla eklendi." : "Kayıt eklenemedi.", "Bilgi", MessageBoxButtons.OK, rowsAffected > 0 ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
+                    string query1 = @"
+                INSERT INTO BSMGRTRTMATHEAD 
+                (COMCODE, MATDOCTYPE, MATDOCNUM, MATDOCFROM, MATDOCUNTIL, SUPPLYTYPE, STUNIT, NETWEIGHT, NWUNIT, 
+                BRUTWEIGHT, BWUNIT, ISBOM, BOMDOCTYPE, BOMDOCNUM, ISROUTE, ROTDOCTYPE, ROTDOCNUM, ISDELETED, ISPASSIVE) 
+                VALUES 
+                (@COMCODE, @MATDOCTYPE, @MATDOCNUM, @MATDOCFROM, @MATDOCUNTIL, @SUPPLYTYPE, @STUNIT, @NETWEIGHT, @NWUNIT, 
+                @BRUTWEIGHT, @BWUNIT, @ISBOM, @BOMDOCTYPE, @BOMDOCNUM, @ISROUTE, @ROTDOCTYPE, @ROTDOCNUM, @ISDELETED, @ISPASSIVE)";
+
+                    using (SqlCommand cmd1 = new SqlCommand(query1, con, transaction))
+                    {
+                        cmd1.Parameters.AddWithValue("@COMCODE", comCode);
+                        cmd1.Parameters.AddWithValue("@MATDOCTYPE", matDocType);
+                        cmd1.Parameters.AddWithValue("@MATDOCNUM", matDocNum);
+                        cmd1.Parameters.AddWithValue("@MATDOCFROM", matDocFrom);
+                        cmd1.Parameters.AddWithValue("@MATDOCUNTIL", matDocUntil);
+                        cmd1.Parameters.AddWithValue("@SUPPLYTYPE", supplyTypeValue);
+                        cmd1.Parameters.AddWithValue("@STUNIT", matStockUnit);
+                        cmd1.Parameters.AddWithValue("@NETWEIGHT", (object)netWeightValue ?? DBNull.Value);
+                        cmd1.Parameters.AddWithValue("@NWUNIT", netWeightUnit);
+                        cmd1.Parameters.AddWithValue("@BRUTWEIGHT", (object)brutWeightValue ?? DBNull.Value);
+                        cmd1.Parameters.AddWithValue("@BWUNIT", brutWeightUnit);
+                        cmd1.Parameters.AddWithValue("@ISBOM", isTree ? 1 : 0);
+                        cmd1.Parameters.AddWithValue("@BOMDOCTYPE", productTreeType);
+                        cmd1.Parameters.AddWithValue("@BOMDOCNUM", productTreeCode);
+                        cmd1.Parameters.AddWithValue("@ISROUTE", isRoute ? 1 : 0);
+                        cmd1.Parameters.AddWithValue("@ROTDOCTYPE", routeType);
+                        cmd1.Parameters.AddWithValue("@ROTDOCNUM", routeCode);
+                        cmd1.Parameters.AddWithValue("@ISDELETED", isDeleted ? 1 : 0);
+                        cmd1.Parameters.AddWithValue("@ISPASSIVE", isPassive ? 1 : 0);
+                        cmd1.ExecuteNonQuery();
+                    }
+
+                    string query2 = @"
+                INSERT INTO BSMGRTRTMATTEXT 
+                (COMCODE, MATDOCTYPE, MATDOCNUM, MATDOCFROM, MATDOCUNTIL, LANCODE, MATSTEXT, MATLTEXT) 
+                VALUES 
+                (@COMCODE, @MATDOCTYPE, @MATDOCNUM, @MATDOCFROM, @MATDOCUNTIL, @LANCODE, @MATSTEXT, @MATLTEXT)";
+
+                    using (SqlCommand cmd2 = new SqlCommand(query2, con, transaction))
+                    {
+                        cmd2.Parameters.AddWithValue("@COMCODE", comCode);
+                        cmd2.Parameters.AddWithValue("@MATDOCTYPE", matDocType);
+                        cmd2.Parameters.AddWithValue("@MATDOCNUM", matDocNum);
+                        cmd2.Parameters.AddWithValue("@MATDOCFROM", matDocFrom);
+                        cmd2.Parameters.AddWithValue("@MATDOCUNTIL", matDocUntil);
+                        cmd2.Parameters.AddWithValue("@LANCODE", lan);
+                        cmd2.Parameters.AddWithValue("@MATSTEXT", matStatementShort);
+                        cmd2.Parameters.AddWithValue("@MATLTEXT", matStatementLong);
+                        cmd2.ExecuteNonQuery();
+                    }
+
+                    transaction.Commit();
+                    MessageBox.Show("Kayıt başarıyla eklendi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                catch (Exception ex)
+                catch (SqlException ex)
                 {
-                    MessageBox.Show($"Hata: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    transaction.Rollback();
+
+                    if (ex.Message.Contains("UQ_MATDOCFROM"))
+                    {
+                        MessageBox.Show("Bu tarih için zaten bir kayıt mevcut. Lütfen farklı bir tarih giriniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Bir hata oluştu: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
-            }
-
-
-            string query2 = @"INSERT INTO BSMGRTRTMATTEXT 
-        (COMCODE, MATDOCTYPE, MATDOCNUM, MATDOCFROM, MATDOCUNTIL, LANCODE, MATSTEXT, MATLTEXT) 
-        VALUES 
-        (@COMCODE, @MATDOCTYPE, @MATDOCNUM, @MATDOCFROM, @MATDOCUNTIL, @LANCODE, @MATSTEXT, @MATLTEXT)";
-
-
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
-            using (cmd = new SqlCommand(query2, con))
-            {
-                cmd.Parameters.AddWithValue("@COMCODE", SqlDbType.VarChar).Value = comCode;
-                cmd.Parameters.AddWithValue("@MATDOCTYPE", SqlDbType.VarChar).Value = matDocType;
-                cmd.Parameters.AddWithValue("@MATDOCNUM", SqlDbType.VarChar).Value = matDocNum;
-                cmd.Parameters.AddWithValue("@MATDOCFROM", SqlDbType.DateTime).Value = matDocFrom;
-                cmd.Parameters.AddWithValue("@MATDOCUNTIL", SqlDbType.DateTime).Value = matDocUntil;
-                cmd.Parameters.AddWithValue("@LANCODE", SqlDbType.VarChar).Value = lan;
-                cmd.Parameters.AddWithValue("@MATSTEXT", SqlDbType.VarChar).Value = matStatementShort;
-                cmd.Parameters.AddWithValue("@MATLTEXT", SqlDbType.VarChar).Value = matStatementLong;
-
-                try
-                {
-                    con.Open();
-                    int rowsAffected = cmd.ExecuteNonQuery();
-                    MessageBox.Show(rowsAffected > 0 ? "Kayıt başarıyla eklendi." : "Kayıt eklenemedi.", "Bilgi", MessageBoxButtons.OK, rowsAffected > 0 ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Hata: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-
             }
 
 
