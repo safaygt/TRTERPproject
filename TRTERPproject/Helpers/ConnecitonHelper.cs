@@ -4,7 +4,10 @@
 	{
 
 
-		public static string ConnectionString { get; } = "Server=LAPTOP-KJPATGFL;Database=TRTdb;Integrated Security=True;";
+
+
+		public static string ConnectionString { get; } = "Server=DESKTOP-DI1RP56;Database=TRTdb;Integrated Security=True;";
+
 
 
 

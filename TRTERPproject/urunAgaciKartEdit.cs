@@ -18,7 +18,24 @@ namespace TRTERPproject
         SqlCommand cmd;
         SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString);
 
-        public urunAgaciKartEdit(string bomDocNum)
+        // Özellikler
+        public string Firma { get; set; }
+        public string UrunAgaciTipi { get; set; }
+        public string UrunAgaciNumarasi { get; set; }
+        public string MalzemeTipi { get; set; }
+        public string MalzemeNumarasi { get; set; }
+        public decimal TemelMiktar { get; set; }
+        public string CizimNumarasi { get; set; }
+        public DateTime GecerlilikBaslangic { get; set; }
+        public DateTime GecerlilikBitis { get; set; }
+        public bool IsDeleted { get; set; }
+        public bool IsPassive { get; set; }
+        public string BilesenKodu { get; set; }
+        public string KalemUrunAgaciTipi { get; set; }
+        public string KalemUrunAgaciNumarasi { get; set; }
+        public string? IcerikNumarasi { get; internal set; }
+
+        public urunAgaciKartEdit()
         {
             InitializeComponent();
             this.bomDocNum = bomDocNum;
@@ -26,159 +43,265 @@ namespace TRTERPproject
 
         private void urunAgaciKartEdit_Load(object sender, EventArgs e)
         {
-            string query = @"
-    SELECT 
-        COMCODE, 
-        MATDOCTYPE, 
-        MATDOCNUM, 
-        BOMDOCTYPE, 
-        BOMDOCNUM, 
-        DRAWNUM, 
-        QUANTITY, 
-        BOMDOCFROM, 
-        BOMDOCUNTIL, 
-        ISPASSIVE, 
-        ISDELETED 
-    FROM BSMGRTRTBOMHEAD 
-    WHERE BOMDOCNUM = @BOMDOCNUM"; // BOMDOCNUM parametresi
+            // Formdaki alanları özelliklerle doldurma
+            firmbox.Text = Firma;
+            urnAgaTipBox.Text = UrunAgaciTipi;
+            textBox1.Text = UrunAgaciNumarasi;
+            urnagamalztipbox.Text = MalzemeTipi;
+            urnmalzemenumBox.Text = MalzemeNumarasi;
+            cizmikBox.Text = CizimNumarasi;
+            icerikNumBox.Text = IcerikNumarasi;
+            temelmikBox.Text = TemelMiktar.ToString();
 
-            cmd = new SqlCommand(query, con);
-            cmd.Parameters.AddWithValue("@BOMDOCNUM", bomDocNum); // 'bomDocNum' parametre olarak ekleniyor
+            baslangicDateTimePicker.Value = GecerlilikBaslangic;
+            bitisDateTimePicker.Value = GecerlilikBitis;
 
+            checkboxpas.Checked = IsPassive;
+            deletedlbl.Checked = IsDeleted;
+
+            bilesenKodBox.Text = BilesenKodu;
+            kalemAgUrnTipBox.Text = KalemUrunAgaciTipi;
+            kalemAgUrnKodBox.Text = KalemUrunAgaciNumarasi;
+
+            // Combobox verilerini doldur
+            LoadComboBoxData();
+        }
+
+        private void LoadComboBoxData()
+        {
             try
             {
-                con.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                if (reader.Read()) // Eğer veri varsa
+                using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
                 {
-                    // Form elemanlarını veritabanı ile dolduruyoruz
-                    firmbox.Text = reader["COMCODE"].ToString();
-                    urnagamalztipbox.Text = reader["MATDOCTYPE"].ToString();
-                    urnmalznumBox.Text = reader["MATDOCNUM"].ToString();
-                    urnAgaTipBox.Text = reader["BOMDOCTYPE"].ToString();
-                    textBox1.Text = reader["BOMDOCNUM"].ToString();
-                    cizmikBox.Text = reader["DRAWNUM"].ToString();
-                    temelmikBox.Text = reader["QUANTITY"].ToString();
+                    con.Open();
 
-                    // DateTimePicker'lara tarihleri yerleştiriyoruz
-                    baslangicDateTimePicker.Value = Convert.ToDateTime(reader["BOMDOCFROM"]);
-                    bitisDateTimePicker.Value = Convert.ToDateTime(reader["BOMDOCUNTIL"]);
+                    // Firma verileri
+                    LoadComboBoxData("SELECT DISTINCT COMCODE FROM BSMGRTRTGEN001", firmbox, "COMCODE");
 
-                    checkboxpas.Checked = Convert.ToBoolean(reader["ISPASSIVE"]);
-                    deletedlbl.Checked = Convert.ToBoolean(reader["ISDELETED"]);
+                    // Malzeme Tipi
+                    LoadComboBoxData("SELECT DISTINCT DOCTYPE FROM BSMGRTRTMAT001", urnagamalztipbox, "DOCTYPE");
+
+                    // Ürün Ağacı Tipi
+                    LoadComboBoxData("SELECT DISTINCT DOCTYPE FROM BSMGRTRTBOM001", urnAgaTipBox, "DOCTYPE");
+
+                    LoadComboBoxData("SELECT DISTINCT MATDOCNUM FROM BSMGRTRTMATHEAD", urnmalzemenumBox, "MATDOCNUM");
+
+                    // Bileşen Kodları
+                    LoadComboBoxData("SELECT DISTINCT COMPONENT FROM BSMGRTRTBOMCONTENT", bilesenKodBox, "COMPONENT");
+
+                    // Kalem Ürün Ağacı Tipi
+                    LoadComboBoxData("SELECT DISTINCT COMPBOMDOCTYPE FROM BSMGRTRTBOMCONTENT", kalemAgUrnTipBox, "COMPBOMDOCTYPE");
+
+                    // Kalem Ürün Ağacı Numarası
+                    LoadComboBoxData("SELECT DISTINCT COMPBOMDOCNUM FROM BSMGRTRTBOMCONTENT", kalemAgUrnKodBox, "COMPBOMDOCNUM");
                 }
-                else
-                {
-                    MessageBox.Show("Girilen Ürün Ağacı Numarasına ait bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    this.Close(); // Kayıt bulunamazsa formu kapatıyoruz
-                }
-                reader.Close(); // SqlDataReader'ı kapatıyoruz
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Veriler yüklenirken hata oluştu: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            finally
+        }
+
+        private void LoadComboBoxData(string query, ComboBox comboBox, string displayMember)
+        {
+            using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
             {
-                con.Close(); // Bağlantıyı kapatıyoruz
+                SqlDataAdapter da = new SqlDataAdapter(query, con);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                comboBox.DataSource = dt;
+                comboBox.DisplayMember = displayMember;
+                comboBox.ValueMember = displayMember;
+                comboBox.DropDownStyle = ComboBoxStyle.DropDown;
+            }
+        }
+
+        public void LoadDataFromDatabase(string bomDocNum)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    string query = @"
+                        SELECT 
+                            H.COMCODE AS Firma, 
+                            H.BOMDOCTYPE AS [Ürün Ağacı Tipi], 
+                            H.BOMDOCNUM AS [Ürün Ağacı Numarası], 
+                            H.BOMDOCFROM AS [Geçerlilik Başlangıç],
+                            H.BOMDOCUNTIL AS [Geçerlilik Bitiş],
+                            H.MATDOCTYPE AS [Malzeme Tipi], 
+                            H.MATDOCNUM AS [Malzeme Numarası], 
+                            H.QUANTITY AS [Temel Miktar],
+                            H.DRAWNUM AS [Çizim Numarası],
+                            H.ISDELETED AS [Silindi mi?],
+                            H.ISPASSIVE AS [Pasif mi?],
+                            C.CONTENTNUM AS [İçerik Numarası],
+                            C.COMPONENT AS [Bileşen Kodu],
+                            C.COMPBOMDOCTYPE AS [Kalem Ürün Ağacı Tipi],
+                            C.COMPBOMDOCNUM AS [Kalem Ürün Ağacı Numarası],
+                            D.DOCTYPE AS [Ürün Ağacı Tipi],
+                            D.DOCTYPETEXT AS [Ürün Ağacı Tipi Açıklaması]
+                        FROM BSMGRTRTBOMHEAD H
+                        LEFT JOIN BSMGRTRTBOMCONTENT C ON H.BOMDOCTYPE = C.BOMDOCTYPE
+                        LEFT JOIN BSMGRTRTBOM001 D ON H.BOMDOCTYPE = D.DOCTYPE
+                        WHERE H.BOMDOCNUM = @BOMDOCNUM";
+
+                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    {
+                        cmd.Parameters.AddWithValue("@BOMDOCNUM", bomDocNum);
+                        con.Open();
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                Firma = reader["Firma"].ToString();
+                                UrunAgaciTipi = reader["Ürün Ağacı Tipi"].ToString();
+                                UrunAgaciNumarasi = reader["Ürün Ağacı Numarası"].ToString();
+                                MalzemeTipi = reader["Malzeme Tipi"].ToString();
+                                MalzemeNumarasi = reader["Malzeme Numarası"].ToString();
+                                TemelMiktar = Convert.ToDecimal(reader["Temel Miktar"]);
+                                CizimNumarasi = reader["Çizim Numarası"].ToString();
+                                GecerlilikBaslangic = Convert.ToDateTime(reader["Geçerlilik Başlangıç"]);
+                                GecerlilikBitis = Convert.ToDateTime(reader["Geçerlilik Bitiş"]);
+                                IsDeleted = Convert.ToBoolean(reader["Silindi mi?"]);
+                                IsPassive = Convert.ToBoolean(reader["Pasif mi?"]);
+                                BilesenKodu = reader["Bileşen Kodu"].ToString();
+                                KalemUrunAgaciTipi = reader["Kalem Ürün Ağacı Tipi"].ToString();
+                                KalemUrunAgaciNumarasi = reader["Kalem Ürün Ağacı Numarası"].ToString();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Girilen Ürün Ağacı Numarasına ait bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Hata: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
 
 
+        // DURUYORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
         private void btnSave_Click_1(object sender, EventArgs e)
         {
-            // Tarihler arasındaki mantık hatasını kontrol etme
-            DateTime bomDocFrom = baslangicDateTimePicker.Value;
-            DateTime bomDocUntil = bitisDateTimePicker.Value;
-
-            if (bomDocFrom >= bomDocUntil)
-            {
-                MessageBox.Show("Başlangıç tarihi, bitiş tarihinden önce olmalıdır!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return; // İşlemi durdur
-            }
-
-            string query = @"
-    UPDATE BSMGRTRTBOMHEAD 
-    SET 
-        COMCODE = @COMCODE,
-        MATDOCTYPE = @MATDOCTYPE,
-        MATDOCNUM = @MATDOCNUM,
-        BOMDOCTYPE = @BOMDOCTYPE,
-        DRAWNUM = @DRAWNUM,
-        QUANTITY = @QUANTITY,
-        BOMDOCFROM = @BOMDOCFROM,
-        BOMDOCUNTIL = @BOMDOCUNTIL,
-        ISPASSIVE = @ISPASSIVE,
-        ISDELETED = @ISDELETED 
-    WHERE BOMDOCNUM = @BOMDOCNUM";
-
-            cmd = new SqlCommand(query, con);
-
-            // Parametreleri ekliyoruz
-            cmd.Parameters.AddWithValue("@COMCODE", firmbox.Text.Trim());
-            cmd.Parameters.AddWithValue("@MATDOCTYPE", urnagamalztipbox.Text.Trim());
-            cmd.Parameters.AddWithValue("@MATDOCNUM", urnmalznumBox.Text.Trim());
-            cmd.Parameters.AddWithValue("@BOMDOCTYPE", urnAgaTipBox.Text.Trim());
-            cmd.Parameters.AddWithValue("@DRAWNUM", cizmikBox.Text.Trim());
-            cmd.Parameters.AddWithValue("@QUANTITY", temelmikBox.Text.Trim());
-
-            // DateTimePicker'dan alınan tarihleri SQL'e ekliyoruz
-            cmd.Parameters.AddWithValue("@BOMDOCFROM", bomDocFrom);
-            cmd.Parameters.AddWithValue("@BOMDOCUNTIL", bomDocUntil);
-
-            cmd.Parameters.AddWithValue("@ISPASSIVE", checkboxpas.Checked ? 1 : 0);
-            cmd.Parameters.AddWithValue("@ISDELETED", deletedlbl.Checked ? 1 : 0);
-            cmd.Parameters.AddWithValue("@BOMDOCNUM", bomDocNum); // Güncellenmek istenen BOMDOCNUM parametre olarak veriliyor
-
             try
             {
-                con.Open();
-                int rowsAffected = cmd.ExecuteNonQuery(); // SQL komutunu çalıştırıyoruz
-
-                if (rowsAffected > 0)
+                using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
                 {
-                    MessageBox.Show("Kayıt başarıyla güncellendi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Close(); // Başarılıysa formu kapatıyoruz
-                }
-                else
-                {
-                    MessageBox.Show("Kayıt güncellenemedi.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            catch (SqlException sqlEx)
-            {
-                string errorMessage = "Bir veritabanı hatası oluştu. Lütfen tekrar deneyin.";
+                    con.Open();
 
-                // SQL hata koduna göre mesajları özelleştir
-                switch (sqlEx.Number)
-                {
-                    case 2627: // UNIQUE constraint violation
-                        errorMessage = "Girilen başlangıç tarihi zaten mevcut. Lütfen farklı bir tarih girin.";
-                        break;
-                    case 547: // Foreign Key violation
-                        errorMessage = "Girilen bilgiler veritabanındaki diğer kayıtlarla uyumlu değil. Lütfen kontrol edin.";
-                        break;
-                    default:
-                        errorMessage = $"Veritabanı hatası: {sqlEx.Message}";
-                        break;
-                }
+                    // UNIQUE KEY ihlalini kontrol et
+                    string checkUniqueQuery = @"
+                SELECT COUNT(*)
+                FROM BSMGRTRTBOMHEAD
+                WHERE BOMDOCFROM = @BOMDOCFROM AND BOMDOCNUM != @BOMDOCNUM";
 
-                MessageBox.Show(errorMessage, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    using (SqlCommand checkCmd = new SqlCommand(checkUniqueQuery, con))
+                    {
+                        checkCmd.Parameters.AddWithValue("@BOMDOCFROM", baslangicDateTimePicker.Value);
+                        checkCmd.Parameters.AddWithValue("@BOMDOCNUM", textBox1.Text);
+
+                        int count = (int)checkCmd.ExecuteScalar();
+                        if (count > 0)
+                        {
+                            MessageBox.Show("Aynı tarihli başka bir kayıt zaten mevcut. Lütfen farklı bir tarih girin.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+                    }
+
+                    // BSMGR0BOMHEAD tablosunu güncelle
+                    string queryHead = @"
+                UPDATE BSMGRTRTBOMHEAD
+                SET 
+                    COMCODE = @COMCODE,
+                    BOMDOCTYPE = @BOMDOCTYPE,
+                    BOMDOCNUM = @BOMDOCNUM,
+                    BOMDOCFROM = @BOMDOCFROM,
+                    BOMDOCUNTIL = @BOMDOCUNTIL,
+                    MATDOCTYPE = @MATDOCTYPE,
+                    MATDOCNUM = @MATDOCNUM,
+                    QUANTITY = @QUANTITY,
+                    DRAWNUM = @DRAWNUM,
+                    ISDELETED = @ISDELETED,
+                    ISPASSIVE = @ISPASSIVE
+                WHERE 
+                    BOMDOCNUM = @BOMDOCNUM;";
+
+                    using (SqlCommand cmdHead = new SqlCommand(queryHead, con))
+                    {
+                        cmdHead.Parameters.AddWithValue("@COMCODE", firmbox.Text ?? (object)DBNull.Value);
+                        cmdHead.Parameters.AddWithValue("@BOMDOCTYPE", urnAgaTipBox.Text ?? (object)DBNull.Value);
+                        cmdHead.Parameters.AddWithValue("@BOMDOCNUM", textBox1.Text ?? (object)DBNull.Value);
+                        cmdHead.Parameters.AddWithValue("@BOMDOCFROM", baslangicDateTimePicker.Value);
+                        cmdHead.Parameters.AddWithValue("@BOMDOCUNTIL", bitisDateTimePicker.Value);
+                        cmdHead.Parameters.AddWithValue("@MATDOCTYPE", urnagamalztipbox.Text ?? (object)DBNull.Value);
+                        cmdHead.Parameters.AddWithValue("@MATDOCNUM", urnmalzemenumBox.Text ?? (object)DBNull.Value);
+                        cmdHead.Parameters.AddWithValue("@QUANTITY", decimal.TryParse(temelmikBox.Text, out decimal quantity) ? quantity : (object)DBNull.Value);
+                        cmdHead.Parameters.AddWithValue("@DRAWNUM", cizmikBox.Text ?? (object)DBNull.Value);
+                        cmdHead.Parameters.AddWithValue("@ISDELETED", deletedlbl.Checked ? 1 : 0);
+                        cmdHead.Parameters.AddWithValue("@ISPASSIVE", checkboxpas.Checked ? 1 : 0);
+
+                        cmdHead.ExecuteNonQuery();
+                    }
+
+                    // BSMGR0BOMCONTENT tablosunu güncelle
+                    string queryContent = @"
+                UPDATE BSMGRTRTBOMCONTENT
+                SET 
+                    COMCODE = @COMCODE,
+                    BOMDOCTYPE = @BOMDOCTYPE,
+                    BOMDOCNUM = @BOMDOCNUM,
+                    BOMDOCFROM = @BOMDOCFROM,
+                    BOMDOCUNTIL = @BOMDOCUNTIL,
+                    MATDOCTYPE = @MATDOCTYPE,
+                    MATDOCNUM = @MATDOCNUM,
+                    CONTENTNUM = @CONTENTNUM,
+                    COMPONENT = @COMPONENT,
+                    COMPBOMDOCTYPE = @COMPBOMDOCTYPE,
+                    COMPBOMDOCNUM = @COMPBOMDOCNUM,
+                    QUANTITY = @QUANTITY
+                WHERE 
+                    BOMDOCNUM = @BOMDOCNUM;";
+
+                    using (SqlCommand cmdContent = new SqlCommand(queryContent, con))
+                    {
+                        cmdContent.Parameters.AddWithValue("@COMCODE", firmbox.Text ?? (object)DBNull.Value);
+                        cmdContent.Parameters.AddWithValue("@BOMDOCTYPE", urnAgaTipBox.Text ?? (object)DBNull.Value);
+                        cmdContent.Parameters.AddWithValue("@BOMDOCNUM", textBox1.Text ?? (object)DBNull.Value);
+                        cmdContent.Parameters.AddWithValue("@BOMDOCFROM", baslangicDateTimePicker.Value);
+                        cmdContent.Parameters.AddWithValue("@BOMDOCUNTIL", bitisDateTimePicker.Value);
+                        cmdContent.Parameters.AddWithValue("@MATDOCTYPE", urnagamalztipbox.Text ?? (object)DBNull.Value);
+                        cmdContent.Parameters.AddWithValue("@MATDOCNUM", urnmalzemenumBox.Text ?? (object)DBNull.Value);
+                        cmdContent.Parameters.AddWithValue("@CONTENTNUM", icerikNumBox.Text ?? (object)DBNull.Value);
+                        cmdContent.Parameters.AddWithValue("@COMPONENT", bilesenKodBox.Text ?? (object)DBNull.Value);
+                        cmdContent.Parameters.AddWithValue("@COMPBOMDOCTYPE", kalemAgUrnTipBox.Text ?? (object)DBNull.Value);
+                        cmdContent.Parameters.AddWithValue("@COMPBOMDOCNUM", kalemAgUrnKodBox.Text ?? (object)DBNull.Value);
+                        cmdContent.Parameters.AddWithValue("@QUANTITY", decimal.TryParse(temelmikBox.Text, out decimal contentQuantity) ? contentQuantity : (object)DBNull.Value);
+
+                        cmdContent.ExecuteNonQuery();
+                    }
+
+                    MessageBox.Show("Kayıt başarıyla güncellendi!", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Bir hata oluştu. Lütfen girdiğiniz bilgileri kontrol edin ve tekrar deneyin.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Hata: {ex.Message}\n{ex.StackTrace}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            finally
-            {
-                con.Close(); // Bağlantıyı kapatıyoruz
-            }
+
+
+
+
         }
 
 
     }
 }
-
-
+        
+     

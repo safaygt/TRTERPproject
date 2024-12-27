@@ -206,11 +206,13 @@ namespace TRTERPproject
                     return;
                 }
 
+
                 using (con = new SqlConnection(ConnectionHelper.ConnectionString))
                 {
                     try
                     {
                         con.Open();
+
 
                         // 2. Kayıt Kontrolü
                         string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTMAT001 WHERE DOCTYPE = @DOCTYPE";
@@ -218,6 +220,7 @@ namespace TRTERPproject
                         cmd.Parameters.AddWithValue("@DOCTYPE", MatCode);
 
                         int recordExists = (int)cmd.ExecuteScalar();
+
 
                         if (recordExists == 0)
                         {
