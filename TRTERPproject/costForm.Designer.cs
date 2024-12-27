@@ -33,14 +33,14 @@
             btnAdd = new Button();
             btnEdit = new Button();
             btnGet = new Button();
-            CountryDataGridView = new DataGridView();
+            costDataGridView = new DataGridView();
             costTypeStatementTextBox = new TextBox();
             costTypeTextBox = new TextBox();
             firmCodeTextBox = new TextBox();
             label2 = new Label();
             label3 = new Label();
             label1 = new Label();
-            ((System.ComponentModel.ISupportInitialize)CountryDataGridView).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)costDataGridView).BeginInit();
             SuspendLayout();
             // 
             // isPassiveCheckBox
@@ -96,16 +96,16 @@
             btnGet.UseVisualStyleBackColor = true;
             btnGet.Click += btnGet_Click;
             // 
-            // CountryDataGridView
+            // costDataGridView
             // 
-            CountryDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            CountryDataGridView.Location = new Point(12, 248);
-            CountryDataGridView.Name = "CountryDataGridView";
-            CountryDataGridView.RowHeadersWidth = 51;
-            CountryDataGridView.RowTemplate.Height = 29;
-            CountryDataGridView.Size = new Size(915, 239);
-            CountryDataGridView.TabIndex = 33;
-            CountryDataGridView.CellContentClick += CountryDataGridView_CellContentClick;
+            costDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            costDataGridView.Location = new Point(12, 248);
+            costDataGridView.Name = "costDataGridView";
+            costDataGridView.RowHeadersWidth = 51;
+            costDataGridView.RowTemplate.Height = 29;
+            costDataGridView.Size = new Size(915, 239);
+            costDataGridView.TabIndex = 33;
+            costDataGridView.CellContentClick += CountryDataGridView_CellContentClick;
             // 
             // costTypeStatementTextBox
             // 
@@ -178,7 +178,7 @@
             Controls.Add(btnAdd);
             Controls.Add(btnEdit);
             Controls.Add(btnGet);
-            Controls.Add(CountryDataGridView);
+            Controls.Add(costDataGridView);
             Controls.Add(costTypeStatementTextBox);
             Controls.Add(costTypeTextBox);
             Controls.Add(firmCodeTextBox);
@@ -187,7 +187,7 @@
             Controls.Add(label1);
             Name = "costForm";
             Text = "Maliyet Merkezi";
-            ((System.ComponentModel.ISupportInitialize)CountryDataGridView).EndInit();
+            ((System.ComponentModel.ISupportInitialize)costDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -199,7 +199,7 @@
         private Button btnAdd;
         private Button btnEdit;
         private Button btnGet;
-        private DataGridView CountryDataGridView;
+        private DataGridView costDataGridView;
         private TextBox costTypeStatementTextBox;
         private TextBox costTypeTextBox;
         private TextBox firmCodeTextBox;

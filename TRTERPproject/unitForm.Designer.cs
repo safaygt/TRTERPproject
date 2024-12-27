@@ -32,7 +32,7 @@
             btnAdd = new Button();
             btnEdit = new Button();
             btnGet = new Button();
-            CountryDataGridView = new DataGridView();
+            unitDataGridView = new DataGridView();
             unitTextBox = new TextBox();
             unitCodeTextBox = new TextBox();
             firmCodeTextBox = new TextBox();
@@ -42,7 +42,7 @@
             isMainUnitCheckBox = new CheckBox();
             label2 = new Label();
             label4 = new Label();
-            ((System.ComponentModel.ISupportInitialize)CountryDataGridView).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)unitDataGridView).BeginInit();
             SuspendLayout();
             // 
             // btnDel
@@ -85,15 +85,15 @@
             btnGet.UseVisualStyleBackColor = true;
             btnGet.Click += btnGet_Click;
             // 
-            // CountryDataGridView
+            // unitDataGridView
             // 
-            CountryDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            CountryDataGridView.Location = new Point(22, 240);
-            CountryDataGridView.Name = "CountryDataGridView";
-            CountryDataGridView.RowHeadersWidth = 51;
-            CountryDataGridView.RowTemplate.Height = 29;
-            CountryDataGridView.Size = new Size(915, 239);
-            CountryDataGridView.TabIndex = 21;
+            unitDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            unitDataGridView.Location = new Point(22, 240);
+            unitDataGridView.Name = "unitDataGridView";
+            unitDataGridView.RowHeadersWidth = 51;
+            unitDataGridView.RowTemplate.Height = 29;
+            unitDataGridView.Size = new Size(915, 239);
+            unitDataGridView.TabIndex = 21;
             // 
             // unitTextBox
             // 
@@ -140,7 +140,7 @@
             // 
             // mainUnitCodeTextBox
             // 
-            mainUnitCodeTextBox.Location = new Point(647, 101);
+            mainUnitCodeTextBox.Location = new Point(476, 101);
             mainUnitCodeTextBox.Name = "mainUnitCodeTextBox";
             mainUnitCodeTextBox.Size = new Size(127, 27);
             mainUnitCodeTextBox.TabIndex = 18;
@@ -150,7 +150,7 @@
             isMainUnitCheckBox.AutoSize = true;
             isMainUnitCheckBox.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             isMainUnitCheckBox.ForeColor = SystemColors.ControlLightLight;
-            isMainUnitCheckBox.Location = new Point(491, 101);
+            isMainUnitCheckBox.Location = new Point(641, 101);
             isMainUnitCheckBox.Name = "isMainUnitCheckBox";
             isMainUnitCheckBox.Size = new Size(130, 24);
             isMainUnitCheckBox.TabIndex = 26;
@@ -173,7 +173,7 @@
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             label4.ForeColor = SystemColors.ControlLightLight;
-            label4.Location = new Point(647, 69);
+            label4.Location = new Point(476, 69);
             label4.Name = "label4";
             label4.Size = new Size(88, 20);
             label4.TabIndex = 16;
@@ -190,7 +190,7 @@
             Controls.Add(btnAdd);
             Controls.Add(btnEdit);
             Controls.Add(btnGet);
-            Controls.Add(CountryDataGridView);
+            Controls.Add(unitDataGridView);
             Controls.Add(mainUnitCodeTextBox);
             Controls.Add(unitTextBox);
             Controls.Add(unitCodeTextBox);
@@ -201,7 +201,7 @@
             Controls.Add(label1);
             Name = "unitForm";
             Text = "unitForm";
-            ((System.ComponentModel.ISupportInitialize)CountryDataGridView).EndInit();
+            ((System.ComponentModel.ISupportInitialize)unitDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -212,7 +212,7 @@
         private Button btnAdd;
         private Button btnEdit;
         private Button btnGet;
-        private DataGridView CountryDataGridView;
+        private DataGridView unitDataGridView;
         private TextBox unitTextBox;
         private TextBox unitCodeTextBox;
         private TextBox firmCodeTextBox;

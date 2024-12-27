@@ -20,6 +20,10 @@ namespace TRTERPproject
         SqlCommand cmd;
         SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString);
 
+        public firmFormEdit()
+        {
+        }
+
         public firmFormEdit(string firmCode)
         {
             InitializeComponent();

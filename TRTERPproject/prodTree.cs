@@ -71,99 +71,122 @@ namespace TRTERPproject
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            string prodDoctype = prodDoctypeTextBox.Text;
-
-            if (string.IsNullOrEmpty(prodDoctype))
+            if (prodTreeDataGridView.SelectedRows.Count > 0)
             {
-                MessageBox.Show("Lütfen bir Ürün Ağacı Tipi giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                // Seçilen satırdaki DOCTYPE (prodDoctype) değerini al
+                string prodDoctype = prodTreeDataGridView.SelectedRows[0].Cells["DOCTYPE"].Value.ToString();
+
+                if (string.IsNullOrEmpty(prodDoctype))
+                {
+                    MessageBox.Show("Lütfen geçerli bir Ürün Ağacı Tipi seçin!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    string query = "SELECT COUNT(*) FROM BSMGRTRTBOM001 WHERE DOCTYPE = @DOCTYPE";
+                    cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@DOCTYPE", prodDoctype);
+
+                    try
+                    {
+                        con.Open();
+                        int recordExists = (int)cmd.ExecuteScalar();
+
+                        if (recordExists > 0)
+                        {
+                            // prodDoctype bulundu, Edit formuna geç
+                            prodTreeEdit ProdTreeEdit = new prodTreeEdit(prodDoctype);
+                            ProdTreeEdit.Show();
+                        }
+                        else
+                        {
+                            // prodDoctype bulunamadı
+                            MessageBox.Show("Belirtilen Ürün Ağacı Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
-
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+            else
             {
-                string query = "SELECT COUNT(*) FROM BSMGRTRTBOM001 WHERE DOCTYPE = @DOCTYPE";
-                cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@DOCTYPE", prodDoctype);
-
-                try
-                {
-                    con.Open();
-                    int recordExists = (int)cmd.ExecuteScalar();
-
-                    if (recordExists > 0)
-                    {
-                        // DOCTYPE bulundu, Edit formuna geç
-                        prodTreeEdit ProdTreeEdit = new prodTreeEdit(prodDoctype);
-                        ProdTreeEdit.Show();
-                    }
-                    else
-                    {
-                        // DOCTYPE bulunamadı
-                        MessageBox.Show("Belirtilen Ürün Ağacı Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show("Lütfen düzenlemek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
         private void btnDel_Click(object sender, EventArgs e)
         {
-
-            string prodTree = prodDoctypeTextBox.Text.Trim();
-
-            // 1. Boş Veri Kontrolü
-            if (string.IsNullOrEmpty(prodTree))
+            if (prodTreeDataGridView.SelectedRows.Count > 0)
             {
-                MessageBox.Show("Lütfen bir Malzeme Kodu giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                DataGridViewRow selectedRow = prodTreeDataGridView.SelectedRows[0];
+                string prodTree = selectedRow.Cells["DOCTYPE"].Value.ToString(); ;
+
+
+                // Kullanıcıdan onay al
+                DialogResult dialogResult = MessageBox.Show(
+                    $"Ürün Ağacı Tipi {prodTree} olan veriyi silmek istediğinize emin misiniz?",
+                    "Onay",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (dialogResult != DialogResult.Yes)
+                {
+                    // Kullanıcı "Hayır" seçerse işlem iptal edilir
+                    return;
+                }
+
+                using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    try
+                    {
+                        con.Open();
+
+                        // 2. Kayıt Kontrolü
+                        string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTBOM001 WHERE DOCTYPE = @DOCTYPE";
+                        cmd = new SqlCommand(checkQuery, con);
+                        cmd.Parameters.AddWithValue("@DOCTYPE", prodTree);
+
+                        int recordExists = (int)cmd.ExecuteScalar();
+
+                        if (recordExists == 0)
+                        {
+                            // Kayıt bulunamadı
+                            MessageBox.Show("Belirtilen Ürün Tipi Ağacı için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        // 3. Silme İşlemi
+                        string deleteQuery = "DELETE FROM BSMGRTRTBOM001 WHERE DOCTYPE = @DOCTYPE";
+                        cmd = new SqlCommand(deleteQuery, con);
+                        cmd.Parameters.AddWithValue("@DOCTYPE", prodTree);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            // TextBox'ı temizle
+                            prodDoctypeTextBox.Clear();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
-
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+            else
             {
-                try
-                {
-                    con.Open();
-
-                    // 2. Kayıt Kontrolü
-                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTBOM001 WHERE DOCTYPE = @DOCTYPE";
-                    cmd = new SqlCommand(checkQuery, con);
-                    cmd.Parameters.AddWithValue("@DOCTYPE", prodTree);
-
-                    int recordExists = (int)cmd.ExecuteScalar();
-
-                    if (recordExists == 0)
-                    {
-                        // Kayıt bulunamadı
-                        MessageBox.Show("Belirtilen Ürün Tipi Ağacı için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-
-                    // 3. Silme İşlemi
-                    string deleteQuery = "DELETE FROM BSMGRTRTBOM001 WHERE DOCTYPE = @DOCTYPE";
-                    cmd = new SqlCommand(deleteQuery, con);
-                    cmd.Parameters.AddWithValue("@DOCTYPE", prodTree);
-
-                    int rowsAffected = cmd.ExecuteNonQuery();
-
-                    if (rowsAffected > 0)
-                    {
-                        MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        // TextBox'ı temizle
-                        prodDoctypeTextBox.Clear();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show("Lütfen silmek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

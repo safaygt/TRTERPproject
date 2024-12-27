@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
+using System.Windows.Forms;
 using TRTERPproject.Helpers;
 
 namespace TRTERPproject
@@ -53,41 +54,49 @@ namespace TRTERPproject
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            string materialCode = MatCodeBox.Text;
-
-            if (string.IsNullOrEmpty(materialCode))
+            if (MatDataGridWiew.SelectedRows.Count > 0)
             {
-                MessageBox.Show("Lütfen bir Malzeme kodu giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                // Seçilen satırdaki DOCTYPE (materialCode) değerini al
+                string materialCode = MatDataGridWiew.SelectedRows[0].Cells["DOCTYPE"].Value.ToString();
+
+                if (string.IsNullOrEmpty(materialCode))
+                {
+                    MessageBox.Show("Lütfen geçerli bir Malzeme Kodu seçin!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    string query = "SELECT COUNT(*) FROM BSMGRTRTMAT001 WHERE DOCTYPE = @DOCTYPE";
+                    cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@DOCTYPE", materialCode);
+
+                    try
+                    {
+                        con.Open();
+                        int recordExists = (int)cmd.ExecuteScalar();
+
+                        if (recordExists > 0)
+                        {
+                            // materialCode bulundu, Edit formuna geç
+                            MatFormEdit matFormEdit = new MatFormEdit(materialCode);
+                            matFormEdit.Show();
+                        }
+                        else
+                        {
+                            // materialCode bulunamadı
+                            MessageBox.Show("Belirtilen Malzeme Kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
-
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+            else
             {
-                string query = "SELECT COUNT(*) FROM BSMGRTRTMAT001 WHERE DOCTYPE = @DOCTYPE";
-                cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@DOCTYPE", materialCode);
-
-                try
-                {
-                    con.Open();
-                    int recordExists = (int)cmd.ExecuteScalar();
-
-                    if (recordExists > 0)
-                    {
-                        // COUNTRYCODE bulundu, Edit formuna geç
-                        MatFormEdit matFormEdit = new MatFormEdit(materialCode);
-                        matFormEdit.Show();
-                    }
-                    else
-                    {
-                        // COUNTRYCODE bulunamadı
-                        MessageBox.Show("Belirtilen Malzeme kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show("Lütfen düzenlemek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -178,60 +187,69 @@ namespace TRTERPproject
 
         private void btnDel_Click(object sender, EventArgs e)
         {
-
-            string MatCode = MatCodeBox.Text.Trim();
-
-            // 1. Boş Veri Kontrolü
-            if (string.IsNullOrEmpty(MatCode))
+            if (MatDataGridWiew.SelectedRows.Count > 0)
             {
-                MessageBox.Show("Lütfen bir Malzeme Kodu giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                DataGridViewRow selectedRow = MatDataGridWiew.SelectedRows[0];
+                string MatCode = selectedRow.Cells["DOCTYPE"].Value.ToString(); ;
 
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
-            {
-                try
+                // Kullanıcıdan onay al
+                DialogResult dialogResult = MessageBox.Show(
+                    $"Malzeme Kodu {MatCode} olan veriyi silmek istediğinize emin misiniz?",
+                    "Onay",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (dialogResult != DialogResult.Yes)
                 {
-                    con.Open();
+                    // Kullanıcı "Hayır" seçerse işlem iptal edilir
+                    return;
+                }
 
-                    // 2. Kayıt Kontrolü
-                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTMAT001 WHERE DOCTYPE = @DOCTYPE";
-                    cmd = new SqlCommand(checkQuery, con);
-                    cmd.Parameters.AddWithValue("@COUNTRYCODE", MatCode);
-
-                    int recordExists = (int)cmd.ExecuteScalar();
-
-                    if (recordExists == 0)
+                using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    try
                     {
-                        // Kayıt bulunamadı
-                        MessageBox.Show("Belirtilen Malzeme kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
+                        con.Open();
+
+                        // 2. Kayıt Kontrolü
+                        string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTMAT001 WHERE DOCTYPE = @DOCTYPE";
+                        cmd = new SqlCommand(checkQuery, con);
+                        cmd.Parameters.AddWithValue("@DOCTYPE", MatCode);
+
+                        int recordExists = (int)cmd.ExecuteScalar();
+
+                        if (recordExists == 0)
+                        {
+                            // Kayıt bulunamadı
+                            MessageBox.Show("Belirtilen Malzeme kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        // 3. Silme İşlemi
+                        string deleteQuery = "DELETE FROM BSMGRTRTMAT001 WHERE DOCTYPE = @DOCTYPE";
+                        cmd = new SqlCommand(deleteQuery, con);
+                        cmd.Parameters.AddWithValue("@DOCTYPE", MatCode);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MatCodeBox.Clear();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
-
-                    // 3. Silme İşlemi
-                    string deleteQuery = "DELETE FROM BSMGRTRTMAT001 WHERE DOCTYPE = @DOCTYPE";
-                    cmd = new SqlCommand(deleteQuery, con);
-                    cmd.Parameters.AddWithValue("@COUNTRYCODE", MatCode);
-
-                    int rowsAffected = cmd.ExecuteNonQuery();
-
-                    if (rowsAffected > 0)
+                    catch (Exception ex)
                     {
-                        MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        // TextBox'ı temizle
-                        MatCodeBox.Clear();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
             }
+            
         }
     }
 }

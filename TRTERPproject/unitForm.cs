@@ -47,7 +47,7 @@ namespace TRTERPproject
                 da.Fill(ds);
 
                 // DataGridView'e veri bağla
-                CountryDataGridView.DataSource = ds.Tables[0];  // Veritabanından çekilen ilk tabloyu DataGridView'e bağla
+                unitDataGridView.DataSource = ds.Tables[0];  // Veritabanından çekilen ilk tabloyu DataGridView'e bağla
             }
             catch (Exception ex)
             {
@@ -64,44 +64,49 @@ namespace TRTERPproject
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-
-            string unitCode = unitCodeTextBox.Text;
-
-            if (string.IsNullOrEmpty(unitCode))
+            if (unitDataGridView.SelectedRows.Count > 0)
             {
-                MessageBox.Show("Lütfen bir Birim Kodu giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                // Seçilen satırdaki UNITCODE değerini al
+                string unitCode = unitDataGridView.SelectedRows[0].Cells["UNITCODE"].Value.ToString();
 
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
-            {
-                string query = "SELECT COUNT(*) FROM BSMGRTRTGEN005 WHERE UNITCODE = @UNITCODE";
-                cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@UNITCODE", unitCode);
-
-                try
+                if (string.IsNullOrEmpty(unitCode))
                 {
-                    con.Open();
-                    int recordExists = (int)cmd.ExecuteScalar();
+                    MessageBox.Show("Lütfen geçerli bir Birim Kodu seçin!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-                    if (recordExists > 0)
+                using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    string query = "SELECT COUNT(*) FROM BSMGRTRTGEN005 WHERE UNITCODE = @UNITCODE";
+                    cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@UNITCODE", unitCode);
+
+                    try
                     {
-                        // UNITCODE bulundu, Edit formuna geç
-                        unitFormEdit UnitFormEdit = new unitFormEdit(unitCode);
-                        UnitFormEdit.Show();
+                        con.Open();
+                        int recordExists = (int)cmd.ExecuteScalar();
+
+                        if (recordExists > 0)
+                        {
+                            // UNITCODE bulundu, Edit formuna geç
+                            unitFormEdit UnitFormEdit = new unitFormEdit(unitCode);
+                            UnitFormEdit.Show();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Belirtilen Birim Kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        MessageBox.Show("Belirtilen Birim Kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
             }
-
-
+            else
+            {
+                MessageBox.Show("Lütfen düzenlemek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -176,54 +181,70 @@ namespace TRTERPproject
 
         private void btnDel_Click(object sender, EventArgs e)
         {
-            string unitCode = unitCodeTextBox.Text.Trim();
-
-            if (string.IsNullOrEmpty(unitCode))
+            if (unitDataGridView.SelectedRows.Count > 0)
             {
-                MessageBox.Show("Lütfen bir UNITCODE giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                DataGridViewRow selectedRow = unitDataGridView.SelectedRows[0];
+                string unitCode = selectedRow.Cells["UNITCODE"].Value.ToString(); ;
 
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
-            {
-                try
+
+                // Kullanıcıdan onay al
+                DialogResult dialogResult = MessageBox.Show(
+                    $"Birim Kodu {unitCode} olan veriyi silmek istediğinize emin misiniz?",
+                    "Onay",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (dialogResult != DialogResult.Yes)
                 {
-                    con.Open();
+                    // Kullanıcı "Hayır" seçerse işlem iptal edilir
+                    return;
+                }
 
-                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTGEN005 WHERE UNITCODE = @UNITCODE";
-                    cmd = new SqlCommand(checkQuery, con);
-                    cmd.Parameters.AddWithValue("@UNITCODE", unitCode);
-
-                    int recordExists = (int)cmd.ExecuteScalar();
-
-                    if (recordExists == 0)
+                using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    try
                     {
-                        MessageBox.Show("Belirtilen Birim Kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
+                        con.Open();
+
+                        string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTGEN005 WHERE UNITCODE = @UNITCODE";
+                        cmd = new SqlCommand(checkQuery, con);
+                        cmd.Parameters.AddWithValue("@UNITCODE", unitCode);
+
+                        int recordExists = (int)cmd.ExecuteScalar();
+
+                        if (recordExists == 0)
+                        {
+                            MessageBox.Show("Belirtilen Birim Kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        string deleteQuery = "DELETE FROM BSMGRTRTGEN005 WHERE UNITCODE = @UNITCODE";
+                        cmd = new SqlCommand(deleteQuery, con);
+                        cmd.Parameters.AddWithValue("@UNITCODE", unitCode);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            unitCodeTextBox.Clear();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
-
-                    string deleteQuery = "DELETE FROM BSMGRTRTGEN005 WHERE UNITCODE = @UNITCODE";
-                    cmd = new SqlCommand(deleteQuery, con);
-                    cmd.Parameters.AddWithValue("@UNITCODE", unitCode);
-
-                    int rowsAffected = cmd.ExecuteNonQuery();
-
-                    if (rowsAffected > 0)
+                    catch (Exception ex)
                     {
-                        MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        unitCodeTextBox.Clear();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
             }
-
+            else
+            {
+                MessageBox.Show("Lütfen silmek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }

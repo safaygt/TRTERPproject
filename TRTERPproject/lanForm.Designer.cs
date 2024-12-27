@@ -32,14 +32,14 @@
             btnAdd = new Button();
             btnEdit = new Button();
             btnGet = new Button();
-            CountryDataGridView = new DataGridView();
+            lanDataGridView = new DataGridView();
             lanTextBox = new TextBox();
             lanCodeTextBox = new TextBox();
             firmCodeTextBox = new TextBox();
             label3 = new Label();
             label1 = new Label();
             label2 = new Label();
-            ((System.ComponentModel.ISupportInitialize)CountryDataGridView).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)lanDataGridView).BeginInit();
             SuspendLayout();
             // 
             // btnDel
@@ -82,16 +82,16 @@
             btnGet.UseVisualStyleBackColor = true;
             btnGet.Click += btnGet_Click;
             // 
-            // CountryDataGridView
+            // lanDataGridView
             // 
-            CountryDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            CountryDataGridView.Location = new Point(26, 221);
-            CountryDataGridView.Name = "CountryDataGridView";
-            CountryDataGridView.RowHeadersWidth = 51;
-            CountryDataGridView.RowTemplate.Height = 29;
-            CountryDataGridView.Size = new Size(915, 239);
-            CountryDataGridView.TabIndex = 10;
-            CountryDataGridView.CellContentClick += CountryDataGridView_CellContentClick;
+            lanDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            lanDataGridView.Location = new Point(26, 221);
+            lanDataGridView.Name = "lanDataGridView";
+            lanDataGridView.RowHeadersWidth = 51;
+            lanDataGridView.RowTemplate.Height = 29;
+            lanDataGridView.Size = new Size(915, 239);
+            lanDataGridView.TabIndex = 10;
+            lanDataGridView.CellContentClick += CountryDataGridView_CellContentClick;
             // 
             // lanTextBox
             // 
@@ -163,7 +163,7 @@
             Controls.Add(btnAdd);
             Controls.Add(btnEdit);
             Controls.Add(btnGet);
-            Controls.Add(CountryDataGridView);
+            Controls.Add(lanDataGridView);
             Controls.Add(lanTextBox);
             Controls.Add(lanCodeTextBox);
             Controls.Add(firmCodeTextBox);
@@ -172,7 +172,7 @@
             Controls.Add(label1);
             Name = "lanForm";
             Text = "lanForm";
-            ((System.ComponentModel.ISupportInitialize)CountryDataGridView).EndInit();
+            ((System.ComponentModel.ISupportInitialize)lanDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -183,7 +183,7 @@
         private Button btnAdd;
         private Button btnEdit;
         private Button btnGet;
-        private DataGridView CountryDataGridView;
+        private DataGridView lanDataGridView;
         private TextBox lanTextBox;
         private TextBox lanCodeTextBox;
         private TextBox firmCodeTextBox;
