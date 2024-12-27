@@ -54,19 +54,19 @@ namespace TRTERPproject
                 {
                     con.Open();
 
-                    
+
                     LoadComboBox(comboBoxMalzFirm, "SELECT DISTINCT COMCODE FROM BSMGRTRTGEN001", "COMCODE");
 
-                    
+
                     LoadComboBox(malzTipcombo, "SELECT DISTINCT DOCTYPE FROM BSMGRTRTMAT001", "DOCTYPE");
 
-                    
+
                     LoadComboBox(comboBoxDil, "SELECT DISTINCT LANCODE FROM BSMGRTRTGEN002", "LANCODE");
 
                     LoadComboBox(comboBoxTedTip, "SELECT DISTINCT SUPPLYTYPE FROM BSMGRTRTMATHEAD", "SUPPLYTYPE");
 
-                   
-                   
+
+
                 }
             }
             catch (Exception ex)
@@ -124,6 +124,8 @@ WHERE {columnName} = @userInput";
         MH.NWUNIT AS 'Net Ağırlık Birimi',
         MH.BRUTWEIGHT AS 'Brüt Ağırlık',
         MH.BWUNIT AS 'Brüt Ağırlık Birimi',
+        MT.MATSTEXT AS 'Malzeme Kısa Açıklama',
+        MT.MATLTEXT AS 'Malzeme Uzun Açıklama',
         MH.ISBOM AS 'Ürün Ağacı Var mı?',
         MH.BOMDOCTYPE AS 'Ürün Ağacı Tipi',
         MH.BOMDOCNUM AS 'Ürün Ağacı Kodu',
@@ -159,6 +161,11 @@ WHERE {columnName} = @userInput";
             if (!string.IsNullOrEmpty(comboBoxTedTip.Text))
             {
                 filters.Add("MH.SUPPLYTYPE = @SUPPLYTYPE");
+            }
+
+            if (!string.IsNullOrEmpty(malNotxtBox.Text))
+            {
+                filters.Add("MH.MATDOCNUM LIKE @MATDOCNUM");
             }
 
             // Dil filtresi
@@ -212,6 +219,11 @@ WHERE {columnName} = @userInput";
             if (!string.IsNullOrEmpty(malzTipcombo.Text))
             {
                 cmd.Parameters.AddWithValue("@MATDOCTYPE", malzTipcombo.Text);
+            }
+
+            if (!string.IsNullOrEmpty(malNotxtBox.Text))
+            {
+                cmd.Parameters.AddWithValue("@MATDOCNUM", $"{malNotxtBox.Text}%");
             }
 
             if (!string.IsNullOrEmpty(comboBoxTedTip.Text))
@@ -280,6 +292,8 @@ WHERE {columnName} = @userInput";
         MH.NWUNIT AS 'Net Ağırlık Birimi',
         MH.BRUTWEIGHT AS 'Brüt Ağırlık',
         MH.BWUNIT AS 'Brüt Ağırlık Birimi',
+        MT.MATSTEXT AS 'Malzeme Kısa Açıklama',
+        MT.MATLTEXT AS 'Malzeme Uzun Açıklama',
         MH.ISBOM AS 'Ürün Ağacı Var mı?',
         MH.BOMDOCTYPE AS 'Ürün Ağacı Tipi',
         MH.BOMDOCNUM AS 'Ürün Ağacı Kodu',
@@ -437,8 +451,22 @@ WHERE {columnName} = @userInput";
                     ? selectedRow.Cells["Net Ağırlık Birimi"].Value.ToString()
                     : string.Empty;
 
+
+
+
+                MalzemeAnaTabloEdit.kisaAciklama = selectedRow.Cells["Malzeme Kısa Açıklama"].Value != DBNull.Value
+                    ? selectedRow.Cells["Malzeme Kısa Açıklama"].Value.ToString()
+                    : string.Empty;
+
+                MalzemeAnaTabloEdit.uzunAciklama = selectedRow.Cells["Malzeme Uzun Açıklama"].Value != DBNull.Value
+                 ? selectedRow.Cells["Malzeme Uzun Açıklama"].Value.ToString()
+                 : string.Empty;
+
+
+
+
                 // MATSTEXT ve MATLTEXT verilerini al
-                string selectMatsText = "SELECT MATSTEXT, MATLTEXT FROM BSMGRTRTMATTEXT WHERE MATDOCNUM = @MATDOCNUM";
+
 
                 // Ensure the connection is opened before executing the command
 
@@ -523,5 +551,5 @@ WHERE {columnName} = @userInput";
             }
         }
 
-        }
+    }
 }
