@@ -45,7 +45,7 @@ namespace TRTERPproject
                 da.Fill(ds);
 
                 // DataGridView'e veri bağla
-                CountryDataGridView.DataSource = ds.Tables[0];  // Veritabanından çekilen ilk tabloyu DataGridView'e bağla
+                businessDataGridView.DataSource = ds.Tables[0];  // Veritabanından çekilen ilk tabloyu DataGridView'e bağla
             }
             catch (Exception ex)
             {
@@ -61,42 +61,50 @@ namespace TRTERPproject
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            string docType = businessTypeTextBox.Text;
-
-            if (string.IsNullOrEmpty(docType))
+            if (businessDataGridView.SelectedRows.Count > 0)
             {
-                MessageBox.Show("Lütfen bir İş Merkezi Tipi giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                // Seçilen satırdaki DOCTYPE (docType) değerini al
+                string docType = businessDataGridView.SelectedRows[0].Cells["DOCTYPE"].Value.ToString();
 
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
-            {
-                string query = "SELECT COUNT(*) FROM BSMGRTRTWCM001 WHERE DOCTYPE = @DOCTYPE";
-                cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@DOCTYPE", docType);
-
-                try
+                if (string.IsNullOrEmpty(docType))
                 {
-                    con.Open();
-                    int recordExists = (int)cmd.ExecuteScalar();
+                    MessageBox.Show("Lütfen geçerli bir İş Merkezi Tipi seçin!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-                    if (recordExists > 0)
+                using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    string query = "SELECT COUNT(*) FROM BSMGRTRTWCM001 WHERE DOCTYPE = @DOCTYPE";
+                    cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@DOCTYPE", docType);
+
+                    try
                     {
-                        // UNITCODE bulundu, Edit formuna geç
-                        businessEditForm BusinessEditForm = new businessEditForm(docType);
-                        BusinessEditForm.Show();
+                        con.Open();
+                        int recordExists = (int)cmd.ExecuteScalar();
+
+                        if (recordExists > 0)
+                        {
+                            // docType bulundu, Edit formuna geç
+                            businessEditForm BusinessEditForm = new businessEditForm(docType);
+                            BusinessEditForm.Show();
+                        }
+                        else
+                        {
+                            // docType bulunamadı
+                            MessageBox.Show("Belirtilen İş Merkezi Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        MessageBox.Show("Belirtilen İş Merkezi Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
             }
-
+            else
+            {
+                MessageBox.Show("Lütfen düzenlemek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -172,54 +180,68 @@ namespace TRTERPproject
 
         private void btnDel_Click(object sender, EventArgs e)
         {
-
-            string docType = businessTypeTextBox.Text.Trim();
-
-            if (string.IsNullOrEmpty(docType))
+            if (businessDataGridView.SelectedRows.Count > 0)
             {
-                MessageBox.Show("Lütfen bir İş Merkezi Tipi giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                DataGridViewRow selectedRow = businessDataGridView.SelectedRows[0];
+                string docType = selectedRow.Cells["DOCTYPE"].Value.ToString(); ;
+
+                // Kullanıcıdan onay al
+                DialogResult dialogResult = MessageBox.Show(
+                    $"İş Merkezi Tipi {docType} olan veriyi silmek istediğinize emin misiniz?",
+                    "Onay",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (dialogResult != DialogResult.Yes)
+                {
+                    // Kullanıcı "Hayır" seçerse işlem iptal edilir
+                    return;
+                }
+
+                using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    try
+                    {
+                        con.Open();
+
+                        string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTWCM001 WHERE DOCTYPE = @DOCTYPE";
+                        cmd = new SqlCommand(checkQuery, con);
+                        cmd.Parameters.AddWithValue("@DOCTYPE", docType);
+
+                        int recordExists = (int)cmd.ExecuteScalar();
+
+                        if (recordExists == 0)
+                        {
+                            MessageBox.Show("Belirtilen İş Merkezi Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        string deleteQuery = "DELETE FROM BSMGRTRTWCM001 WHERE DOCTYPE = @DOCTYPE";
+                        cmd = new SqlCommand(deleteQuery, con);
+                        cmd.Parameters.AddWithValue("@DOCTYPE", docType);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            businessTypeTextBox.Clear();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
-
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+            else
             {
-                try
-                {
-                    con.Open();
-
-                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTWCM001 WHERE DOCTYPE = @DOCTYPE";
-                    cmd = new SqlCommand(checkQuery, con);
-                    cmd.Parameters.AddWithValue("@DOCTYPE", docType);
-
-                    int recordExists = (int)cmd.ExecuteScalar();
-
-                    if (recordExists == 0)
-                    {
-                        MessageBox.Show("Belirtilen İş Merkezi Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-
-                    string deleteQuery = "DELETE FROM BSMGRTRTWCM001 WHERE DOCTYPE = @DOCTYPE";
-                    cmd = new SqlCommand(deleteQuery, con);
-                    cmd.Parameters.AddWithValue("@DOCTYPE", docType);
-
-                    int rowsAffected = cmd.ExecuteNonQuery();
-
-                    if (rowsAffected > 0)
-                    {
-                        MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        businessTypeTextBox.Clear();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-
+                MessageBox.Show("Lütfen silmek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
     }

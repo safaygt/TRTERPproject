@@ -61,44 +61,50 @@ namespace TRTERPproject
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-
-
-            string rotType = rotTypeTextBox.Text;
-
-            if (string.IsNullOrEmpty(rotType))
+            if (RotDataGridWiew.SelectedRows.Count > 0)
             {
-                MessageBox.Show("Lütfen bir Rota Tipi giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                // Seçilen satırdaki DOCTYPE (rotType) değerini al
+                string rotType = RotDataGridWiew.SelectedRows[0].Cells["DOCTYPE"].Value.ToString();
 
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
-            {
-                string query = "SELECT COUNT(*) FROM BSMGRTRTROT001 WHERE DOCTYPE = @DOCTYPE";
-                cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@DOCTYPE", rotType);
-
-                try
+                if (string.IsNullOrEmpty(rotType))
                 {
-                    con.Open();
-                    int recordExists = (int)cmd.ExecuteScalar();
+                    MessageBox.Show("Lütfen geçerli bir Rota Tipi seçin!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-                    if (recordExists > 0)
+                using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    string query = "SELECT COUNT(*) FROM BSMGRTRTROT001 WHERE DOCTYPE = @DOCTYPE";
+                    cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@DOCTYPE", rotType);
+
+                    try
                     {
-                        // UNITCODE bulundu, Edit formuna geç
-                        rotEditForm RotEditForm = new rotEditForm(rotType);
-                        RotEditForm.Show();
+                        con.Open();
+                        int recordExists = (int)cmd.ExecuteScalar();
+
+                        if (recordExists > 0)
+                        {
+                            // rotType bulundu, Edit formuna geç
+                            rotEditForm RotEditForm = new rotEditForm(rotType);
+                            RotEditForm.Show();
+                        }
+                        else
+                        {
+                            // rotType bulunamadı
+                            MessageBox.Show("Belirtilen Rota Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        MessageBox.Show("Belirtilen Rota Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
             }
-
+            else
+            {
+                MessageBox.Show("Lütfen düzenlemek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -173,56 +179,70 @@ namespace TRTERPproject
 
         private void btnDel_Click(object sender, EventArgs e)
         {
-
-            string docType = rotTypeTextBox.Text.Trim();
-
-            if (string.IsNullOrEmpty(docType))
+            if (RotDataGridWiew.SelectedRows.Count > 0)
             {
-                MessageBox.Show("Lütfen bir Rota Tipi giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                DataGridViewRow selectedRow = RotDataGridWiew.SelectedRows[0];
+                string docType = selectedRow.Cells["DOCTYPE"].Value.ToString(); ;
 
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
-            {
-                try
+
+                // Kullanıcıdan onay al
+                DialogResult dialogResult = MessageBox.Show(
+                    $"Rota Tipi {docType} olan veriyi silmek istediğinize emin misiniz?",
+                    "Onay",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (dialogResult != DialogResult.Yes)
                 {
-                    con.Open();
+                    // Kullanıcı "Hayır" seçerse işlem iptal edilir
+                    return;
+                }
 
-                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTROT001 WHERE DOCTYPE = @DOCTYPE";
-                    cmd = new SqlCommand(checkQuery, con);
-                    cmd.Parameters.AddWithValue("@DOCTYPE", docType);
-
-                    int recordExists = (int)cmd.ExecuteScalar();
-
-                    if (recordExists == 0)
+                using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    try
                     {
-                        MessageBox.Show("Belirtilen Rota Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
+                        con.Open();
+
+                        string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTROT001 WHERE DOCTYPE = @DOCTYPE";
+                        cmd = new SqlCommand(checkQuery, con);
+                        cmd.Parameters.AddWithValue("@DOCTYPE", docType);
+
+                        int recordExists = (int)cmd.ExecuteScalar();
+
+                        if (recordExists == 0)
+                        {
+                            MessageBox.Show("Belirtilen Rota Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        string deleteQuery = "DELETE FROM BSMGRTRTROT001 WHERE DOCTYPE = @DOCTYPE";
+                        cmd = new SqlCommand(deleteQuery, con);
+                        cmd.Parameters.AddWithValue("@DOCTYPE", docType);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            rotTypeTextBox.Clear();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
-
-                    string deleteQuery = "DELETE FROM BSMGRTRTROT001 WHERE DOCTYPE = @DOCTYPE";
-                    cmd = new SqlCommand(deleteQuery, con);
-                    cmd.Parameters.AddWithValue("@DOCTYPE", docType);
-
-                    int rowsAffected = cmd.ExecuteNonQuery();
-
-                    if (rowsAffected > 0)
+                    catch (Exception ex)
                     {
-                        MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        rotTypeTextBox.Clear();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
             }
-
-
+            else
+            {
+                MessageBox.Show("Lütfen silmek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }

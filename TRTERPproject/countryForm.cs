@@ -60,40 +60,50 @@ namespace TRTERPproject
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            string countryCode = countryCodeTextBox.Text;
-
-            if (string.IsNullOrEmpty(countryCode))
+            // DataGridView'de bir satır seçilip seçilmediğini kontrol et
+            if (countryDataGridView.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Lütfen bir COUNTRYCODE giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Lütfen düzenlemek için bir satır seçiniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+            // Seçilen satırdan COUNTRYCODE bilgisi al
+            string countryCode = countryDataGridView.SelectedRows[0].Cells["COUNTRYCODE"].Value?.ToString();
+
+            if (string.IsNullOrEmpty(countryCode))
+            {
+                MessageBox.Show("Seçilen satırda geçerli bir COUNTRYCODE bulunamadı!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
             {
                 string query = "SELECT COUNT(*) FROM BSMGRTRTGEN003 WHERE COUNTRYCODE = @COUNTRYCODE";
-                cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@COUNTRYCODE", countryCode);
-
-                try
+                using (SqlCommand cmd = new SqlCommand(query, con))
                 {
-                    con.Open();
-                    int recordExists = (int)cmd.ExecuteScalar();
+                    cmd.Parameters.AddWithValue("@COUNTRYCODE", countryCode);
 
-                    if (recordExists > 0)
+                    try
                     {
-                        // COUNTRYCODE bulundu, Edit formuna geç
-                        countryFormEdit CountryFormEdit = new countryFormEdit(countryCode);
-                        CountryFormEdit.Show();
+                        con.Open();
+                        int recordExists = (int)cmd.ExecuteScalar();
+
+                        if (recordExists > 0)
+                        {
+                            // COUNTRYCODE bulundu, Edit formuna geç
+                            countryFormEdit countryFormEdit = new countryFormEdit(countryCode);
+                            countryFormEdit.Show();
+                        }
+                        else
+                        {
+                            // COUNTRYCODE bulunamadı
+                            MessageBox.Show("Belirtilen COUNTRYCODE için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        // COUNTRYCODE bulunamadı
-                        MessageBox.Show("Belirtilen COUNTRYCODE için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
@@ -185,59 +195,77 @@ namespace TRTERPproject
 
         private void btnDel_Click(object sender, EventArgs e)
         {
-            string countryCode = countryCodeTextBox.Text.Trim();
-
-            // 1. Boş Veri Kontrolü
-            if (string.IsNullOrEmpty(countryCode))
+            if (countryDataGridView.SelectedRows.Count > 0)
             {
-                MessageBox.Show("Lütfen bir COUNTRYCODE giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                DataGridViewRow selectedRow = countryDataGridView.SelectedRows[0];
+                string countryCode = selectedRow.Cells["COUNTRYCODE"].Value.ToString(); ;
 
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
-            {
-                try
+               
+                // Kullanıcıdan onay al
+                DialogResult dialogResult = MessageBox.Show(
+                    $"Ülke Kodu {countryCode} olan veriyi silmek istediğinize emin misiniz?",
+                    "Onay",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (dialogResult != DialogResult.Yes)
                 {
-                    con.Open();
+                    // Kullanıcı "Hayır" seçerse işlem iptal edilir
+                    return;
+                }
 
-                    // 2. Kayıt Kontrolü
-                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTGEN003 WHERE COUNTRYCODE = @COUNTRYCODE";
-                    cmd = new SqlCommand(checkQuery, con);
-                    cmd.Parameters.AddWithValue("@COUNTRYCODE", countryCode);
-
-                    int recordExists = (int)cmd.ExecuteScalar();
-
-                    if (recordExists == 0)
+                using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    try
                     {
-                        // Kayıt bulunamadı
-                        MessageBox.Show("Belirtilen COUNTRYCODE için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
+                        con.Open();
+
+                        // 2. Kayıt Kontrolü
+                        string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTGEN003 WHERE COUNTRYCODE = @COUNTRYCODE";
+                        cmd = new SqlCommand(checkQuery, con);
+                        cmd.Parameters.AddWithValue("@COUNTRYCODE", countryCode);
+
+                        int recordExists = (int)cmd.ExecuteScalar();
+
+                        if (recordExists == 0)
+                        {
+                            // Kayıt bulunamadı
+                            MessageBox.Show("Belirtilen COUNTRYCODE için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        // 3. Silme İşlemi
+                        string deleteQuery = "DELETE FROM BSMGRTRTGEN003 WHERE COUNTRYCODE = @COUNTRYCODE";
+                        cmd = new SqlCommand(deleteQuery, con);
+                        cmd.Parameters.AddWithValue("@COUNTRYCODE", countryCode);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            // TextBox'ı temizle
+                            countryCodeTextBox.Clear();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
-
-                    // 3. Silme İşlemi
-                    string deleteQuery = "DELETE FROM BSMGRTRTGEN003 WHERE COUNTRYCODE = @COUNTRYCODE";
-                    cmd = new SqlCommand(deleteQuery, con);
-                    cmd.Parameters.AddWithValue("@COUNTRYCODE", countryCode);
-
-                    int rowsAffected = cmd.ExecuteNonQuery();
-
-                    if (rowsAffected > 0)
+                    catch (Exception ex)
                     {
-                        MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        // TextBox'ı temizle
-                        countryCodeTextBox.Clear();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+
             }
+            else
+            {
+                MessageBox.Show("Lütfen silmek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
         }
 
         private void countryForm_Load(object sender, EventArgs e)

@@ -65,40 +65,50 @@ namespace TRTERPproject
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            string firmCode = firmCodeTextBox.Text;
-
-            if (string.IsNullOrEmpty(firmCode))
+            // DataGridView'de bir satır seçilip seçilmediğini kontrol et
+            if (firmFormDataGridView.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Lütfen bir Firma Kodu giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Lütfen düzenlemek için bir satır seçiniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+            // Seçilen satırdan Firma Kodu bilgisi al
+            string firmCode = firmFormDataGridView.SelectedRows[0].Cells["COMCODE"].Value?.ToString();
+
+            if (string.IsNullOrEmpty(firmCode))
+            {
+                MessageBox.Show("Seçilen satırda geçerli bir Firma Kodu bulunamadı!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
             {
                 string query = "SELECT COUNT(*) FROM BSMGRTRTGEN001 WHERE COMCODE = @COMCODE";
-                cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@COMCODE", firmCode);
-
-                try
+                using (SqlCommand cmd = new SqlCommand(query, con))
                 {
-                    con.Open();
-                    int recordExists = (int)cmd.ExecuteScalar();
+                    cmd.Parameters.AddWithValue("@COMCODE", firmCode);
 
-                    if (recordExists > 0)
+                    try
                     {
-                        // COUNTRYCODE bulundu, Edit formuna geç
-                        firmFormEdit FirmFormEdit = new firmFormEdit(firmCode);
-                        FirmFormEdit.Show();
+                        con.Open();
+                        int recordExists = (int)cmd.ExecuteScalar();
+
+                        if (recordExists > 0)
+                        {
+                            // Firma kodu bulundu, Edit formuna geç
+                            firmFormEdit firmFormEdit = new firmFormEdit(firmCode);
+                            firmFormEdit.Show();
+                        }
+                        else
+                        {
+                            // Firma kodu bulunamadı
+                            MessageBox.Show("Belirtilen Firma Kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        // COUNTRYCODE bulunamadı
-                        MessageBox.Show("Belirtilen Firma Kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -203,62 +213,80 @@ namespace TRTERPproject
 
         private void btnDel_Click(object sender, EventArgs e)
         {
-
-            string firmCode = firmCodeTextBox.Text.Trim();
-
-            // 1. Boş Veri Kontrolü
-            if (string.IsNullOrEmpty(firmCode))
+            // Seçili satır var mı kontrolü
+            if (firmFormDataGridView.SelectedRows.Count > 0)
             {
-                MessageBox.Show("Lütfen bir Firma Kodu giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                DataGridViewRow selectedRow = firmFormDataGridView.SelectedRows[0];
+                string firmCode = selectedRow.Cells["COMCODE"].Value.ToString(); ;
+                               
+                // Kullanıcıdan onay al
+                DialogResult dialogResult = MessageBox.Show(
+                    $"Firma Kodu {firmCode} olan veriyi silmek istediğinize emin misiniz?",
+                    "Onay",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
 
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
-            {
-                try
+                if (dialogResult != DialogResult.Yes)
                 {
-                    con.Open();
+                    // Kullanıcı "Hayır" seçerse işlem iptal edilir
+                    return;
+                }
 
-                    // 2. Kayıt Kontrolü
-                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTGEN001 WHERE COMCODE = @COMCODE";
-                    cmd = new SqlCommand(checkQuery, con);
-                    cmd.Parameters.AddWithValue("@COMCODE", firmCode);
-
-                    int recordExists = (int)cmd.ExecuteScalar();
-
-                    if (recordExists == 0)
+                using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    try
                     {
-                        // Kayıt bulunamadı
-                        MessageBox.Show("Belirtilen Firma Kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
+                        con.Open();
+
+                        // 2. Kayıt Kontrolü
+                        string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTGEN001 WHERE COMCODE = @COMCODE";
+                        using (SqlCommand cmd = new SqlCommand(checkQuery, con))
+                        {
+                            cmd.Parameters.AddWithValue("@COMCODE", firmCode);
+                            int recordExists = (int)cmd.ExecuteScalar();
+
+                            if (recordExists == 0)
+                            {
+                                // Kayıt bulunamadı
+                                MessageBox.Show("Belirtilen Firma Kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                return;
+                            }
+                        }
+
+                        // 3. Silme İşlemi
+                        string deleteQuery = "DELETE FROM BSMGRTRTGEN001 WHERE COMCODE = @COMCODE";
+                        using (SqlCommand cmd = new SqlCommand(deleteQuery, con))
+                        {
+                            cmd.Parameters.AddWithValue("@COMCODE", firmCode);
+                            int rowsAffected = cmd.ExecuteNonQuery();
+
+                            if (rowsAffected > 0)
+                            {
+                                MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                                // Seçilen satırı DataGridView'den sil
+                                firmFormDataGridView.Rows.Remove(selectedRow);
+
+                                // TextBox'ı temizle
+                                firmCodeTextBox.Clear();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
                     }
-
-                    // 3. Silme İşlemi
-                    string deleteQuery = "DELETE FROM BSMGRTRTGEN001 WHERE COMCODE = @COMCODE";
-                    cmd = new SqlCommand(deleteQuery, con);
-                    cmd.Parameters.AddWithValue("@COMCODE", firmCode);
-
-                    int rowsAffected = cmd.ExecuteNonQuery();
-
-                    if (rowsAffected > 0)
+                    catch (Exception ex)
                     {
-                        MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        // TextBox'ı temizle
-                        firmCodeTextBox.Clear();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
             }
-
-
+            else
+            {
+                MessageBox.Show("Lütfen silmek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void firmForm_Load(object sender, EventArgs e)

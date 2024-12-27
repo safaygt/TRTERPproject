@@ -47,7 +47,7 @@ namespace TRTERPproject
                 da.Fill(ds);
 
                 // DataGridView'e veri bağla
-                CountryDataGridView.DataSource = ds.Tables[0];  // Veritabanından çekilen ilk tabloyu DataGridView'e bağla
+                costDataGridView.DataSource = ds.Tables[0];  // Veritabanından çekilen ilk tabloyu DataGridView'e bağla
             }
             catch (Exception ex)
             {
@@ -64,44 +64,50 @@ namespace TRTERPproject
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-
-            string docType = costTypeTextBox.Text;
-
-            if (string.IsNullOrEmpty(docType))
+            if (costDataGridView.SelectedRows.Count > 0)
             {
-                MessageBox.Show("Lütfen bir Maliyet Merkezi Tipi giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                // Seçilen satırdaki DOCTYPE (docType) değerini al
+                string docType = costDataGridView.SelectedRows[0].Cells["DOCTYPE"].Value.ToString();
 
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
-            {
-                string query = "SELECT COUNT(*) FROM BSMGRTRTCCM001 WHERE DOCTYPE = @DOCTYPE";
-                cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@DOCTYPE", docType);
-
-                try
+                if (string.IsNullOrEmpty(docType))
                 {
-                    con.Open();
-                    int recordExists = (int)cmd.ExecuteScalar();
+                    MessageBox.Show("Lütfen geçerli bir Maliyet Merkezi Tipi seçin!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-                    if (recordExists > 0)
+                using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    string query = "SELECT COUNT(*) FROM BSMGRTRTCCM001 WHERE DOCTYPE = @DOCTYPE";
+                    cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@DOCTYPE", docType);
+
+                    try
                     {
-                        // UNITCODE bulundu, Edit formuna geç
-                        costEditForm CostEditForm = new costEditForm(docType);
-                        CostEditForm.Show();
+                        con.Open();
+                        int recordExists = (int)cmd.ExecuteScalar();
+
+                        if (recordExists > 0)
+                        {
+                            // docType bulundu, Edit formuna geç
+                            costEditForm CostEditForm = new costEditForm(docType);
+                            CostEditForm.Show();
+                        }
+                        else
+                        {
+                            // docType bulunamadı
+                            MessageBox.Show("Belirtilen Maliyet Merkezi Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        MessageBox.Show("Belirtilen Maliyet Merkezi Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
             }
-
-
+            else
+            {
+                MessageBox.Show("Lütfen düzenlemek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -176,56 +182,69 @@ namespace TRTERPproject
 
         private void btnDel_Click(object sender, EventArgs e)
         {
-
-            string docType = costTypeTextBox.Text.Trim();
-
-            if (string.IsNullOrEmpty(docType))
+            if (costDataGridView.SelectedRows.Count > 0)
             {
-                MessageBox.Show("Lütfen bir Maliyet Merkezi Tipi giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                DataGridViewRow selectedRow = costDataGridView.SelectedRows[0];
+                string docType = selectedRow.Cells["DOCTYPE"].Value.ToString(); ;
 
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
-            {
-                try
+                // Kullanıcıdan onay al
+                DialogResult dialogResult = MessageBox.Show(
+                    $"Maliyet Merkezi Tipi {docType} olan veriyi silmek istediğinize emin misiniz?",
+                    "Onay",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (dialogResult != DialogResult.Yes)
                 {
-                    con.Open();
+                    // Kullanıcı "Hayır" seçerse işlem iptal edilir
+                    return;
+                }
 
-                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTCCM001 WHERE DOCTYPE = @DOCTYPE";
-                    cmd = new SqlCommand(checkQuery, con);
-                    cmd.Parameters.AddWithValue("@DOCTYPE", docType);
-
-                    int recordExists = (int)cmd.ExecuteScalar();
-
-                    if (recordExists == 0)
+                using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    try
                     {
-                        MessageBox.Show("Belirtilen Maliyet Merkezi Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
+                        con.Open();
+
+                        string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTCCM001 WHERE DOCTYPE = @DOCTYPE";
+                        cmd = new SqlCommand(checkQuery, con);
+                        cmd.Parameters.AddWithValue("@DOCTYPE", docType);
+
+                        int recordExists = (int)cmd.ExecuteScalar();
+
+                        if (recordExists == 0)
+                        {
+                            MessageBox.Show("Belirtilen Maliyet Merkezi Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        string deleteQuery = "DELETE FROM BSMGRTRTCCM001 WHERE DOCTYPE = @DOCTYPE";
+                        cmd = new SqlCommand(deleteQuery, con);
+                        cmd.Parameters.AddWithValue("@DOCTYPE", docType);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            costTypeTextBox.Clear();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
-
-                    string deleteQuery = "DELETE FROM BSMGRTRTCCM001 WHERE DOCTYPE = @DOCTYPE";
-                    cmd = new SqlCommand(deleteQuery, con);
-                    cmd.Parameters.AddWithValue("@DOCTYPE", docType);
-
-                    int rowsAffected = cmd.ExecuteNonQuery();
-
-                    if (rowsAffected > 0)
+                    catch (Exception ex)
                     {
-                        MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        costTypeTextBox.Clear();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
             }
-
-
+            else
+            {
+                MessageBox.Show("Lütfen silmek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void isPassiveCheckBox_CheckedChanged(object sender, EventArgs e)

@@ -33,14 +33,14 @@
             btnAdd = new Button();
             btnEdit = new Button();
             btnGet = new Button();
-            CountryDataGridView = new DataGridView();
+            businessDataGridView = new DataGridView();
             businessTypeStatementTextBox = new TextBox();
             businessTypeTextBox = new TextBox();
             firmCodeTextBox = new TextBox();
             label2 = new Label();
             label3 = new Label();
             label1 = new Label();
-            ((System.ComponentModel.ISupportInitialize)CountryDataGridView).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)businessDataGridView).BeginInit();
             SuspendLayout();
             // 
             // isPassiveCheckBox
@@ -95,15 +95,15 @@
             btnGet.UseVisualStyleBackColor = true;
             btnGet.Click += btnGet_Click;
             // 
-            // CountryDataGridView
+            // businessDataGridView
             // 
-            CountryDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            CountryDataGridView.Location = new Point(24, 197);
-            CountryDataGridView.Name = "CountryDataGridView";
-            CountryDataGridView.RowHeadersWidth = 51;
-            CountryDataGridView.RowTemplate.Height = 29;
-            CountryDataGridView.Size = new Size(915, 239);
-            CountryDataGridView.TabIndex = 45;
+            businessDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            businessDataGridView.Location = new Point(24, 197);
+            businessDataGridView.Name = "businessDataGridView";
+            businessDataGridView.RowHeadersWidth = 51;
+            businessDataGridView.RowTemplate.Height = 29;
+            businessDataGridView.Size = new Size(915, 239);
+            businessDataGridView.TabIndex = 45;
             // 
             // businessTypeStatementTextBox
             // 
@@ -170,7 +170,7 @@
             Controls.Add(btnAdd);
             Controls.Add(btnEdit);
             Controls.Add(btnGet);
-            Controls.Add(CountryDataGridView);
+            Controls.Add(businessDataGridView);
             Controls.Add(businessTypeStatementTextBox);
             Controls.Add(businessTypeTextBox);
             Controls.Add(firmCodeTextBox);
@@ -179,7 +179,7 @@
             Controls.Add(label1);
             Name = "businessForm";
             Text = "businessForm";
-            ((System.ComponentModel.ISupportInitialize)CountryDataGridView).EndInit();
+            ((System.ComponentModel.ISupportInitialize)businessDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -191,7 +191,7 @@
         private Button btnAdd;
         private Button btnEdit;
         private Button btnGet;
-        private DataGridView CountryDataGridView;
+        private DataGridView businessDataGridView;
         private TextBox businessTypeStatementTextBox;
         private TextBox businessTypeTextBox;
         private TextBox firmCodeTextBox;

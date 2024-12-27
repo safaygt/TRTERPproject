@@ -32,7 +32,7 @@
             btnAdd = new Button();
             btnEdit = new Button();
             btnGet = new Button();
-            CountryDataGridView = new DataGridView();
+            cityDataGridView = new DataGridView();
             cityNameTextBox = new TextBox();
             cityCodeTextBox = new TextBox();
             label2 = new Label();
@@ -41,7 +41,7 @@
             label1 = new Label();
             countryCodeTextBox = new TextBox();
             label4 = new Label();
-            ((System.ComponentModel.ISupportInitialize)CountryDataGridView).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)cityDataGridView).BeginInit();
             SuspendLayout();
             // 
             // btnDel
@@ -84,15 +84,15 @@
             btnGet.UseVisualStyleBackColor = true;
             btnGet.Click += btnGet_Click;
             // 
-            // CountryDataGridView
+            // cityDataGridView
             // 
-            CountryDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            CountryDataGridView.Location = new Point(12, 209);
-            CountryDataGridView.Name = "CountryDataGridView";
-            CountryDataGridView.RowHeadersWidth = 51;
-            CountryDataGridView.RowTemplate.Height = 29;
-            CountryDataGridView.Size = new Size(915, 239);
-            CountryDataGridView.TabIndex = 10;
+            cityDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            cityDataGridView.Location = new Point(12, 209);
+            cityDataGridView.Name = "cityDataGridView";
+            cityDataGridView.RowHeadersWidth = 51;
+            cityDataGridView.RowTemplate.Height = 29;
+            cityDataGridView.Size = new Size(915, 239);
+            cityDataGridView.TabIndex = 10;
             // 
             // cityNameTextBox
             // 
@@ -176,7 +176,7 @@
             Controls.Add(btnAdd);
             Controls.Add(btnEdit);
             Controls.Add(btnGet);
-            Controls.Add(CountryDataGridView);
+            Controls.Add(cityDataGridView);
             Controls.Add(countryCodeTextBox);
             Controls.Add(cityNameTextBox);
             Controls.Add(cityCodeTextBox);
@@ -187,7 +187,7 @@
             Controls.Add(label1);
             Name = "cityForm";
             Text = "cityForm";
-            ((System.ComponentModel.ISupportInitialize)CountryDataGridView).EndInit();
+            ((System.ComponentModel.ISupportInitialize)cityDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -198,7 +198,7 @@
         private Button btnAdd;
         private Button btnEdit;
         private Button btnGet;
-        private DataGridView CountryDataGridView;
+        private DataGridView cityDataGridView;
         private TextBox cityNameTextBox;
         private TextBox cityCodeTextBox;
         private Label label2;

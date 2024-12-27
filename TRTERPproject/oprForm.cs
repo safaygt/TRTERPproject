@@ -69,39 +69,48 @@ namespace TRTERPproject
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            string operationCode = oprTypeTextBox.Text;
-
-            if (string.IsNullOrEmpty(operationCode))
+            if (oprDataGridView.SelectedRows.Count > 0)
             {
-                MessageBox.Show("Lütfen bir Operasyon Tipi giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                // Seçilen satırdaki DOCTYPE (operationCode) değerini al
+                string operationCode = oprDataGridView.SelectedRows[0].Cells["DOCTYPE"].Value.ToString();
+
+                if (string.IsNullOrEmpty(operationCode))
+                {
+                    MessageBox.Show("Lütfen geçerli bir Operasyon Tipi seçin!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    string query = "SELECT COUNT(*) FROM BSMGRTRTOPR001 WHERE DOCTYPE = @DOCTYPE";
+                    cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@DOCTYPE", operationCode);
+
+                    try
+                    {
+                        con.Open();
+                        int recordExists = (int)cmd.ExecuteScalar();
+
+                        if (recordExists > 0)
+                        {
+                            // operationCode bulundu, Edit formuna geç
+                            oprFormEdit OperationFormEdit = new oprFormEdit(operationCode);
+                            OperationFormEdit.Show();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Belirtilen Operasyon Kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
-
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+            else
             {
-                string query = "SELECT COUNT(*) FROM BSMGRTRTOPR001 WHERE DOCTYPE = @DOCTYPE";
-                cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@DOCTYPE", operationCode);
-
-                try
-                {
-                    con.Open();
-                    int recordExists = (int)cmd.ExecuteScalar();
-
-                    if (recordExists > 0)
-                    {
-                        oprFormEdit OperationFormEdit = new oprFormEdit(operationCode);
-                        OperationFormEdit.Show();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Belirtilen Operasyon Kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show("Lütfen düzenlemek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -175,53 +184,69 @@ namespace TRTERPproject
 
         private void btnDel_Click(object sender, EventArgs e)
         {
-
-            string unitCode = oprTypeTextBox.Text.Trim();
-
-            if (string.IsNullOrEmpty(unitCode))
+            if (oprDataGridView.SelectedRows.Count > 0)
             {
-                MessageBox.Show("Lütfen bir DOCTYPE giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                DataGridViewRow selectedRow = oprDataGridView.SelectedRows[0];
+                string operationCode = selectedRow.Cells["DOCTYPE"].Value.ToString(); ;
+
+
+                // Kullanıcıdan onay al
+                DialogResult dialogResult = MessageBox.Show(
+                    $"Operaston Tipi {operationCode} olan veriyi silmek istediğinize emin misiniz?",
+                    "Onay",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (dialogResult != DialogResult.Yes)
+                {
+                    // Kullanıcı "Hayır" seçerse işlem iptal edilir
+                    return;
+                }
+
+                using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    try
+                    {
+                        con.Open();
+
+                        string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTOPR001 WHERE DOCTYPE = @DOCTYPE";
+                        cmd = new SqlCommand(checkQuery, con);
+                        cmd.Parameters.AddWithValue("@DOCTYPE", operationCode);
+
+                        int recordExists = (int)cmd.ExecuteScalar();
+
+                        if (recordExists == 0)
+                        {
+                            MessageBox.Show("Belirtilen Birim Kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        string deleteQuery = "DELETE FROM BSMGRTRTOPR001 WHERE DOCTYPE = @DOCTYPE";
+                        cmd = new SqlCommand(deleteQuery, con);
+                        cmd.Parameters.AddWithValue("@DOCTYPE", operationCode);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            oprTypeTextBox.Clear();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
-
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
+            else
             {
-                try
-                {
-                    con.Open();
-
-                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTOPR001 WHERE DOCTYPE = @DOCTYPE";
-                    cmd = new SqlCommand(checkQuery, con);
-                    cmd.Parameters.AddWithValue("@DOCTYPE", unitCode);
-
-                    int recordExists = (int)cmd.ExecuteScalar();
-
-                    if (recordExists == 0)
-                    {
-                        MessageBox.Show("Belirtilen Birim Kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-
-                    string deleteQuery = "DELETE FROM BSMGRTRTOPR001 WHERE DOCTYPE = @DOCTYPE";
-                    cmd = new SqlCommand(deleteQuery, con);
-                    cmd.Parameters.AddWithValue("@DOCTYPE", unitCode);
-
-                    int rowsAffected = cmd.ExecuteNonQuery();
-
-                    if (rowsAffected > 0)
-                    {
-                        MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        oprTypeTextBox.Clear();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show("Lütfen silmek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
