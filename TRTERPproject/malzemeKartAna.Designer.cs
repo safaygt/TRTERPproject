@@ -49,8 +49,6 @@
             malzTipcombo = new ComboBox();
             label8 = new Label();
             comboBoxDil = new ComboBox();
-            comboBoxUrnAgcRota = new ComboBox();
-            label9 = new Label();
             dateTimePickerBaslangic = new DateTimePicker();
             dateTimePickerBitis = new DateTimePicker();
             getAll = new Button();
@@ -267,25 +265,6 @@
             comboBoxDil.Size = new Size(173, 28);
             comboBoxDil.TabIndex = 26;
             // 
-            // comboBoxUrnAgcRota
-            // 
-            comboBoxUrnAgcRota.FormattingEnabled = true;
-            comboBoxUrnAgcRota.Location = new Point(636, 56);
-            comboBoxUrnAgcRota.Name = "comboBoxUrnAgcRota";
-            comboBoxUrnAgcRota.Size = new Size(173, 28);
-            comboBoxUrnAgcRota.TabIndex = 29;
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
-            label9.ForeColor = Color.GhostWhite;
-            label9.Location = new Point(650, 29);
-            label9.Name = "label9";
-            label9.Size = new Size(141, 23);
-            label9.TabIndex = 28;
-            label9.Text = "Ürün Ağacı Rota";
-            // 
             // dateTimePickerBaslangic
             // 
             dateTimePickerBaslangic.Location = new Point(829, 57);
@@ -319,8 +298,6 @@
             Controls.Add(getAll);
             Controls.Add(dateTimePickerBitis);
             Controls.Add(dateTimePickerBaslangic);
-            Controls.Add(comboBoxUrnAgcRota);
-            Controls.Add(label9);
             Controls.Add(comboBoxTedTip);
             Controls.Add(comboBoxDil);
             Controls.Add(label8);
@@ -373,8 +350,6 @@
         private Label label8;
         private ComboBox comboBoxDil;
         private ComboBox comboBoxTedTip;
-        private ComboBox comboBoxUrnAgcRota;
-        private Label label9;
         private DateTimePicker dateTimePickerBaslangic;
         private DateTimePicker dateTimePickerBitis;
         private Button getAll;
