@@ -168,6 +168,11 @@ WHERE {columnName} = @userInput";
                 filters.Add("MH.MATDOCNUM LIKE @MATDOCNUM");
             }
 
+            if (!string.IsNullOrEmpty(malacicTxtBox.Text))
+            {
+                filters.Add("MT.MATLTEXT LIKE @MATLTEXT");
+            }
+
             // Dil filtresi
             if (!string.IsNullOrEmpty(comboBoxDil.Text))
             {
@@ -224,6 +229,11 @@ WHERE {columnName} = @userInput";
             if (!string.IsNullOrEmpty(malNotxtBox.Text))
             {
                 cmd.Parameters.AddWithValue("@MATDOCNUM", $"{malNotxtBox.Text}%");
+            }
+
+            if (!string.IsNullOrEmpty(malNotxtBox.Text))
+            {
+                cmd.Parameters.AddWithValue("@MATLTEXT", $"{malacicTxtBox.Text}%");
             }
 
             if (!string.IsNullOrEmpty(comboBoxTedTip.Text))
