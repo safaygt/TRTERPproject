@@ -381,7 +381,7 @@ namespace TRTERPproject
         private void firmComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
 
-}
+        }
         private void getAll_Click(object sender, EventArgs e)
         {
             string query = @"SELECT 
@@ -445,12 +445,12 @@ namespace TRTERPproject
 
                 try
                 {
-                    con.Open();  
+                    con.Open();
                     int recordExists = (int)cmd.ExecuteScalar();
 
                     if (recordExists > 0)
                     {
-                        
+
                         MaliyetKartAnaEdit MaliyetKartForm = new MaliyetKartAnaEdit(malCarNum);
                         MaliyetKartForm.Show();
                     }

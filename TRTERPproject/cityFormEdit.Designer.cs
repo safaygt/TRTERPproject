@@ -137,7 +137,7 @@
             Controls.Add(label1);
             Controls.Add(btnSave);
             Name = "cityFormEdit";
-            Text = "Edit";
+            Text = "Şehir Düzenle";
             Load += cityFormEdit_Load;
             ResumeLayout(false);
             PerformLayout();

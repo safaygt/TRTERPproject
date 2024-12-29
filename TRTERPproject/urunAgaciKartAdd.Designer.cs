@@ -371,7 +371,7 @@
             Controls.Add(label1);
             Controls.Add(btnSave);
             Name = "urunAgaciKartAdd";
-            Text = "urunAgaciKartAdd";
+            Text = "Ürün Ağacı Ekleme Tablosu";
             Load += urunAgaciKartAdd_Load;
             ResumeLayout(false);
             PerformLayout();

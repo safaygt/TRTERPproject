@@ -227,7 +227,7 @@ namespace TRTERPproject
                 quantityValue = parsedQuantity;
             }
 
-           
+
 
             using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
             {
@@ -242,7 +242,7 @@ namespace TRTERPproject
                 VALUES 
                 (@COMCODE, @BOMDOCTYPE, @BOMDOCNUM, @BOMDOCFROM, @BOMDOCUNTIL, @MATDOCTYPE, @MATDOCNUM, @QUANTITY, @ISDELETED, @ISPASSIVE, @DRAWNUM)";
 
-                    using (SqlCommand cmd= new SqlCommand(query1, con, transaction))
+                    using (SqlCommand cmd = new SqlCommand(query1, con, transaction))
                     {
                         cmd.Parameters.AddWithValue("@COMCODE", comCode);
                         cmd.Parameters.AddWithValue("@BOMDOCTYPE", bomDoctype);

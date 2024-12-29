@@ -126,7 +126,7 @@
             Controls.Add(label3);
             Controls.Add(label1);
             Name = "prodTreeEdit";
-            Text = "prodTreeEdit";
+            Text = "Ürün Ağacı Düzenle";
             Load += prodTreeEdit_Load_1;
             ResumeLayout(false);
             PerformLayout();

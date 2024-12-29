@@ -156,7 +156,7 @@ namespace TRTERPproject
                         cmd.Parameters.AddWithValue("@DOCTYPE", typeTex);
                         cmd.Parameters.AddWithValue("@DOCTYPETEXT", typeDes);
                         cmd.Parameters.AddWithValue("@ISPASSIVE", oprPascheck);
-                        
+
 
                         int rowsAffected = cmd.ExecuteNonQuery();
 
@@ -167,7 +167,7 @@ namespace TRTERPproject
                             oprTypeTextBox.Clear();
                             oprTypeDesTextBox.Clear();
                             oprPascheckbox.Checked = false;
-                            
+
                         }
                         else
                         {

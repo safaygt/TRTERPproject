@@ -198,7 +198,7 @@ namespace TRTERPproject
                 DataGridViewRow selectedRow = lanDataGridView.SelectedRows[0];
                 string lanCode = selectedRow.Cells["LANCODE"].Value.ToString(); ;
 
-             
+
                 // Kullanıcıdan onay al
                 DialogResult dialogResult = MessageBox.Show(
                     $"Dil Kodu {lanCode} olan veriyi silmek istediğinize emin misiniz?",

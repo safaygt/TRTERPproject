@@ -181,7 +181,7 @@
             Controls.Add(label3);
             Controls.Add(label1);
             Name = "prodTree";
-            Text = "prodTree";
+            Text = "Ürün Ağacı Destek Tablosu";
             Load += prodTree_Load;
             ((System.ComponentModel.ISupportInitialize)prodTreeDataGridView).EndInit();
             ResumeLayout(false);

@@ -162,7 +162,7 @@
             Controls.Add(label1);
             Controls.Add(btnSave);
             Name = "unitFormEdit";
-            Text = "unitFormEdit";
+            Text = "Birim Düzenle";
             Load += unitFormEdit_Load;
             ResumeLayout(false);
             PerformLayout();

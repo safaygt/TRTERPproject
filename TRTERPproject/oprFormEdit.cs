@@ -61,7 +61,7 @@ namespace TRTERPproject
             }
         }
 
-       
+
 
         private void oprFormEdit_Load(object sender, EventArgs e)
         {

@@ -115,7 +115,7 @@
             Controls.Add(label1);
             Controls.Add(btnSave);
             Name = "countryFormEdit";
-            Text = "Edit";
+            Text = "Ülke Düzenle";
             Load += countryFormEdit_Load;
             ResumeLayout(false);
             PerformLayout();

@@ -38,9 +38,9 @@
             label4 = new Label();
             address2TextBox = new TextBox();
             label5 = new Label();
-            cityCodeTextBox = new TextBox();
             label6 = new Label();
-            countryCodeTextBox = new TextBox();
+            comboBoxCountry = new ComboBox();
+            comboBoxCity = new ComboBox();
             SuspendLayout();
             // 
             // address1TextBox
@@ -136,13 +136,6 @@
             label5.TabIndex = 17;
             label5.Text = "Şehir Kodu";
             // 
-            // cityCodeTextBox
-            // 
-            cityCodeTextBox.Location = new Point(261, 227);
-            cityCodeTextBox.Name = "cityCodeTextBox";
-            cityCodeTextBox.Size = new Size(127, 27);
-            cityCodeTextBox.TabIndex = 19;
-            // 
             // label6
             // 
             label6.AutoSize = true;
@@ -154,12 +147,21 @@
             label6.TabIndex = 17;
             label6.Text = "Ülke Kodu";
             // 
-            // countryCodeTextBox
+            // comboBoxCountry
             // 
-            countryCodeTextBox.Location = new Point(454, 227);
-            countryCodeTextBox.Name = "countryCodeTextBox";
-            countryCodeTextBox.Size = new Size(127, 27);
-            countryCodeTextBox.TabIndex = 19;
+            comboBoxCountry.FormattingEnabled = true;
+            comboBoxCountry.Location = new Point(456, 227);
+            comboBoxCountry.Name = "comboBoxCountry";
+            comboBoxCountry.Size = new Size(131, 28);
+            comboBoxCountry.TabIndex = 22;
+            // 
+            // comboBoxCity
+            // 
+            comboBoxCity.FormattingEnabled = true;
+            comboBoxCity.Location = new Point(261, 226);
+            comboBoxCity.Name = "comboBoxCity";
+            comboBoxCity.Size = new Size(131, 28);
+            comboBoxCity.TabIndex = 22;
             // 
             // firmFormEdit
             // 
@@ -167,9 +169,9 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(800, 450);
+            Controls.Add(comboBoxCity);
+            Controls.Add(comboBoxCountry);
             Controls.Add(address2TextBox);
-            Controls.Add(cityCodeTextBox);
-            Controls.Add(countryCodeTextBox);
             Controls.Add(address1TextBox);
             Controls.Add(firmNameTextBox);
             Controls.Add(firmCodeTextBox);
@@ -181,7 +183,7 @@
             Controls.Add(label1);
             Controls.Add(btnSave);
             Name = "firmFormEdit";
-            Text = "firmFormEdit";
+            Text = "Firma Düzenle";
             Load += firmFormEdit_Load;
             ResumeLayout(false);
             PerformLayout();
@@ -199,8 +201,8 @@
         private Label label4;
         private TextBox address2TextBox;
         private Label label5;
-        private TextBox cityCodeTextBox;
         private Label label6;
-        private TextBox countryCodeTextBox;
+        private ComboBox comboBoxCountry;
+        private ComboBox comboBoxCity;
     }
 }

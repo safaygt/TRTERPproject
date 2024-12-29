@@ -200,7 +200,7 @@
             Controls.Add(label3);
             Controls.Add(label1);
             Name = "unitForm";
-            Text = "unitForm";
+            Text = "Birim Destek Tablosu";
             ((System.ComponentModel.ISupportInitialize)unitDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();

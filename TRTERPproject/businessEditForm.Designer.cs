@@ -140,7 +140,7 @@
             Controls.Add(label3);
             Controls.Add(label1);
             Name = "businessEditForm";
-            Text = "businessEditForm";
+            Text = "İş Merkezi Düzenle";
             Load += businessEditForm_Load;
             ResumeLayout(false);
             PerformLayout();

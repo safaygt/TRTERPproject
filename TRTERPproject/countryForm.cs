@@ -200,7 +200,7 @@ namespace TRTERPproject
                 DataGridViewRow selectedRow = countryDataGridView.SelectedRows[0];
                 string countryCode = selectedRow.Cells["COUNTRYCODE"].Value.ToString(); ;
 
-               
+
                 // Kullanıcıdan onay al
                 DialogResult dialogResult = MessageBox.Show(
                     $"Ülke Kodu {countryCode} olan veriyi silmek istediğinize emin misiniz?",
