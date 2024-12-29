@@ -21,11 +21,87 @@ namespace TRTERPproject
         public cityForm()
         {
             InitializeComponent();
+            this.Load += (s, e) => LoadComboBoxData();
+
+            // ComboBox Leave eventlerini bağla
+            comboBoxFirmCode.Leave += (s, e) => ValidateComboBox(comboBoxFirmCode, "COMCODE", "BSMGRTRTGEN001");
+            comboBoxFirmCode.Leave += (s, e) => ValidateComboBox(comboBoxCountryCode, "COUNTRYCODE", "BSMGRTRTGEN003");
+        }
+
+        private void LoadComboBox(ComboBox comboBox, string query, string columnName)
+        {
+            using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+            {
+                using (SqlDataAdapter adapter = new SqlDataAdapter(query, con))
+                {
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    comboBox.DataSource = dt;
+                    comboBox.DisplayMember = columnName;
+                    comboBox.ValueMember = columnName;
+                    comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+
+                    // Varsayılan seçim ilk satır olarak ayarlanır
+                    if (comboBox.SelectedValue == null && dt.Rows.Count > 0)
+                    {
+                        comboBox.SelectedValue = dt.Rows[0][columnName];
+                    }
+                }
+            }
+        }
+
+        private void LoadComboBoxData()
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    con.Open();
+
+                    // ComboBox'ları doldur
+                    LoadComboBox(comboBoxFirmCode, "SELECT DISTINCT COMCODE FROM BSMGRTRTGEN001", "COMCODE");
+                    LoadComboBox(comboBoxCountryCode, "SELECT DISTINCT COUNTRYCODE FROM BSMGRTRTGEN003", "COUNTRYCODE");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Veriler yüklenirken hata oluştu: {ex.Message}");
+            }
+        }
+
+        private void ValidateComboBox(ComboBox comboBox, string columnName, string tableName)
+        {
+            string checkQuery = $"SELECT COUNT(*) FROM {tableName} WHERE {columnName} = @userInput";
+
+            if (string.IsNullOrEmpty(comboBox.Text)) return;
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    con.Open();
+                    using (SqlCommand checkCmd = new SqlCommand(checkQuery, con))
+                    {
+                        checkCmd.Parameters.AddWithValue("@userInput", comboBox.Text);
+                        int count = (int)checkCmd.ExecuteScalar();
+
+                        if (count == 0)
+                        {
+                            MessageBox.Show($"{columnName} '{comboBox.Text}' tablodaki verilerle uyuşmuyor.");
+                            comboBox.Text = string.Empty; // Kullanıcının yanlış girişini temizler
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Hata: {ex.Message}");
+            }
         }
 
         private void btnGet_Click(object sender, EventArgs e)
         {
-            string query = "Select * from BSMGRTRTGEN004";
+            string query = "SELECT COMCODE AS 'Firma Kodu', CITYCODE AS 'Şehir Kodu', CITYTEXT AS 'Şehir Adı', COUNTRYCODE AS 'Ülke Kodu' FROM BSMGRTRTGEN004";
             con = new SqlConnection(ConnectionHelper.ConnectionString);
             cmd = new SqlCommand();
             cmd.Connection = con;
@@ -33,14 +109,10 @@ namespace TRTERPproject
 
             try
             {
-
                 con.Open();
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
-
-
                 DataSet ds = new DataSet();
-
                 da.Fill(ds);
 
                 // DataGridView'e veri bağla
@@ -56,72 +128,69 @@ namespace TRTERPproject
                 // Bağlantıyı kapat
                 con.Close();
             }
-
-
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            // DataGridView'de bir satır seçilip seçilmediğini kontrol et
-            if (cityDataGridView.SelectedRows.Count == 0)
+            if (cityDataGridView.SelectedRows.Count > 0)
             {
-                MessageBox.Show("Lütfen düzenlemek için bir satır seçiniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                DataGridViewRow selectedRow = cityDataGridView.SelectedRows[0];
 
-            // Seçilen satırdan COUNTRYCODE bilgisi al
-            string countryCode = cityDataGridView.SelectedRows[0].Cells["COUNTRYCODE"].Value?.ToString();
-
-            if (string.IsNullOrEmpty(countryCode))
-            {
-                MessageBox.Show("Seçilen satırda geçerli bir COUNTRYCODE bulunamadı!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
-            {
-                string query = "SELECT COUNT(*) FROM BSMGRTRTGEN003 WHERE COUNTRYCODE = @COUNTRYCODE";
-                using (SqlCommand cmd = new SqlCommand(query, con))
+                // Seçilen satırdaki tüm hücrelerin boş olup olmadığını kontrol et
+                bool isRowEmpty = true;
+                foreach (DataGridViewCell cell in selectedRow.Cells)
                 {
-                    cmd.Parameters.AddWithValue("@COUNTRYCODE", countryCode);
-
-                    try
+                    if (cell.Value != null && !string.IsNullOrWhiteSpace(cell.Value.ToString()))
                     {
-                        con.Open();
-                        int recordExists = (int)cmd.ExecuteScalar();
-
-                        if (recordExists > 0)
-                        {
-                            // COUNTRYCODE bulundu, Edit formuna geç
-                            countryFormEdit countryFormEdit = new countryFormEdit(countryCode);
-                            countryFormEdit.Show();
-                        }
-                        else
-                        {
-                            // COUNTRYCODE bulunamadı
-                            MessageBox.Show("Belirtilen COUNTRYCODE için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        isRowEmpty = false;
+                        break;
                     }
                 }
-            }
 
+                if (isRowEmpty)
+                {
+                    MessageBox.Show("Boş bir satır seçtiniz. Lütfen dolu bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Yeni bir edit form oluştur ve seçilen veriyi aktar
+                cityFormEdit CityFormEdit = new cityFormEdit();
+
+                CityFormEdit.comCode = selectedRow.Cells["Firma Kodu"].Value != DBNull.Value
+                    ? selectedRow.Cells["Firma Kodu"].Value.ToString()
+                    : string.Empty;
+
+                CityFormEdit.cityCode = selectedRow.Cells["Şehir Kodu"].Value != DBNull.Value
+                    ? selectedRow.Cells["Şehir Kodu"].Value.ToString()
+                    : string.Empty;
+
+                CityFormEdit.cityName = selectedRow.Cells["Şehir Adı"].Value != DBNull.Value
+                    ? selectedRow.Cells["Şehir Adı"].Value.ToString()
+                    : string.Empty;
+
+                CityFormEdit.countryCode = selectedRow.Cells["Ülke Kodu"].Value != DBNull.Value
+                    ? selectedRow.Cells["Ülke Kodu"].Value.ToString()
+                    : string.Empty;
+
+                CityFormEdit.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Lütfen düzenlemek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            string comCode = firmCodeTextBox.Text.Trim();
+            string comCode = comboBoxFirmCode.Text.Trim();
             string cityCode = cityCodeTextBox.Text.Trim();
             string cityName = cityNameTextBox.Text.Trim();
-            string countryCode = countryCodeTextBox.Text.Trim();
+            string countryCode = comboBoxCountryCode.Text.Trim();
 
             // 1. Veri Kontrolü
             if (string.IsNullOrEmpty(comCode) || string.IsNullOrEmpty(countryCode) || string.IsNullOrEmpty(cityName) || string.IsNullOrEmpty(cityCode))
             {
-                MessageBox.Show("Lütfen tüm alanları doldurun!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Lütfen gerekli tüm alanları doldurun!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -131,39 +200,25 @@ namespace TRTERPproject
                 {
                     con.Open();
 
-                    // 2. COUNTRYCODE Kontrolü
-                    string checkCountryCodeQuery = "SELECT COUNT(*) FROM BSMGRTRTGEN004 WHERE CITYCODE = @CITYCODE";
-                    using (cmd = new SqlCommand(checkCountryCodeQuery, con))
+                    // 2. CITYCODE Kontrolü
+                    string checkCityCodeQuery = "SELECT COUNT(*) FROM BSMGRTRTGEN004 WHERE CITYCODE = @CITYCODE";
+                    using (cmd = new SqlCommand(checkCityCodeQuery, con))
                     {
-                        cmd.Parameters.AddWithValue("@CITYCODE", countryCode);
+                        cmd.Parameters.AddWithValue("@CITYCODE", cityCode);
 
-                        int countryCodeExists = (int)cmd.ExecuteScalar();
+                        int cityCodeExists = (int)cmd.ExecuteScalar();
 
-                        if (countryCodeExists > 0)
+                        if (cityCodeExists > 0)
                         {
-                            // COUNTRYCODE zaten mevcut
                             MessageBox.Show("Bu Şehir Kodu zaten mevcut. Lütfen başka bir Şehir Kodu giriniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
                         }
                     }
 
-                    // 3. COMCODE Kontrolü
-                    string checkComCodeQuery = "SELECT COUNT(*) FROM BSMGRTRTGEN004 WHERE COMCODE = @COMCODE";
-                    using (cmd = new SqlCommand(checkComCodeQuery, con))
-                    {
-                        cmd.Parameters.AddWithValue("@COMCODE", comCode);
 
-                        int comCodeExists = (int)cmd.ExecuteScalar();
-
-                        if (comCodeExists == 0)
-                        {
-                            MessageBox.Show("Belirtilen COMCODE mevcut değil. Lütfen doğru bir COMCODE giriniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            return;
-                        }
-                    }
 
                     // 4. Ekleme İşlemi
-                    string insertQuery = "INSERT INTO BSMGRTRTGEN004 (COMCODE, CITYCODE, CITYTEXT, COUNTRYCODE) VALUES (@COMCODE,@CITYCODE ,@CITYTEXT, @COUNTRYCODE)";
+                    string insertQuery = "INSERT INTO BSMGRTRTGEN004 (COMCODE, CITYCODE, CITYTEXT, COUNTRYCODE) VALUES (@COMCODE, @CITYCODE, @CITYTEXT, @COUNTRYCODE)";
                     using (cmd = new SqlCommand(insertQuery, con))
                     {
                         cmd.Parameters.AddWithValue("@COMCODE", comCode);
@@ -178,10 +233,10 @@ namespace TRTERPproject
                             MessageBox.Show("Kayıt başarıyla eklendi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                             // TextBox'ları temizle
-                            firmCodeTextBox.Clear();
+
                             cityCodeTextBox.Clear();
                             cityNameTextBox.Clear();
-                            countryCodeTextBox.Clear();
+
                         }
                         else
                         {
@@ -194,7 +249,6 @@ namespace TRTERPproject
                     MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-
         }
 
         private void btnDel_Click(object sender, EventArgs e)
@@ -202,7 +256,13 @@ namespace TRTERPproject
             if (cityDataGridView.SelectedRows.Count > 0)
             {
                 DataGridViewRow selectedRow = cityDataGridView.SelectedRows[0];
-                string cityCode = selectedRow.Cells["CITYCODE"].Value.ToString(); ;
+                string cityCode = selectedRow.Cells["Şehir Kodu"].Value?.ToString();
+
+                if (string.IsNullOrEmpty(cityCode))
+                {
+                    MessageBox.Show("Geçersiz bir kayıt seçildi. Lütfen geçerli bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
                 // Kullanıcıdan onay al
                 DialogResult dialogResult = MessageBox.Show(
@@ -214,7 +274,6 @@ namespace TRTERPproject
 
                 if (dialogResult != DialogResult.Yes)
                 {
-                    // Kullanıcı "Hayır" seçerse işlem iptal edilir
                     return;
                 }
 
@@ -226,35 +285,38 @@ namespace TRTERPproject
 
                         // 2. Kayıt Kontrolü
                         string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTGEN004 WHERE CITYCODE = @CITYCODE";
-                        cmd = new SqlCommand(checkQuery, con);
-                        cmd.Parameters.AddWithValue("@CITYCODE", cityCode);
-
-                        int recordExists = (int)cmd.ExecuteScalar();
-
-                        if (recordExists == 0)
+                        using (cmd = new SqlCommand(checkQuery, con))
                         {
-                            // Kayıt bulunamadı
-                            MessageBox.Show("Belirtilen Şehir Kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            return;
+                            cmd.Parameters.AddWithValue("@CITYCODE", cityCode);
+
+                            int recordExists = (int)cmd.ExecuteScalar();
+
+                            if (recordExists == 0)
+                            {
+                                MessageBox.Show("Belirtilen Şehir Kodu için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                return;
+                            }
                         }
 
                         // 3. Silme İşlemi
                         string deleteQuery = "DELETE FROM BSMGRTRTGEN004 WHERE CITYCODE = @CITYCODE";
-                        cmd = new SqlCommand(deleteQuery, con);
-                        cmd.Parameters.AddWithValue("@CITYCODE", cityCode);
-
-                        int rowsAffected = cmd.ExecuteNonQuery();
-
-                        if (rowsAffected > 0)
+                        using (cmd = new SqlCommand(deleteQuery, con))
                         {
-                            MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            cmd.Parameters.AddWithValue("@CITYCODE", cityCode);
 
-                            // TextBox'ı temizle
-                            cityCodeTextBox.Clear();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            int rowsAffected = cmd.ExecuteNonQuery();
+
+                            if (rowsAffected > 0)
+                            {
+                                MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                                // TextBox'ı temizle
+                                cityCodeTextBox.Clear();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -268,5 +330,102 @@ namespace TRTERPproject
                 MessageBox.Show("Lütfen silmek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+
+        private void btnFiltreliGetir_Click(object sender, EventArgs e)
+        {
+            string query = @"
+            SELECT 
+            COMCODE AS 'Firma Kodu',
+            CITYCODE AS 'Şehir Kodu',
+            CITYTEXT AS 'Şehir Adı',
+            COUNTRYCODE AS 'Ülke Kodu'
+            FROM 
+            BSMGRTRTGEN004";
+
+            // Filtreleme koşullarını tutacak liste
+            List<string> filters = new List<string>();
+
+            // Firma Kodu filtresi
+            if (!string.IsNullOrEmpty(comboBoxFirmCode.Text))
+            {
+                filters.Add("COMCODE LIKE @COMCODE");
+            }
+
+            // Firma Adı filtresi
+        
+
+            // Şehir Kodu filtresi
+            if (!string.IsNullOrEmpty(cityCodeTextBox.Text))
+            {
+                filters.Add("CITYCODE LIKE @CITYCODE");
+            }
+
+            if (!string.IsNullOrEmpty(cityNameTextBox.Text))
+            {
+                filters.Add("CITYTEXT LIKE @CITYTEXT");
+            }
+
+            if (!string.IsNullOrEmpty(comboBoxCountryCode.Text))
+            {
+                filters.Add("COUNTRYCODE LIKE @COUNTRYCODE");
+            }
+
+            // Filtreleri sorguya ekle
+            if (filters.Count > 0)
+            {
+                query += " WHERE " + string.Join(" AND ", filters);
+            }
+
+            // SQL bağlantısı ve komut
+            using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    // Parametreleri ekle
+                    if (!string.IsNullOrEmpty(comboBoxFirmCode.Text))
+                    {
+                        cmd.Parameters.AddWithValue("@COMCODE", $"{comboBoxFirmCode.Text}%");
+                    }
+
+                    if (!string.IsNullOrEmpty(cityCodeTextBox.Text))
+                    {
+                        cmd.Parameters.AddWithValue("@CITYCODE", $"{cityCodeTextBox.Text}%");
+                    }
+
+                    if (!string.IsNullOrEmpty(cityNameTextBox.Text))
+                    {
+                        cmd.Parameters.AddWithValue("@CITYTEXT", $"{cityNameTextBox.Text}%");
+                    }
+
+
+
+                    if (!string.IsNullOrEmpty(comboBoxCountryCode.Text))
+                    {
+                        cmd.Parameters.AddWithValue("@COUNTRYCODE", $"{comboBoxCountryCode.Text}%");
+                    }
+
+
+
+                    try
+                    {
+                        con.Open();
+
+                        // Verileri çekmek için DataAdapter kullan
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+
+                        // DataGridView'e verileri bağla
+                        cityDataGridView.DataSource = dt;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Hata: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
     }
+
 }
+

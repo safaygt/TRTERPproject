@@ -30,12 +30,12 @@
         {
             MALNAMEBOX = new TextBox();
             MALCODEBOX = new TextBox();
-            firmCodeTextBox = new TextBox();
             label2 = new Label();
             label3 = new Label();
             label1 = new Label();
             btnSave = new Button();
             ispassiveBOX = new CheckBox();
+            comboBoxFirmCode = new ComboBox();
             SuspendLayout();
             // 
             // MALNAMEBOX
@@ -51,13 +51,6 @@
             MALCODEBOX.Name = "MALCODEBOX";
             MALCODEBOX.Size = new Size(127, 27);
             MALCODEBOX.TabIndex = 13;
-            // 
-            // firmCodeTextBox
-            // 
-            firmCodeTextBox.Location = new Point(50, 112);
-            firmCodeTextBox.Name = "firmCodeTextBox";
-            firmCodeTextBox.Size = new Size(127, 27);
-            firmCodeTextBox.TabIndex = 14;
             // 
             // label2
             // 
@@ -115,16 +108,24 @@
             ispassiveBOX.Text = "Pasif mi?";
             ispassiveBOX.UseVisualStyleBackColor = true;
             // 
+            // comboBoxFirmCode
+            // 
+            comboBoxFirmCode.FormattingEnabled = true;
+            comboBoxFirmCode.Location = new Point(50, 113);
+            comboBoxFirmCode.Name = "comboBoxFirmCode";
+            comboBoxFirmCode.Size = new Size(140, 28);
+            comboBoxFirmCode.TabIndex = 17;
+            // 
             // MatFormEdit
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(865, 450);
+            Controls.Add(comboBoxFirmCode);
             Controls.Add(ispassiveBOX);
             Controls.Add(MALNAMEBOX);
             Controls.Add(MALCODEBOX);
-            Controls.Add(firmCodeTextBox);
             Controls.Add(label2);
             Controls.Add(label3);
             Controls.Add(label1);
@@ -140,11 +141,11 @@
 
         private TextBox MALNAMEBOX;
         private TextBox MALCODEBOX;
-        private TextBox firmCodeTextBox;
         private Label label2;
         private Label label3;
         private Label label1;
         private Button btnSave;
         private CheckBox ispassiveBOX;
+        private ComboBox comboBoxFirmCode;
     }
 }

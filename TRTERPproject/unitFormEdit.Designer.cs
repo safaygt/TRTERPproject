@@ -30,7 +30,6 @@
         {
             unitTextBox = new TextBox();
             unitCodeTextBox = new TextBox();
-            firmCodeTextBox = new TextBox();
             label2 = new Label();
             label3 = new Label();
             label1 = new Label();
@@ -39,6 +38,7 @@
             label4 = new Label();
             label5 = new Label();
             mainUnitCodeTextBox = new TextBox();
+            comboBoxFirmCode = new ComboBox();
             SuspendLayout();
             // 
             // unitTextBox
@@ -54,13 +54,6 @@
             unitCodeTextBox.Name = "unitCodeTextBox";
             unitCodeTextBox.Size = new Size(127, 27);
             unitCodeTextBox.TabIndex = 20;
-            // 
-            // firmCodeTextBox
-            // 
-            firmCodeTextBox.Location = new Point(28, 139);
-            firmCodeTextBox.Name = "firmCodeTextBox";
-            firmCodeTextBox.Size = new Size(127, 27);
-            firmCodeTextBox.TabIndex = 21;
             // 
             // label2
             // 
@@ -144,17 +137,25 @@
             mainUnitCodeTextBox.Size = new Size(127, 27);
             mainUnitCodeTextBox.TabIndex = 21;
             // 
+            // comboBoxFirmCode
+            // 
+            comboBoxFirmCode.FormattingEnabled = true;
+            comboBoxFirmCode.Location = new Point(28, 140);
+            comboBoxFirmCode.Name = "comboBoxFirmCode";
+            comboBoxFirmCode.Size = new Size(137, 28);
+            comboBoxFirmCode.TabIndex = 23;
+            // 
             // unitFormEdit
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(800, 450);
+            Controls.Add(comboBoxFirmCode);
             Controls.Add(isMainUnitCheckBox);
             Controls.Add(unitTextBox);
             Controls.Add(unitCodeTextBox);
             Controls.Add(mainUnitCodeTextBox);
-            Controls.Add(firmCodeTextBox);
             Controls.Add(label2);
             Controls.Add(label4);
             Controls.Add(label5);
@@ -172,7 +173,6 @@
 
         private TextBox unitTextBox;
         private TextBox unitCodeTextBox;
-        private TextBox firmCodeTextBox;
         private Label label2;
         private Label label3;
         private Label label1;
@@ -181,5 +181,6 @@
         private Label label4;
         private Label label5;
         private TextBox mainUnitCodeTextBox;
+        private ComboBox comboBoxFirmCode;
     }
 }

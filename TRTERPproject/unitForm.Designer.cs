@@ -35,19 +35,20 @@
             unitDataGridView = new DataGridView();
             unitTextBox = new TextBox();
             unitCodeTextBox = new TextBox();
-            firmCodeTextBox = new TextBox();
             label3 = new Label();
             label1 = new Label();
             mainUnitCodeTextBox = new TextBox();
             isMainUnitCheckBox = new CheckBox();
             label2 = new Label();
             label4 = new Label();
+            btnFiltreliGetir = new Button();
+            comboBoxFirmCode = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)unitDataGridView).BeginInit();
             SuspendLayout();
             // 
             // btnDel
             // 
-            btnDel.Location = new Point(476, 165);
+            btnDel.Location = new Point(628, 166);
             btnDel.Name = "btnDel";
             btnDel.Size = new Size(127, 29);
             btnDel.TabIndex = 22;
@@ -57,7 +58,7 @@
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(326, 165);
+            btnAdd.Location = new Point(478, 166);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(127, 29);
             btnAdd.TabIndex = 23;
@@ -67,7 +68,7 @@
             // 
             // btnEdit
             // 
-            btnEdit.Location = new Point(179, 165);
+            btnEdit.Location = new Point(331, 166);
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(127, 29);
             btnEdit.TabIndex = 24;
@@ -77,11 +78,11 @@
             // 
             // btnGet
             // 
-            btnGet.Location = new Point(28, 165);
+            btnGet.Location = new Point(28, 166);
             btnGet.Name = "btnGet";
             btnGet.Size = new Size(127, 29);
             btnGet.TabIndex = 25;
-            btnGet.Text = "Getir";
+            btnGet.Text = "Hepsini Getir";
             btnGet.UseVisualStyleBackColor = true;
             btnGet.Click += btnGet_Click;
             // 
@@ -108,13 +109,6 @@
             unitCodeTextBox.Name = "unitCodeTextBox";
             unitCodeTextBox.Size = new Size(127, 27);
             unitCodeTextBox.TabIndex = 19;
-            // 
-            // firmCodeTextBox
-            // 
-            firmCodeTextBox.Location = new Point(28, 101);
-            firmCodeTextBox.Name = "firmCodeTextBox";
-            firmCodeTextBox.Size = new Size(127, 27);
-            firmCodeTextBox.TabIndex = 20;
             // 
             // label3
             // 
@@ -175,9 +169,27 @@
             label4.ForeColor = SystemColors.ControlLightLight;
             label4.Location = new Point(476, 69);
             label4.Name = "label4";
-            label4.Size = new Size(88, 20);
+            label4.Size = new Size(120, 20);
             label4.TabIndex = 16;
-            label4.Text = "Birim Kodu";
+            label4.Text = "Ana Birim Kodu";
+            // 
+            // btnFiltreliGetir
+            // 
+            btnFiltreliGetir.Location = new Point(179, 169);
+            btnFiltreliGetir.Name = "btnFiltreliGetir";
+            btnFiltreliGetir.Size = new Size(134, 29);
+            btnFiltreliGetir.TabIndex = 27;
+            btnFiltreliGetir.Text = "Getir";
+            btnFiltreliGetir.UseVisualStyleBackColor = true;
+            btnFiltreliGetir.Click += btnFiltreliGetir_Click;
+            // 
+            // comboBoxFirmCode
+            // 
+            comboBoxFirmCode.FormattingEnabled = true;
+            comboBoxFirmCode.Location = new Point(28, 101);
+            comboBoxFirmCode.Name = "comboBoxFirmCode";
+            comboBoxFirmCode.Size = new Size(127, 28);
+            comboBoxFirmCode.TabIndex = 28;
             // 
             // unitForm
             // 
@@ -185,6 +197,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(1003, 555);
+            Controls.Add(comboBoxFirmCode);
+            Controls.Add(btnFiltreliGetir);
             Controls.Add(isMainUnitCheckBox);
             Controls.Add(btnDel);
             Controls.Add(btnAdd);
@@ -194,7 +208,6 @@
             Controls.Add(mainUnitCodeTextBox);
             Controls.Add(unitTextBox);
             Controls.Add(unitCodeTextBox);
-            Controls.Add(firmCodeTextBox);
             Controls.Add(label4);
             Controls.Add(label2);
             Controls.Add(label3);
@@ -215,12 +228,13 @@
         private DataGridView unitDataGridView;
         private TextBox unitTextBox;
         private TextBox unitCodeTextBox;
-        private TextBox firmCodeTextBox;
         private Label label3;
         private Label label1;
         private TextBox mainUnitCodeTextBox;
         private CheckBox isMainUnitCheckBox;
         private Label label2;
         private Label label4;
+        private Button btnFiltreliGetir;
+        private ComboBox comboBoxFirmCode;
     }
 }

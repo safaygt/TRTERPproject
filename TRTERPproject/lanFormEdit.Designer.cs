@@ -30,11 +30,11 @@
         {
             lanTextBox = new TextBox();
             lanCodeTextBox = new TextBox();
-            firmCodeTextBox = new TextBox();
             label2 = new Label();
             label3 = new Label();
             label1 = new Label();
             btnSave = new Button();
+            comboBoxFirmCode = new ComboBox();
             SuspendLayout();
             // 
             // lanTextBox
@@ -50,13 +50,6 @@
             lanCodeTextBox.Name = "lanCodeTextBox";
             lanCodeTextBox.Size = new Size(127, 27);
             lanCodeTextBox.TabIndex = 13;
-            // 
-            // firmCodeTextBox
-            // 
-            firmCodeTextBox.Location = new Point(85, 123);
-            firmCodeTextBox.Name = "firmCodeTextBox";
-            firmCodeTextBox.Size = new Size(127, 27);
-            firmCodeTextBox.TabIndex = 14;
             // 
             // label2
             // 
@@ -101,15 +94,23 @@
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Click += btnSave_Click;
             // 
+            // comboBoxFirmCode
+            // 
+            comboBoxFirmCode.FormattingEnabled = true;
+            comboBoxFirmCode.Location = new Point(85, 123);
+            comboBoxFirmCode.Name = "comboBoxFirmCode";
+            comboBoxFirmCode.Size = new Size(139, 28);
+            comboBoxFirmCode.TabIndex = 14;
+            // 
             // lanFormEdit
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(800, 450);
+            Controls.Add(comboBoxFirmCode);
             Controls.Add(lanTextBox);
             Controls.Add(lanCodeTextBox);
-            Controls.Add(firmCodeTextBox);
             Controls.Add(label2);
             Controls.Add(label3);
             Controls.Add(label1);
@@ -125,10 +126,10 @@
 
         private TextBox lanTextBox;
         private TextBox lanCodeTextBox;
-        private TextBox firmCodeTextBox;
         private Label label2;
         private Label label3;
         private Label label1;
         private Button btnSave;
+        private ComboBox comboBoxFirmCode;
     }
 }

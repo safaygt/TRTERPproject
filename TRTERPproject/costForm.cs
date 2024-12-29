@@ -22,28 +22,101 @@ namespace TRTERPproject
         public costForm()
         {
             InitializeComponent();
+            this.Load += (s, e) => LoadComboBoxData();
+
+            // ComboBox Leave eventlerini bağla
+            comboBoxFirmCode.Leave += (s, e) => ValidateComboBox(comboBoxFirmCode, "COMCODE", "BSMGRTRTGEN001");
+
+
+
         }
 
+
+        private void LoadComboBox(ComboBox comboBox, string query, string columnName)
+        {
+            using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+            {
+                using (SqlDataAdapter adapter = new SqlDataAdapter(query, con))
+                {
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    comboBox.DataSource = dt;
+                    comboBox.DisplayMember = columnName;
+                    comboBox.ValueMember = columnName;
+                    comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+
+                    // Varsayılan seçim ilk satır olarak ayarlanır
+                    if (comboBox.SelectedValue == null && dt.Rows.Count > 0)
+                    {
+                        comboBox.SelectedValue = dt.Rows[0][columnName];
+                    }
+                }
+            }
+        }
+
+        private void LoadComboBoxData()
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    con.Open();
+
+                    // ComboBox'ları doldur
+                    LoadComboBox(comboBoxFirmCode, "SELECT DISTINCT COMCODE FROM BSMGRTRTGEN001", "COMCODE");
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Veriler yüklenirken hata oluştu: {ex.Message}");
+            }
+        }
+
+        private void ValidateComboBox(ComboBox comboBox, string columnName, string tableName)
+        {
+            string checkQuery = $"SELECT COUNT(*) FROM {tableName} WHERE {columnName} = @userInput";
+
+            if (string.IsNullOrEmpty(comboBox.Text)) return;
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    con.Open();
+                    using (SqlCommand checkCmd = new SqlCommand(checkQuery, con))
+                    {
+                        checkCmd.Parameters.AddWithValue("@userInput", comboBox.Text);
+                        int count = (int)checkCmd.ExecuteScalar();
+
+                        if (count == 0)
+                        {
+                            MessageBox.Show($"{columnName} '{comboBox.Text}' tablodaki verilerle uyuşmuyor.");
+                            comboBox.Text = string.Empty; // Kullanıcının yanlış girişini temizler
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Hata: {ex.Message}");
+            }
+        }
         private void btnGet_Click(object sender, EventArgs e)
         {
 
-            string query = "Select * from BSMGRTRTCCM001";
+            string query = "SELECT COMCODE AS 'Firma Kodu', DOCTYPE AS 'Maliyet Tipi', DOCTYPETEXT AS 'Maliyet Tipi Açıklama', ISPASSIVE AS 'Pasif mi?' FROM BSMGRTRTCCM001";
             con = new SqlConnection(ConnectionHelper.ConnectionString);
             cmd = new SqlCommand();
             cmd.Connection = con;
             cmd.CommandText = query;
 
-
             try
             {
-
                 con.Open();
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
-
-
                 DataSet ds = new DataSet();
-
                 da.Fill(ds);
 
                 // DataGridView'e veri bağla
@@ -66,43 +139,48 @@ namespace TRTERPproject
         {
             if (costDataGridView.SelectedRows.Count > 0)
             {
-                // Seçilen satırdaki DOCTYPE (docType) değerini al
-                string docType = costDataGridView.SelectedRows[0].Cells["DOCTYPE"].Value.ToString();
+                DataGridViewRow selectedRow = costDataGridView.SelectedRows[0];
 
-                if (string.IsNullOrEmpty(docType))
+                // Seçilen satırdaki tüm hücrelerin boş olup olmadığını kontrol et
+                bool isRowEmpty = true;
+                foreach (DataGridViewCell cell in selectedRow.Cells)
                 {
-                    MessageBox.Show("Lütfen geçerli bir Maliyet Merkezi Tipi seçin!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    if (cell.Value != null && !string.IsNullOrWhiteSpace(cell.Value.ToString()))
+                    {
+                        isRowEmpty = false;
+                        break;
+                    }
+                }
+
+                if (isRowEmpty)
+                {
+                    MessageBox.Show("Boş bir satır seçtiniz. Lütfen dolu bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                using (con = new SqlConnection(ConnectionHelper.ConnectionString))
-                {
-                    string query = "SELECT COUNT(*) FROM BSMGRTRTCCM001 WHERE DOCTYPE = @DOCTYPE";
-                    cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@DOCTYPE", docType);
+                // Yeni bir edit form oluştur ve seçilen veriyi aktar
+                costEditForm CostEditForm = new costEditForm();
 
-                    try
-                    {
-                        con.Open();
-                        int recordExists = (int)cmd.ExecuteScalar();
+                CostEditForm.firmCode = selectedRow.Cells["Firma Kodu"].Value != DBNull.Value
+                    ? selectedRow.Cells["Firma Kodu"].Value.ToString()
+                    : string.Empty;
 
-                        if (recordExists > 0)
-                        {
-                            // docType bulundu, Edit formuna geç
-                            costEditForm CostEditForm = new costEditForm(docType);
-                            CostEditForm.Show();
-                        }
-                        else
-                        {
-                            // docType bulunamadı
-                            MessageBox.Show("Belirtilen Maliyet Merkezi Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
+                CostEditForm.docType = selectedRow.Cells["Maliyet Tipi"].Value != DBNull.Value
+                    ? selectedRow.Cells["Maliyet Tipi"].Value.ToString()
+                    : string.Empty;
+
+                CostEditForm.docTypeText = selectedRow.Cells["Maliyet Tipi Açıklama"].Value != DBNull.Value
+                    ? selectedRow.Cells["Maliyet Tipi Açıklama"].Value.ToString()
+                    : string.Empty;
+
+                CostEditForm.isPassive = selectedRow.Cells["Pasif mi?"].Value != DBNull.Value
+                   ? Convert.ToBoolean(selectedRow.Cells["Pasif mi?"].Value)
+                   : false;
+
+
+
+
+                CostEditForm.ShowDialog();
             }
             else
             {
@@ -112,14 +190,14 @@ namespace TRTERPproject
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            string comCode = firmCodeTextBox.Text.Trim();
+            string comCode = comboBoxFirmCode.Text.Trim();
             string docType = costTypeTextBox.Text.Trim();
-            string docTypeStatement = costTypeStatementTextBox.Text.Trim();
+            string costName = costTypeStatementTextBox.Text.Trim();
             int isPassive = isPassiveCheckBox.Checked ? 1 : 0; // Checkbox durumunu belirle
 
 
 
-            if (string.IsNullOrEmpty(comCode) || string.IsNullOrEmpty(docType) || string.IsNullOrEmpty(docTypeStatement))
+            if (string.IsNullOrEmpty(comCode) || string.IsNullOrEmpty(docType) || string.IsNullOrEmpty(costName))
             {
                 MessageBox.Show("Lütfen tüm alanları doldurun!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -140,7 +218,7 @@ namespace TRTERPproject
 
                         if (unitCodeExists > 0)
                         {
-                            MessageBox.Show("Bu Maliyet Merkezi Tipi zaten mevcut. Lütfen başka bir Maliyet Merkezi Tipi giriniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBox.Show("Bu Maliyet Tipi zaten mevcut. Lütfen başka bir Maliyet Tipi giriniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
                         }
                     }
@@ -150,7 +228,7 @@ namespace TRTERPproject
                     {
                         cmd.Parameters.AddWithValue("@COMCODE", comCode);
                         cmd.Parameters.AddWithValue("@DOCTYPE", docType);
-                        cmd.Parameters.AddWithValue("@DOCTYPETEXT", docTypeStatement);
+                        cmd.Parameters.AddWithValue("@DOCTYPETEXT", costName);
                         cmd.Parameters.AddWithValue("@ISPASSIVE", isPassive);
 
 
@@ -159,11 +237,11 @@ namespace TRTERPproject
                         if (rowsAffected > 0)
                         {
                             MessageBox.Show("Kayıt başarıyla eklendi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            firmCodeTextBox.Clear();
-                            costTypeTextBox.Clear();
-                            costTypeStatementTextBox.Clear();
-                            isPassiveCheckBox.Checked = false;
 
+
+                            costTypeTextBox.Clear();
+                            isPassiveCheckBox.Checked = false;
+                            costTypeStatementTextBox.Clear();
                         }
                         else
                         {
@@ -185,11 +263,11 @@ namespace TRTERPproject
             if (costDataGridView.SelectedRows.Count > 0)
             {
                 DataGridViewRow selectedRow = costDataGridView.SelectedRows[0];
-                string docType = selectedRow.Cells["DOCTYPE"].Value.ToString(); ;
+                string costType = selectedRow.Cells["Maliyet Tipi"].Value.ToString(); ;
 
                 // Kullanıcıdan onay al
                 DialogResult dialogResult = MessageBox.Show(
-                    $"Maliyet Merkezi Tipi {docType} olan veriyi silmek istediğinize emin misiniz?",
+                    $"Maliyet Tipi {costType} olan veriyi silmek istediğinize emin misiniz?",
                     "Onay",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question
@@ -201,27 +279,33 @@ namespace TRTERPproject
                     return;
                 }
 
+
                 using (con = new SqlConnection(ConnectionHelper.ConnectionString))
                 {
                     try
                     {
                         con.Open();
 
+
+                        // 2. Kayıt Kontrolü
                         string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTCCM001 WHERE DOCTYPE = @DOCTYPE";
                         cmd = new SqlCommand(checkQuery, con);
-                        cmd.Parameters.AddWithValue("@DOCTYPE", docType);
+                        cmd.Parameters.AddWithValue("@DOCTYPE", costType);
 
                         int recordExists = (int)cmd.ExecuteScalar();
 
+
                         if (recordExists == 0)
                         {
-                            MessageBox.Show("Belirtilen Maliyet Merkezi Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            // Kayıt bulunamadı
+                            MessageBox.Show("Belirtilen Maliyet Tipi için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
                         }
 
+                        // 3. Silme İşlemi
                         string deleteQuery = "DELETE FROM BSMGRTRTCCM001 WHERE DOCTYPE = @DOCTYPE";
                         cmd = new SqlCommand(deleteQuery, con);
-                        cmd.Parameters.AddWithValue("@DOCTYPE", docType);
+                        cmd.Parameters.AddWithValue("@DOCTYPE", costType);
 
                         int rowsAffected = cmd.ExecuteNonQuery();
 
@@ -240,10 +324,6 @@ namespace TRTERPproject
                         MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-            }
-            else
-            {
-                MessageBox.Show("Lütfen silmek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -278,6 +358,101 @@ namespace TRTERPproject
 
         private void label1_Click(object sender, EventArgs e)
         {
+        }
+
+        private void btnFiltreliGetir_Click(object sender, EventArgs e)
+        {
+
+            string query = @"
+            SELECT 
+            COMCODE AS 'Firma Kodu',
+            DOCTYPE AS 'Maliyet Tipi',
+            DOCTYPETEXT AS 'Maliyet Tipi Açıklama',
+            ISPASSIVE AS 'Pasif mi?'
+            FROM 
+            BSMGRTRTCCM001";
+
+            // Filtreleme koşullarını tutacak liste
+            List<string> filters = new List<string>();
+
+            // Firma Kodu filtresi
+            if (!string.IsNullOrEmpty(comboBoxFirmCode.Text))
+            {
+                filters.Add("COMCODE LIKE @COMCODE");
+            }
+
+
+            if (!string.IsNullOrEmpty(costTypeTextBox.Text))
+            {
+                filters.Add("DOCTYPE LIKE @DOCTYPE");
+            }
+
+            if (!string.IsNullOrEmpty(costTypeStatementTextBox.Text))
+            {
+                filters.Add("DOCTYPETEXT LIKE @DOCTYPETEXT");
+            }
+
+
+
+            if (isPassiveCheckBox.Checked)
+            {
+                filters.Add("ISPASSIVE = 1");
+            }
+            else
+            {
+                filters.Add("ISPASSIVE = 0");
+            }
+
+            // Filtreleri sorguya ekle
+            if (filters.Count > 0)
+            {
+                query += " WHERE " + string.Join(" AND ", filters);
+            }
+
+            // SQL bağlantısı ve komut
+            using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    // Parametreleri ekle
+                    if (!string.IsNullOrEmpty(comboBoxFirmCode.Text))
+                    {
+                        cmd.Parameters.AddWithValue("@COMCODE", $"{comboBoxFirmCode.Text}%");
+                    }
+
+                    if (!string.IsNullOrEmpty(costTypeTextBox.Text))
+                    {
+                        cmd.Parameters.AddWithValue("@DOCTYPE", $"{costTypeTextBox.Text}%");
+                    }
+
+                    if (!string.IsNullOrEmpty(costTypeStatementTextBox.Text))
+                    {
+                        cmd.Parameters.AddWithValue("@DOCTYPETEXT", $"{costTypeStatementTextBox.Text}%");
+                    }
+
+
+
+
+                    try
+                    {
+                        con.Open();
+
+                        // Verileri çekmek için DataAdapter kullan
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+
+                        // DataGridView'e verileri bağla
+                        costDataGridView.DataSource = dt;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Hata: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+
+
+            }
         }
     }
 }

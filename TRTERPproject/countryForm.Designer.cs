@@ -28,9 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             label1 = new Label();
-            firmCodeTextBox = new TextBox();
             countryCodeTextBox = new TextBox();
             label2 = new Label();
             countryNameTextBox = new TextBox();
@@ -40,6 +39,8 @@
             btnAdd = new Button();
             btnDel = new Button();
             countryDataGridView = new DataGridView();
+            comboBoxFirmCode = new ComboBox();
+            btnFiltreliGetir = new Button();
             ((System.ComponentModel.ISupportInitialize)countryDataGridView).BeginInit();
             SuspendLayout();
             // 
@@ -53,13 +54,6 @@
             label1.Size = new Size(90, 20);
             label1.TabIndex = 0;
             label1.Text = "Firma Kodu";
-            // 
-            // firmCodeTextBox
-            // 
-            firmCodeTextBox.Location = new Point(36, 70);
-            firmCodeTextBox.Name = "firmCodeTextBox";
-            firmCodeTextBox.Size = new Size(127, 27);
-            firmCodeTextBox.TabIndex = 1;
             // 
             // countryCodeTextBox
             // 
@@ -100,18 +94,18 @@
             // btnGet
             // 
             btnGet.ForeColor = SystemColors.ActiveCaptionText;
-            btnGet.Location = new Point(36, 154);
+            btnGet.Location = new Point(36, 156);
             btnGet.Name = "btnGet";
             btnGet.Size = new Size(127, 29);
             btnGet.TabIndex = 3;
-            btnGet.Text = "Getir";
+            btnGet.Text = "Hepsini Getir";
             btnGet.UseVisualStyleBackColor = true;
             btnGet.Click += btnGet_Click;
             // 
             // btnEdit
             // 
             btnEdit.ForeColor = SystemColors.ActiveCaptionText;
-            btnEdit.Location = new Point(187, 154);
+            btnEdit.Location = new Point(334, 156);
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(127, 29);
             btnEdit.TabIndex = 3;
@@ -122,7 +116,7 @@
             // btnAdd
             // 
             btnAdd.ForeColor = SystemColors.ActiveCaptionText;
-            btnAdd.Location = new Point(334, 154);
+            btnAdd.Location = new Point(486, 156);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(127, 29);
             btnAdd.TabIndex = 3;
@@ -133,7 +127,7 @@
             // btnDel
             // 
             btnDel.ForeColor = SystemColors.ActiveCaptionText;
-            btnDel.Location = new Point(484, 154);
+            btnDel.Location = new Point(636, 156);
             btnDel.Name = "btnDel";
             btnDel.Size = new Size(127, 29);
             btnDel.TabIndex = 3;
@@ -144,14 +138,14 @@
             // countryDataGridView
             // 
             countryDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Window;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = SystemColors.ControlLightLight;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
-            countryDataGridView.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Window;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ControlLightLight;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            countryDataGridView.DefaultCellStyle = dataGridViewCellStyle2;
             countryDataGridView.Location = new Point(36, 246);
             countryDataGridView.Name = "countryDataGridView";
             countryDataGridView.RowHeadersWidth = 51;
@@ -159,12 +153,33 @@
             countryDataGridView.Size = new Size(914, 272);
             countryDataGridView.TabIndex = 11;
             // 
+            // comboBoxFirmCode
+            // 
+            comboBoxFirmCode.FormattingEnabled = true;
+            comboBoxFirmCode.Location = new Point(36, 70);
+            comboBoxFirmCode.Name = "comboBoxFirmCode";
+            comboBoxFirmCode.Size = new Size(136, 28);
+            comboBoxFirmCode.TabIndex = 12;
+            // 
+            // btnFiltreliGetir
+            // 
+            btnFiltreliGetir.ForeColor = SystemColors.ActiveCaptionText;
+            btnFiltreliGetir.Location = new Point(187, 156);
+            btnFiltreliGetir.Name = "btnFiltreliGetir";
+            btnFiltreliGetir.Size = new Size(127, 29);
+            btnFiltreliGetir.TabIndex = 13;
+            btnFiltreliGetir.Text = "Getir";
+            btnFiltreliGetir.UseVisualStyleBackColor = true;
+            btnFiltreliGetir.Click += btnFiltreliGetir_Click;
+            // 
             // countryForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(981, 530);
+            Controls.Add(btnFiltreliGetir);
+            Controls.Add(comboBoxFirmCode);
             Controls.Add(countryDataGridView);
             Controls.Add(btnDel);
             Controls.Add(btnAdd);
@@ -173,7 +188,6 @@
             Controls.Add(countryNameTextBox);
             Controls.Add(countryCodeTextBox);
             Controls.Add(label2);
-            Controls.Add(firmCodeTextBox);
             Controls.Add(label3);
             Controls.Add(label1);
             ForeColor = SystemColors.ControlLightLight;
@@ -188,7 +202,6 @@
         #endregion
 
         private Label label1;
-        private TextBox firmCodeTextBox;
         private TextBox countryCodeTextBox;
         private Label label2;
         private TextBox countryNameTextBox;
@@ -198,5 +211,7 @@
         private Button btnAdd;
         private Button btnDel;
         private DataGridView countryDataGridView;
+        private ComboBox comboBoxFirmCode;
+        private Button btnFiltreliGetir;
     }
 }

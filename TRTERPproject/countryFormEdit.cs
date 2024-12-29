@@ -13,13 +13,95 @@ namespace TRTERPproject
 {
     public partial class countryFormEdit : Form
     {
-        private string countryCode;
+        public string countryCode;
+        public string firmCode;
+        public string countryName;
+
+
+
         SqlCommand cmd;
         SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString);
-        public countryFormEdit(string countryCode)
+        public countryFormEdit()
         {
             InitializeComponent();
-            this.countryCode = countryCode;
+            this.Load += (s, e) => LoadComboBoxData();
+
+            // ComboBox Leave eventlerini bağla
+            comboBoxFirmCode.Leave += (s, e) => ValidateComboBox(comboBoxFirmCode, "COMCODE", "BSMGRTRTGEN001");
+           
+        }
+
+
+        private void LoadComboBox(ComboBox comboBox, string query, string columnName)
+        {
+            using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+            {
+                using (SqlDataAdapter adapter = new SqlDataAdapter(query, con))
+                {
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    comboBox.DataSource = dt;
+                    comboBox.DisplayMember = columnName;
+                    comboBox.ValueMember = columnName;
+                    comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+
+                    // Varsayılan seçim ilk satır olarak ayarlanır
+                    if (comboBox.SelectedValue == null && dt.Rows.Count > 0)
+                    {
+                        comboBox.SelectedValue = dt.Rows[0][columnName];
+                    }
+                }
+            }
+        }
+
+
+        private void LoadComboBoxData()
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    con.Open();
+
+                    // ComboBox'ları doldur
+                    LoadComboBox(comboBoxFirmCode, "SELECT DISTINCT COMCODE FROM BSMGRTRTGEN001", "COMCODE");
+                 
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Veriler yüklenirken hata oluştu: {ex.Message}");
+            }
+        }
+
+        private void ValidateComboBox(ComboBox comboBox, string columnName, string tableName)
+        {
+            string checkQuery = $"SELECT COUNT(*) FROM {tableName} WHERE {columnName} = @userInput";
+
+            if (string.IsNullOrEmpty(comboBox.Text)) return;
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    con.Open();
+                    using (SqlCommand checkCmd = new SqlCommand(checkQuery, con))
+                    {
+                        checkCmd.Parameters.AddWithValue("@userInput", comboBox.Text);
+                        int count = (int)checkCmd.ExecuteScalar();
+
+                        if (count == 0)
+                        {
+                            MessageBox.Show($"{columnName} '{comboBox.Text}' tablodaki verilerle uyuşmuyor.");
+                            comboBox.Text = string.Empty; // Kullanıcının yanlış girişini temizler
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Hata: {ex.Message}");
+            }
         }
 
         //private string connectionString = "Server=DESKTOP-U86MLBA;Database=TRTdb;Integrated Security=True;";
@@ -31,7 +113,7 @@ namespace TRTERPproject
                 string query = "UPDATE BSMGRTRTGEN003 SET COMCODE = @COMCODE, COUNTRYTEXT = @COUNTRYTEXT WHERE COUNTRYCODE = @COUNTRYCODE";
                 cmd = new SqlCommand(query, con);
 
-                cmd.Parameters.AddWithValue("@COMCODE", firmCodeTextBox.Text);
+                cmd.Parameters.AddWithValue("@COMCODE", comboBoxFirmCode.Text);
                 cmd.Parameters.AddWithValue("@COUNTRYCODE", countryCodeTextBox.Text);
                 cmd.Parameters.AddWithValue("@COUNTRYTEXT", countryNameTextBox.Text);
 
@@ -71,7 +153,7 @@ namespace TRTERPproject
 
                     if (reader.Read())
                     {
-                        firmCodeTextBox.Text = reader["COMCODE"].ToString();
+                        comboBoxFirmCode.Text = reader["COMCODE"].ToString();
                         countryCodeTextBox.Text = countryCode;
                         countryNameTextBox.Text = reader["COUNTRYTEXT"].ToString();
                     }
