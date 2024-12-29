@@ -475,41 +475,7 @@ WHERE {columnName} = @userInput";
 
 
 
-                // MATSTEXT ve MATLTEXT verilerini al
-
-
-                // Ensure the connection is opened before executing the command
-
-                /*
-                using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
-                {
-                    con.Open();  // Open the connection
-
-                    using (SqlCommand cmdMatText = new SqlCommand(selectMatsText, con))
-                    {
-                        cmdMatText.Parameters.AddWithValue("@MATDOCNUM", selectedRow.Cells["Malzeme Numarası"].Value != DBNull.Value
-                            ? Convert.ToInt32(selectedRow.Cells["Malzeme Numarası"].Value)
-                            : 0);
-
-                        using (SqlDataReader reader = cmdMatText.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                // MATSTEXT ve MATLTEXT verilerini al
-                                MalzemeAnaTabloEdit.kisaAciklama = reader["MATSTEXT"] != DBNull.Value.ToString()
-                                    ? reader["MATSTEXT"].ToString()
-                                    : string.Empty;
-
-                                // Set MATLTEXT value as well
-                                MalzemeAnaTabloEdit.uzunAciklama = reader["MATLTEXT"] != DBNull.Value.ToString()
-                                    ? reader["MATLTEXT"].ToString()
-                                    : string.Empty;
-                            }
-                        }
-                    }
-                }
-
-                */
+         
 
                 // Other fields assignment
                 MalzemeAnaTabloEdit.brutWeightUnit = selectedRow.Cells["Brüt Ağırlık Birimi"].Value != DBNull.Value

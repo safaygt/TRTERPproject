@@ -140,7 +140,7 @@
             Controls.Add(label3);
             Controls.Add(label1);
             Name = "costEditForm";
-            Text = "costEditForm";
+            Text = "Maliyet Düzenle";
             Load += costEditForm_Load;
             ResumeLayout(false);
             PerformLayout();

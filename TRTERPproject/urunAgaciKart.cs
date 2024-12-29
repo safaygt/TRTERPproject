@@ -114,7 +114,7 @@ namespace TRTERPproject
             }
         }
 
-        
+
         private void getBut_Click(object sender, EventArgs e)
         {
             // Temel SQL sorgusu
@@ -229,7 +229,7 @@ namespace TRTERPproject
                 {
                     cmd.Parameters.AddWithValue("@QUANTITY", temelmikBox.Text);
                 }
-               
+
                 if (!string.IsNullOrEmpty(textBox1.Text))
                 {
                     cmd.Parameters.AddWithValue("@DRAWNUM", cizmikBox.Text);
@@ -271,7 +271,7 @@ namespace TRTERPproject
             urunAgaciKartAdd.Show();
 
             // Kullanıcıdan alınacak form verilerini okuma
-            
+
         }
 
         private void basTarTxtBox_TextChanged(object sender, EventArgs e)
@@ -342,7 +342,7 @@ namespace TRTERPproject
                 MessageBox.Show("Lütfen silmek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-        
+
         private void duzBut_Click(object sender, EventArgs e)
         {
 

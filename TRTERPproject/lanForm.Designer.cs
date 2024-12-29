@@ -171,7 +171,7 @@
             Controls.Add(label3);
             Controls.Add(label1);
             Name = "lanForm";
-            Text = "lanForm";
+            Text = "Dil Destek Tablosu";
             ((System.ComponentModel.ISupportInitialize)lanDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();

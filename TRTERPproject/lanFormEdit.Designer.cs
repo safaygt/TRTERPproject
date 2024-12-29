@@ -115,7 +115,7 @@
             Controls.Add(label1);
             Controls.Add(btnSave);
             Name = "lanFormEdit";
-            Text = "lanFormEdit";
+            Text = "Dil Düzenle";
             Load += lanFormEdit_Load;
             ResumeLayout(false);
             PerformLayout();

@@ -186,7 +186,7 @@
             Controls.Add(label3);
             Controls.Add(label1);
             Name = "cityForm";
-            Text = "cityForm";
+            Text = "Şehir Destek Tablosu";
             ((System.ComponentModel.ISupportInitialize)cityDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();

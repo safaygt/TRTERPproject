@@ -129,7 +129,7 @@
             Controls.Add(oprTypeDesLabel);
             Controls.Add(oprFrimLabel);
             Name = "oprFormEdit";
-            Text = "oprFormEdit";
+            Text = "Operasyon Düzenleme Tablosu";
             Load += oprFormEdit_Load;
             ResumeLayout(false);
             PerformLayout();

@@ -370,7 +370,7 @@
             Controls.Add(label1);
             Controls.Add(btnSave);
             Name = "urunAgaciKartEdit";
-            Text = "urunAgaciKartEdit";
+            Text = "Ürün Ağacı Düzenle";
             Load += urunAgaciKartEdit_Load;
             ResumeLayout(false);
             PerformLayout();

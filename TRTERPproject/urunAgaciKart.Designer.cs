@@ -1,24 +1,24 @@
 ﻿namespace TRTERPproject
 {
-	partial class urunAgaciKart
-	{
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+    partial class urunAgaciKart
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && (components != null))
-			{
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
         #region Windows Form Designer generated code
 
@@ -343,7 +343,7 @@
             Controls.Add(label3);
             Controls.Add(label1);
             Name = "urunAgaciKart";
-            Text = "urunAgaciKart";
+            Text = "Ürün Ağacı Veri Tablosu";
             Load += urunAgaciKart_Load;
             ((System.ComponentModel.ISupportInitialize)urnAgcData).EndInit();
             ResumeLayout(false);
@@ -352,23 +352,23 @@
 
         #endregion
         private ComboBox urnAgaTipBox;
-		private Label label2;
-		private ComboBox firmbox;
-		private CheckBox checkboxpas;
-		private CheckBox deletedlbl;
-		private Button duzBut;
-		private Button DelBut;
-		private Button addBut;
-		private Button getBut;
-		private DataGridView urnAgcData;
-		private Label label6;
-		private Label label5;
-		private Label label4;
-		private Label label3;
-		private Label label1;
-		private TextBox textBox1;
-		private Label label7;
-		private ComboBox urnagamalztipbox;
+        private Label label2;
+        private ComboBox firmbox;
+        private CheckBox checkboxpas;
+        private CheckBox deletedlbl;
+        private Button duzBut;
+        private Button DelBut;
+        private Button addBut;
+        private Button getBut;
+        private DataGridView urnAgcData;
+        private Label label6;
+        private Label label5;
+        private Label label4;
+        private Label label3;
+        private Label label1;
+        private TextBox textBox1;
+        private Label label7;
+        private ComboBox urnagamalztipbox;
         private TextBox temelmikBox;
         private TextBox cizmikBox;
         private Label label8;

@@ -178,7 +178,7 @@
             Controls.Add(label1);
             ForeColor = SystemColors.ControlLightLight;
             Name = "countryForm";
-            Text = "Country Form";
+            Text = "Ülke Destek Tablosu";
             Load += countryForm_Load;
             ((System.ComponentModel.ISupportInitialize)countryDataGridView).EndInit();
             ResumeLayout(false);

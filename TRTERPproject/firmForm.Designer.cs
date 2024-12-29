@@ -41,17 +41,18 @@
             label4 = new Label();
             address2TextBox = new TextBox();
             label5 = new Label();
-            cityCodeTextBox = new TextBox();
             label6 = new Label();
-            countryCodeTextBox = new TextBox();
             firmFormDataGridView = new DataGridView();
+            comboBoxCity = new ComboBox();
+            comboBoxCountry = new ComboBox();
+            filtreliGetirBtn = new Button();
             ((System.ComponentModel.ISupportInitialize)firmFormDataGridView).BeginInit();
             SuspendLayout();
             // 
             // btnDel
             // 
             btnDel.ForeColor = SystemColors.ActiveCaptionText;
-            btnDel.Location = new Point(477, 223);
+            btnDel.Location = new Point(631, 226);
             btnDel.Name = "btnDel";
             btnDel.Size = new Size(127, 29);
             btnDel.TabIndex = 22;
@@ -62,7 +63,7 @@
             // btnAdd
             // 
             btnAdd.ForeColor = SystemColors.ActiveCaptionText;
-            btnAdd.Location = new Point(335, 223);
+            btnAdd.Location = new Point(489, 226);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(127, 29);
             btnAdd.TabIndex = 23;
@@ -73,7 +74,7 @@
             // btnEdit
             // 
             btnEdit.ForeColor = SystemColors.ActiveCaptionText;
-            btnEdit.Location = new Point(188, 223);
+            btnEdit.Location = new Point(342, 226);
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(127, 29);
             btnEdit.TabIndex = 24;
@@ -84,11 +85,11 @@
             // btnGet
             // 
             btnGet.ForeColor = SystemColors.ActiveCaptionText;
-            btnGet.Location = new Point(37, 223);
+            btnGet.Location = new Point(37, 226);
             btnGet.Name = "btnGet";
             btnGet.Size = new Size(127, 29);
             btnGet.TabIndex = 25;
-            btnGet.Text = "Getir";
+            btnGet.Text = "Hepsini Getir";
             btnGet.UseVisualStyleBackColor = true;
             btnGet.Click += btnGet_Click;
             // 
@@ -175,30 +176,16 @@
             label5.TabIndex = 16;
             label5.Text = "Şehir Kodu";
             // 
-            // cityCodeTextBox
-            // 
-            cityCodeTextBox.Location = new Point(188, 138);
-            cityCodeTextBox.Name = "cityCodeTextBox";
-            cityCodeTextBox.Size = new Size(127, 27);
-            cityCodeTextBox.TabIndex = 18;
-            // 
             // label6
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             label6.ForeColor = SystemColors.ControlLightLight;
-            label6.Location = new Point(335, 100);
+            label6.Location = new Point(360, 100);
             label6.Name = "label6";
             label6.Size = new Size(81, 20);
             label6.TabIndex = 16;
             label6.Text = "Ülke Kodu";
-            // 
-            // countryCodeTextBox
-            // 
-            countryCodeTextBox.Location = new Point(335, 138);
-            countryCodeTextBox.Name = "countryCodeTextBox";
-            countryCodeTextBox.Size = new Size(127, 27);
-            countryCodeTextBox.TabIndex = 18;
             // 
             // firmFormDataGridView
             // 
@@ -210,19 +197,47 @@
             firmFormDataGridView.Size = new Size(962, 272);
             firmFormDataGridView.TabIndex = 26;
             // 
+            // comboBoxCity
+            // 
+            comboBoxCity.FormattingEnabled = true;
+            comboBoxCity.Location = new Point(188, 137);
+            comboBoxCity.Name = "comboBoxCity";
+            comboBoxCity.Size = new Size(141, 28);
+            comboBoxCity.TabIndex = 27;
+            // 
+            // comboBoxCountry
+            // 
+            comboBoxCountry.FormattingEnabled = true;
+            comboBoxCountry.Location = new Point(360, 137);
+            comboBoxCountry.Name = "comboBoxCountry";
+            comboBoxCountry.Size = new Size(151, 28);
+            comboBoxCountry.TabIndex = 28;
+            // 
+            // filtreliGetirBtn
+            // 
+            filtreliGetirBtn.ForeColor = SystemColors.ActiveCaptionText;
+            filtreliGetirBtn.Location = new Point(188, 226);
+            filtreliGetirBtn.Name = "filtreliGetirBtn";
+            filtreliGetirBtn.Size = new Size(141, 29);
+            filtreliGetirBtn.TabIndex = 29;
+            filtreliGetirBtn.Text = "Getir";
+            filtreliGetirBtn.UseVisualStyleBackColor = true;
+            filtreliGetirBtn.Click += button1_Click;
+            // 
             // firmForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(1031, 588);
+            Controls.Add(filtreliGetirBtn);
+            Controls.Add(comboBoxCountry);
+            Controls.Add(comboBoxCity);
             Controls.Add(firmFormDataGridView);
             Controls.Add(btnDel);
             Controls.Add(btnAdd);
             Controls.Add(btnEdit);
             Controls.Add(btnGet);
-            Controls.Add(countryCodeTextBox);
-            Controls.Add(cityCodeTextBox);
             Controls.Add(address2TextBox);
             Controls.Add(address1TextBox);
             Controls.Add(firmNameTextBox);
@@ -235,7 +250,7 @@
             Controls.Add(label1);
             ForeColor = SystemColors.ControlLightLight;
             Name = "firmForm";
-            Text = "firmForm";
+            Text = "Firma Destek Tablosu";
             Load += firmForm_Load;
             ((System.ComponentModel.ISupportInitialize)firmFormDataGridView).EndInit();
             ResumeLayout(false);
@@ -257,9 +272,10 @@
         private Label label4;
         private TextBox address2TextBox;
         private Label label5;
-        private TextBox cityCodeTextBox;
         private Label label6;
-        private TextBox countryCodeTextBox;
         private DataGridView firmFormDataGridView;
+        private ComboBox comboBoxCity;
+        private ComboBox comboBoxCountry;
+        private Button filtreliGetirBtn;
     }
 }

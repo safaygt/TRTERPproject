@@ -320,7 +320,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Name = "malzemeKartAna";
-            Text = "malzemeKartAna";
+            Text = "Malzeme Veri Tablosu";
             Load += malzemeKartAna_Load;
             ((System.ComponentModel.ISupportInitialize)malKartAna).EndInit();
             ResumeLayout(false);

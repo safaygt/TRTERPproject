@@ -178,7 +178,7 @@
             Controls.Add(label3);
             Controls.Add(label1);
             Name = "businessForm";
-            Text = "businessForm";
+            Text = "İş Merkezi Destek Tablosu";
             ((System.ComponentModel.ISupportInitialize)businessDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();

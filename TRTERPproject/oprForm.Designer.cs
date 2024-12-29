@@ -125,7 +125,6 @@
             oprTypeLabel.Size = new Size(114, 20);
             oprTypeLabel.TabIndex = 28;
             oprTypeLabel.Text = "Operasyon Tipi";
-
             // 
             // oprTypeDesLabel
             // 
@@ -149,7 +148,6 @@
             oprFrimLabel.Size = new Size(90, 20);
             oprFrimLabel.TabIndex = 30;
             oprFrimLabel.Text = "Firma Kodu";
-
             // 
             // oprPascheckbox
             // 
@@ -182,8 +180,7 @@
             Controls.Add(oprTypeDesLabel);
             Controls.Add(oprFrimLabel);
             Name = "oprForm";
-            Text = "oprForm";
-
+            Text = "Operasyon Destek Tablosu";
             ((System.ComponentModel.ISupportInitialize)oprDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();

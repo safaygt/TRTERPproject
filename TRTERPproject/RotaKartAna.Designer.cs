@@ -1,24 +1,24 @@
 ﻿namespace TRTERPproject
 {
-	partial class RotaKartAna
-	{
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+    partial class RotaKartAna
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && (components != null))
-			{
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
         #region Windows Form Designer generated code
 
@@ -294,7 +294,7 @@
             Controls.Add(label3);
             Controls.Add(label1);
             Name = "RotaKartAna";
-            Text = "RotaKartAna";
+            Text = "Rota Veri Tablosu";
             ((System.ComponentModel.ISupportInitialize)RotaData).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -303,23 +303,23 @@
         #endregion
 
         private ComboBox dilBox;
-		private ComboBox firmbox;
-		private CheckBox checkboxpas;
-		private CheckBox deletedlbl;
-		private Button duzBut;
-		private Button DelBut;
-		private Button addBut;
-		private Button getBut;
-		private DataGridView RotaData;
-		private TextBox maliyTxtBox;
-		private TextBox malNotxtBox;
-		private Label dillbl;
-		private Label label6;
-		private Label label5;
-		private Label label4;
-		private Label label3;
-		private Label label1;
-		private ComboBox comboBoxRotTip;
+        private ComboBox firmbox;
+        private CheckBox checkboxpas;
+        private CheckBox deletedlbl;
+        private Button duzBut;
+        private Button DelBut;
+        private Button addBut;
+        private Button getBut;
+        private DataGridView RotaData;
+        private TextBox maliyTxtBox;
+        private TextBox malNotxtBox;
+        private Label dillbl;
+        private Label label6;
+        private Label label5;
+        private Label label4;
+        private Label label3;
+        private Label label1;
+        private ComboBox comboBoxRotTip;
         private Button getAllBut;
         private DateTimePicker dateTimePickerBaslangic;
         private DateTimePicker dateTimePickerBitis;
