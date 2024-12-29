@@ -30,13 +30,13 @@
         {
             cityNameTextBox = new TextBox();
             cityCodeTextBox = new TextBox();
-            firmCodeTextBox = new TextBox();
             label2 = new Label();
             label3 = new Label();
             label1 = new Label();
             btnSave = new Button();
-            countryCodeTextBox = new TextBox();
             label4 = new Label();
+            comboBoxFirmCode = new ComboBox();
+            comboBoxCountryCode = new ComboBox();
             SuspendLayout();
             // 
             // cityNameTextBox
@@ -52,13 +52,6 @@
             cityCodeTextBox.Name = "cityCodeTextBox";
             cityCodeTextBox.Size = new Size(127, 27);
             cityCodeTextBox.TabIndex = 13;
-            // 
-            // firmCodeTextBox
-            // 
-            firmCodeTextBox.Location = new Point(64, 119);
-            firmCodeTextBox.Name = "firmCodeTextBox";
-            firmCodeTextBox.Size = new Size(127, 27);
-            firmCodeTextBox.TabIndex = 14;
             // 
             // label2
             // 
@@ -103,13 +96,6 @@
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Click += btnSave_Click_1;
             // 
-            // countryCodeTextBox
-            // 
-            countryCodeTextBox.Location = new Point(545, 119);
-            countryCodeTextBox.Name = "countryCodeTextBox";
-            countryCodeTextBox.Size = new Size(127, 27);
-            countryCodeTextBox.TabIndex = 16;
-            // 
             // label4
             // 
             label4.AutoSize = true;
@@ -121,17 +107,33 @@
             label4.TabIndex = 15;
             label4.Text = "Ülke Kodu";
             // 
+            // comboBoxFirmCode
+            // 
+            comboBoxFirmCode.FormattingEnabled = true;
+            comboBoxFirmCode.Location = new Point(64, 118);
+            comboBoxFirmCode.Name = "comboBoxFirmCode";
+            comboBoxFirmCode.Size = new Size(129, 28);
+            comboBoxFirmCode.TabIndex = 16;
+            // 
+            // comboBoxCountryCode
+            // 
+            comboBoxCountryCode.FormattingEnabled = true;
+            comboBoxCountryCode.Location = new Point(545, 119);
+            comboBoxCountryCode.Name = "comboBoxCountryCode";
+            comboBoxCountryCode.Size = new Size(127, 28);
+            comboBoxCountryCode.TabIndex = 17;
+            // 
             // cityFormEdit
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(800, 450);
-            Controls.Add(countryCodeTextBox);
+            Controls.Add(comboBoxCountryCode);
+            Controls.Add(comboBoxFirmCode);
             Controls.Add(label4);
             Controls.Add(cityNameTextBox);
             Controls.Add(cityCodeTextBox);
-            Controls.Add(firmCodeTextBox);
             Controls.Add(label2);
             Controls.Add(label3);
             Controls.Add(label1);
@@ -147,12 +149,12 @@
 
         private TextBox cityNameTextBox;
         private TextBox cityCodeTextBox;
-        private TextBox firmCodeTextBox;
         private Label label2;
         private Label label3;
         private Label label1;
         private Button btnSave;
-        private TextBox countryCodeTextBox;
         private Label label4;
+        private ComboBox comboBoxFirmCode;
+        private ComboBox comboBoxCountryCode;
     }
 }

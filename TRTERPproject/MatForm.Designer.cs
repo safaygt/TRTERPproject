@@ -36,16 +36,17 @@
             MatNameBox = new TextBox();
             MatCodeBox = new TextBox();
             label2 = new Label();
-            firmCodeTextBox = new TextBox();
             label3 = new Label();
             label1 = new Label();
             ispassiveBOX = new CheckBox();
+            btnFiltreliGetir = new Button();
+            comboBoxFirmCode = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)MatDataGridWiew).BeginInit();
             SuspendLayout();
             // 
             // btnDel
             // 
-            btnDel.Location = new Point(489, 160);
+            btnDel.Location = new Point(643, 159);
             btnDel.Name = "btnDel";
             btnDel.Size = new Size(127, 29);
             btnDel.TabIndex = 11;
@@ -55,7 +56,7 @@
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(339, 160);
+            btnAdd.Location = new Point(493, 159);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(127, 29);
             btnAdd.TabIndex = 12;
@@ -65,7 +66,7 @@
             // 
             // btnEdit
             // 
-            btnEdit.Location = new Point(192, 160);
+            btnEdit.Location = new Point(346, 159);
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(127, 29);
             btnEdit.TabIndex = 13;
@@ -75,11 +76,11 @@
             // 
             // btnGet
             // 
-            btnGet.Location = new Point(41, 160);
+            btnGet.Location = new Point(41, 159);
             btnGet.Name = "btnGet";
             btnGet.Size = new Size(127, 29);
             btnGet.TabIndex = 14;
-            btnGet.Text = "Getir";
+            btnGet.Text = "Hepsini Getir";
             btnGet.UseVisualStyleBackColor = true;
             btnGet.Click += btnGet_Click;
             // 
@@ -114,16 +115,9 @@
             label2.ForeColor = SystemColors.ControlLightLight;
             label2.Location = new Point(192, 44);
             label2.Name = "label2";
-            label2.Size = new Size(113, 20);
+            label2.Size = new Size(102, 20);
             label2.TabIndex = 4;
-            label2.Text = "Malzeme Kodu";
-            // 
-            // firmCodeTextBox
-            // 
-            firmCodeTextBox.Location = new Point(41, 76);
-            firmCodeTextBox.Name = "firmCodeTextBox";
-            firmCodeTextBox.Size = new Size(127, 27);
-            firmCodeTextBox.TabIndex = 9;
+            label2.Text = "Malzeme Tipi";
             // 
             // label3
             // 
@@ -160,12 +154,32 @@
             ispassiveBOX.Text = "Pasif mi?";
             ispassiveBOX.UseVisualStyleBackColor = true;
             // 
+            // btnFiltreliGetir
+            // 
+            btnFiltreliGetir.Location = new Point(192, 159);
+            btnFiltreliGetir.Name = "btnFiltreliGetir";
+            btnFiltreliGetir.Size = new Size(127, 29);
+            btnFiltreliGetir.TabIndex = 16;
+            btnFiltreliGetir.Text = "Getir";
+            btnFiltreliGetir.UseVisualStyleBackColor = true;
+            btnFiltreliGetir.Click += btnFiltreliGetir_Click;
+            // 
+            // comboBoxFirmCode
+            // 
+            comboBoxFirmCode.FormattingEnabled = true;
+            comboBoxFirmCode.Location = new Point(41, 76);
+            comboBoxFirmCode.Name = "comboBoxFirmCode";
+            comboBoxFirmCode.Size = new Size(127, 28);
+            comboBoxFirmCode.TabIndex = 17;
+            // 
             // MatForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(981, 520);
+            Controls.Add(comboBoxFirmCode);
+            Controls.Add(btnFiltreliGetir);
             Controls.Add(ispassiveBOX);
             Controls.Add(btnDel);
             Controls.Add(btnAdd);
@@ -175,7 +189,6 @@
             Controls.Add(MatNameBox);
             Controls.Add(MatCodeBox);
             Controls.Add(label2);
-            Controls.Add(firmCodeTextBox);
             Controls.Add(label3);
             Controls.Add(label1);
             Name = "MatForm";
@@ -195,9 +208,10 @@
         private TextBox MatNameBox;
         private TextBox MatCodeBox;
         private Label label2;
-        private TextBox firmCodeTextBox;
         private Label label3;
         private Label label1;
         private CheckBox ispassiveBOX;
+        private Button btnFiltreliGetir;
+        private ComboBox comboBoxFirmCode;
     }
 }

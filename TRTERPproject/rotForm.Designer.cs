@@ -37,9 +37,10 @@
             rotTypeStatementTextBox = new TextBox();
             rotTypeTextBox = new TextBox();
             label2 = new Label();
-            firmCodeTextBox = new TextBox();
             label3 = new Label();
             label1 = new Label();
+            btnFiltreliGetir = new Button();
+            comboBoxFirmCode = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)RotDataGridWiew).BeginInit();
             SuspendLayout();
             // 
@@ -58,7 +59,7 @@
             // 
             // btnDel
             // 
-            btnDel.Location = new Point(496, 143);
+            btnDel.Location = new Point(650, 144);
             btnDel.Name = "btnDel";
             btnDel.Size = new Size(127, 29);
             btnDel.TabIndex = 23;
@@ -68,7 +69,7 @@
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(346, 143);
+            btnAdd.Location = new Point(496, 144);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(127, 29);
             btnAdd.TabIndex = 24;
@@ -78,7 +79,7 @@
             // 
             // btnEdit
             // 
-            btnEdit.Location = new Point(199, 143);
+            btnEdit.Location = new Point(346, 144);
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(127, 29);
             btnEdit.TabIndex = 25;
@@ -88,11 +89,11 @@
             // 
             // btnGet
             // 
-            btnGet.Location = new Point(48, 143);
+            btnGet.Location = new Point(48, 144);
             btnGet.Name = "btnGet";
             btnGet.Size = new Size(127, 29);
             btnGet.TabIndex = 26;
-            btnGet.Text = "Getir";
+            btnGet.Text = "Hepsini Getir";
             btnGet.UseVisualStyleBackColor = true;
             btnGet.Click += btnGet_Click;
             // 
@@ -131,13 +132,6 @@
             label2.TabIndex = 16;
             label2.Text = "Rota Tipi";
             // 
-            // firmCodeTextBox
-            // 
-            firmCodeTextBox.Location = new Point(48, 59);
-            firmCodeTextBox.Name = "firmCodeTextBox";
-            firmCodeTextBox.Size = new Size(127, 27);
-            firmCodeTextBox.TabIndex = 21;
-            // 
             // label3
             // 
             label3.AutoSize = true;
@@ -160,12 +154,32 @@
             label1.TabIndex = 18;
             label1.Text = "Firma Kodu";
             // 
+            // btnFiltreliGetir
+            // 
+            btnFiltreliGetir.Location = new Point(199, 144);
+            btnFiltreliGetir.Name = "btnFiltreliGetir";
+            btnFiltreliGetir.Size = new Size(127, 29);
+            btnFiltreliGetir.TabIndex = 28;
+            btnFiltreliGetir.Text = "Getir";
+            btnFiltreliGetir.UseVisualStyleBackColor = true;
+            btnFiltreliGetir.Click += btnFiltreliGetir_Click;
+            // 
+            // comboBoxFirmCode
+            // 
+            comboBoxFirmCode.FormattingEnabled = true;
+            comboBoxFirmCode.Location = new Point(48, 57);
+            comboBoxFirmCode.Name = "comboBoxFirmCode";
+            comboBoxFirmCode.Size = new Size(121, 28);
+            comboBoxFirmCode.TabIndex = 29;
+            // 
             // rotForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(969, 500);
+            Controls.Add(comboBoxFirmCode);
+            Controls.Add(btnFiltreliGetir);
             Controls.Add(isPassiveBOX);
             Controls.Add(btnDel);
             Controls.Add(btnAdd);
@@ -175,7 +189,6 @@
             Controls.Add(rotTypeStatementTextBox);
             Controls.Add(rotTypeTextBox);
             Controls.Add(label2);
-            Controls.Add(firmCodeTextBox);
             Controls.Add(label3);
             Controls.Add(label1);
             Name = "rotForm";
@@ -196,8 +209,9 @@
         private TextBox rotTypeStatementTextBox;
         private TextBox rotTypeTextBox;
         private Label label2;
-        private TextBox firmCodeTextBox;
         private Label label3;
         private Label label1;
+        private Button btnFiltreliGetir;
+        private ComboBox comboBoxFirmCode;
     }
 }

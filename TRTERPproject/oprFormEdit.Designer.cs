@@ -31,11 +31,11 @@
             isPassiveOprCheckbox = new CheckBox();
             oprTypeDesTextBox = new TextBox();
             oprTypeTextBox = new TextBox();
-            oprFirmCodeTextBox = new TextBox();
             oprTypeLabel = new Label();
             oprTypeDesLabel = new Label();
             oprFrimLabel = new Label();
             btnSave = new Button();
+            comboBoxFirmCode = new ComboBox();
             SuspendLayout();
             // 
             // isPassiveOprCheckbox
@@ -63,13 +63,6 @@
             oprTypeTextBox.Name = "oprTypeTextBox";
             oprTypeTextBox.Size = new Size(127, 27);
             oprTypeTextBox.TabIndex = 72;
-            // 
-            // oprFirmCodeTextBox
-            // 
-            oprFirmCodeTextBox.Location = new Point(29, 135);
-            oprFirmCodeTextBox.Name = "oprFirmCodeTextBox";
-            oprFirmCodeTextBox.Size = new Size(127, 27);
-            oprFirmCodeTextBox.TabIndex = 73;
             // 
             // oprTypeLabel
             // 
@@ -114,17 +107,25 @@
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Click += btnSave_Click;
             // 
+            // comboBoxFirmCode
+            // 
+            comboBoxFirmCode.FormattingEnabled = true;
+            comboBoxFirmCode.Location = new Point(29, 139);
+            comboBoxFirmCode.Name = "comboBoxFirmCode";
+            comboBoxFirmCode.Size = new Size(123, 28);
+            comboBoxFirmCode.TabIndex = 76;
+            // 
             // oprFormEdit
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(800, 450);
+            Controls.Add(comboBoxFirmCode);
             Controls.Add(btnSave);
             Controls.Add(isPassiveOprCheckbox);
             Controls.Add(oprTypeDesTextBox);
             Controls.Add(oprTypeTextBox);
-            Controls.Add(oprFirmCodeTextBox);
             Controls.Add(oprTypeLabel);
             Controls.Add(oprTypeDesLabel);
             Controls.Add(oprFrimLabel);
@@ -140,10 +141,10 @@
         private CheckBox isPassiveOprCheckbox;
         private TextBox oprTypeDesTextBox;
         private TextBox oprTypeTextBox;
-        private TextBox oprFirmCodeTextBox;
         private Label oprTypeLabel;
         private Label oprTypeDesLabel;
         private Label oprFrimLabel;
         private Button btnSave;
+        private ComboBox comboBoxFirmCode;
     }
 }

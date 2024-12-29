@@ -36,17 +36,18 @@
             cityNameTextBox = new TextBox();
             cityCodeTextBox = new TextBox();
             label2 = new Label();
-            firmCodeTextBox = new TextBox();
             label3 = new Label();
             label1 = new Label();
-            countryCodeTextBox = new TextBox();
             label4 = new Label();
+            comboBoxFirmCode = new ComboBox();
+            comboBoxCountryCode = new ComboBox();
+            btnFiltreliGetir = new Button();
             ((System.ComponentModel.ISupportInitialize)cityDataGridView).BeginInit();
             SuspendLayout();
             // 
             // btnDel
             // 
-            btnDel.Location = new Point(475, 131);
+            btnDel.Location = new Point(625, 132);
             btnDel.Name = "btnDel";
             btnDel.Size = new Size(127, 29);
             btnDel.TabIndex = 11;
@@ -56,7 +57,7 @@
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(325, 131);
+            btnAdd.Location = new Point(475, 132);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(127, 29);
             btnAdd.TabIndex = 12;
@@ -66,7 +67,7 @@
             // 
             // btnEdit
             // 
-            btnEdit.Location = new Point(178, 131);
+            btnEdit.Location = new Point(328, 132);
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(127, 29);
             btnEdit.TabIndex = 13;
@@ -76,11 +77,11 @@
             // 
             // btnGet
             // 
-            btnGet.Location = new Point(27, 131);
+            btnGet.Location = new Point(27, 132);
             btnGet.Name = "btnGet";
             btnGet.Size = new Size(127, 29);
             btnGet.TabIndex = 14;
-            btnGet.Text = "Getir";
+            btnGet.Text = "Hepsini Getir";
             btnGet.UseVisualStyleBackColor = true;
             btnGet.Click += btnGet_Click;
             // 
@@ -119,13 +120,6 @@
             label2.TabIndex = 4;
             label2.Text = "Şehir Kodu";
             // 
-            // firmCodeTextBox
-            // 
-            firmCodeTextBox.Location = new Point(27, 81);
-            firmCodeTextBox.Name = "firmCodeTextBox";
-            firmCodeTextBox.Size = new Size(127, 27);
-            firmCodeTextBox.TabIndex = 9;
-            // 
             // label3
             // 
             label3.AutoSize = true;
@@ -148,13 +142,6 @@
             label1.TabIndex = 6;
             label1.Text = "Firma Kodu";
             // 
-            // countryCodeTextBox
-            // 
-            countryCodeTextBox.Location = new Point(475, 81);
-            countryCodeTextBox.Name = "countryCodeTextBox";
-            countryCodeTextBox.Size = new Size(127, 27);
-            countryCodeTextBox.TabIndex = 7;
-            // 
             // label4
             // 
             label4.AutoSize = true;
@@ -166,22 +153,49 @@
             label4.TabIndex = 5;
             label4.Text = "Ülke Kodu";
             // 
+            // comboBoxFirmCode
+            // 
+            comboBoxFirmCode.FormattingEnabled = true;
+            comboBoxFirmCode.Location = new Point(27, 81);
+            comboBoxFirmCode.Name = "comboBoxFirmCode";
+            comboBoxFirmCode.Size = new Size(127, 28);
+            comboBoxFirmCode.TabIndex = 15;
+            // 
+            // comboBoxCountryCode
+            // 
+            comboBoxCountryCode.FormattingEnabled = true;
+            comboBoxCountryCode.Location = new Point(475, 80);
+            comboBoxCountryCode.Name = "comboBoxCountryCode";
+            comboBoxCountryCode.Size = new Size(127, 28);
+            comboBoxCountryCode.TabIndex = 16;
+            // 
+            // btnFiltreliGetir
+            // 
+            btnFiltreliGetir.Location = new Point(178, 133);
+            btnFiltreliGetir.Name = "btnFiltreliGetir";
+            btnFiltreliGetir.Size = new Size(127, 29);
+            btnFiltreliGetir.TabIndex = 17;
+            btnFiltreliGetir.Text = "Getir";
+            btnFiltreliGetir.UseVisualStyleBackColor = true;
+            btnFiltreliGetir.Click += btnFiltreliGetir_Click;
+            // 
             // cityForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(967, 474);
+            Controls.Add(btnFiltreliGetir);
+            Controls.Add(comboBoxCountryCode);
+            Controls.Add(comboBoxFirmCode);
             Controls.Add(btnDel);
             Controls.Add(btnAdd);
             Controls.Add(btnEdit);
             Controls.Add(btnGet);
             Controls.Add(cityDataGridView);
-            Controls.Add(countryCodeTextBox);
             Controls.Add(cityNameTextBox);
             Controls.Add(cityCodeTextBox);
             Controls.Add(label2);
-            Controls.Add(firmCodeTextBox);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label1);
@@ -202,10 +216,11 @@
         private TextBox cityNameTextBox;
         private TextBox cityCodeTextBox;
         private Label label2;
-        private TextBox firmCodeTextBox;
         private Label label3;
         private Label label1;
-        private TextBox countryCodeTextBox;
         private Label label4;
+        private ComboBox comboBoxFirmCode;
+        private ComboBox comboBoxCountryCode;
+        private Button btnFiltreliGetir;
     }
 }
