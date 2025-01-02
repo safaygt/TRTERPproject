@@ -309,73 +309,84 @@ namespace TRTERPproject
 
         private void DelBut_Click(object sender, EventArgs e)
         {
-            string malMerCode = malNotxtBox.Text.Trim();
-
-            if (string.IsNullOrEmpty(malMerCode))
+            if (maliyetdata.SelectedRows.Count > 0)
             {
-                MessageBox.Show("Lütfen bir Maliyet Merkezi Numarası giriniz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                DataGridViewRow selectedRow = maliyetdata.SelectedRows[0];
 
-            // Kullanıcıdan onay alıyoruz
-            DialogResult result = MessageBox.Show(
-                "Bu kaydı silmek istediğinizden emin misiniz?",
-                "Onay",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
-
-            if (result != DialogResult.Yes)
-            {
-                // Kullanıcı "Hayır" seçtiyse işlemi iptal ediyoruz
-                MessageBox.Show("Silme işlemi iptal edildi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            try
-            {
-                _connection.Open();
-
-                string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTCCMHEAD WHERE CCMDOCNUM = @CCMDOCNUM";
-                using (SqlCommand command = new SqlCommand(checkQuery, _connection))
+                if (selectedRow.Cells["Maliyet Merkezi Numarası"].Value == null || string.IsNullOrWhiteSpace(selectedRow.Cells["Maliyet Merkezi Numarası"].Value.ToString()))
                 {
-                    command.Parameters.AddWithValue("@CCMDOCNUM", malMerCode);
-
-                    int recordExists = (int)command.ExecuteScalar();
-
-                    if (recordExists == 0)
-                    {
-                        MessageBox.Show("Belirtilen Maliyet Merkezi Numarası için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
+                    MessageBox.Show("Boş bir satır seçemezsiniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return; // Boş satırda işlem yapılmasın
                 }
 
-                string deleteQuery = "DELETE FROM BSMGRTRTCCMHEAD WHERE CCMDOCNUM = @CCMDOCNUM";
-                using (SqlCommand command = new SqlCommand(deleteQuery, _connection))
+                string malMerCode = selectedRow.Cells["Maliyet Merkezi Numarası"].Value.ToString();
+
+                // Kullanıcıdan onay al
+                DialogResult result = MessageBox.Show(
+                    $"Maliyet Merkezi Numarası {malMerCode} olan veriyi silmek istediğinize emin misiniz?",
+                    "Silme Onayı",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (result != DialogResult.Yes)
                 {
-                    command.Parameters.AddWithValue("@CCMDOCNUM", malMerCode);
+                    // Kullanıcı "Hayır" seçtiyse işlemi iptal ediyoruz
+                    MessageBox.Show("Silme işlemi iptal edildi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
 
-                    int rowsAffected = command.ExecuteNonQuery();
+                try
+                {
+                    _connection.Open();
 
-                    if (rowsAffected > 0)
+                    string checkQuery = "SELECT COUNT(*) FROM BSMGRTRTCCMHEAD WHERE CCMDOCNUM = @CCMDOCNUM";
+                    using (SqlCommand command = new SqlCommand(checkQuery, _connection))
                     {
-                        MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        ResetFormFields();
+                        command.Parameters.AddWithValue("@CCMDOCNUM", malMerCode);
+
+                        int recordExists = (int)command.ExecuteScalar();
+
+                        if (recordExists == 0)
+                        {
+                            MessageBox.Show("Belirtilen Maliyet Merkezi Numarası için bir kayıt bulunamadı.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
                     }
-                    else
+
+                    string deleteQuery = "DELETE FROM BSMGRTRTCCMHEAD WHERE CCMDOCNUM = @CCMDOCNUM";
+                    using (SqlCommand command = new SqlCommand(deleteQuery, _connection))
                     {
-                        MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        command.Parameters.AddWithValue("@CCMDOCNUM", malMerCode);
+
+                        int rowsAffected = command.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show("Kayıt başarıyla silindi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            ResetFormFields();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Kayıt silinemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Hata: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    _connection.Close();
+                }
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show($"Hata: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lütfen silmek için bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-            finally
-            {
-                _connection.Close();
-            }
+
         }
+     
 
 
         private void firmComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -385,16 +396,20 @@ namespace TRTERPproject
         private void getAll_Click(object sender, EventArgs e)
         {
             string query = @"SELECT 
-                                COMCODE AS 'Firma', 
-                                CCMDOCTYPE AS 'Maliyet Merkezi Tipi', 
-                                CCMDOCNUM AS 'Maliyet Merkezi Numarası', 
-                                CCMDOCFROM AS 'Geçerlilik Başlangıç',
-                                CCMDOCUNTIL AS 'Geçerlilik Bitiş',
-                                MAINCCMDOCTYPE AS 'Ana Maliyet Merkezi Tipi', 
-                                MAINCCMDOCNUM AS 'Ana Maliyet Merkezi Numarası', 
-                                ISDELETED AS 'Silindi mi?',
-                                ISPASSIVE AS 'Pasif mi?'
-                            FROM BSMGRTRTCCMHEAD";
+                            HD.COMCODE AS 'Firma', 
+                            HD.CCMDOCTYPE AS 'Maliyet Merkezi Tipi', 
+                            HD.CCMDOCNUM AS 'Maliyet Merkezi Numarası', 
+                            HD.CCMDOCFROM AS 'Geçerlilik Başlangıç',
+                            HD.CCMDOCUNTIL AS 'Geçerlilik Bitiş',
+                            HD.MAINCCMDOCTYPE AS 'Ana Maliyet Merkezi Tipi', 
+                            HD.MAINCCMDOCNUM AS 'Ana Maliyet Merkezi Numarası', 
+                            HD.ISDELETED AS 'Silindi mi?',
+                            HD.ISPASSIVE AS 'Pasif mi?',
+                            CT.CCMSTEXT AS 'Maliyet Açıklaması'
+                        FROM 
+                            BSMGRTRTCCMHEAD HD
+                        LEFT JOIN 
+                            BSMGRTRTCCMTEXT CT ON HD.CCMDOCNUM = CT.CCMDOCNUM";
 
             try
             {

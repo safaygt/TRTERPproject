@@ -330,6 +330,7 @@
             Text = "urunAgaciDetayAdd";
             Load += urunAgaciDetayAdd_Load;
 
+
             ResumeLayout(false);
             PerformLayout();
         }

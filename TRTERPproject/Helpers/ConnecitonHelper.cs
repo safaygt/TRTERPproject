@@ -6,7 +6,9 @@
 
 
 
+
 		public static string ConnectionString { get; } = "Server=DESKTOP-U86MLBA;Database=TRTdb;Integrated Security=True;";
+
 
 
 
