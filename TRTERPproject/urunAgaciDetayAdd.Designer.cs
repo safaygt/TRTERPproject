@@ -324,17 +324,13 @@
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label1);
-<<<<<<< HEAD:TRTERPproject/urunAgaciDetayAdd.Designer.cs
+
             Controls.Add(contentbtnSave);
             Name = "urunAgaciDetayAdd";
             Text = "urunAgaciDetayAdd";
             Load += urunAgaciDetayAdd_Load;
-=======
-            Controls.Add(btnSave);
-            Name = "urunAgaciKartAdd";
-            Text = "Ürün Ağacı Ekleme Tablosu";
-            Load += urunAgaciKartAdd_Load;
->>>>>>> 67cb15581ba1da81555da7380acab4cb08a406c2:TRTERPproject/urunAgaciKartAdd.Designer.cs
+
+
             ResumeLayout(false);
             PerformLayout();
         }
