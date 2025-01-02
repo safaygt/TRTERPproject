@@ -389,6 +389,26 @@ WHERE {columnName} = @userInput";
                         cmdMatText.Parameters.AddWithValue("@MATDOCNUM", matDocNum);
                         cmdMatText.ExecuteNonQuery();
 
+                        string deleteFromBomContent = "DELETE FROM BSMGRTRTBOMCONTENT WHERE MATDOCNUM = @MATDOCNUM";
+                        SqlCommand cmdBomContent = new SqlCommand(deleteFromBomContent, con);
+                        cmdBomContent.Parameters.AddWithValue("@MATDOCNUM", matDocNum);
+                        cmdBomContent.ExecuteNonQuery();
+
+                        string deleteFromRotOprContent = "DELETE FROM BSMGRTRTROTOPRCONTENT WHERE MATDOCNUM = @MATDOCNUM";
+                        SqlCommand cmdRotOprCOntent = new SqlCommand(deleteFromRotOprContent, con);
+                        cmdRotOprCOntent.Parameters.AddWithValue("@MATDOCNUM", matDocNum);
+                        cmdRotOprCOntent.ExecuteNonQuery();
+
+                        string deleteFromRotBomContent = "DELETE FROM BSMGRTRTROTBOMCONTENT WHERE MATDOCNUM = @MATDOCNUM";
+                        SqlCommand cmdRotBomContent = new SqlCommand(deleteFromRotBomContent, con);
+                        cmdRotBomContent.Parameters.AddWithValue("@MATDOCNUM", matDocNum);
+                        cmdRotBomContent.ExecuteNonQuery();
+
+                        string deleteFromRotHead = "DELETE FROM BSMGRTRTROTHEAD WHERE MATDOCNUM = @MATDOCNUM";
+                        SqlCommand cmdRotHead = new SqlCommand(deleteFromRotHead, con);
+                        cmdRotHead.Parameters.AddWithValue("@MATDOCNUM", matDocNum);
+                        cmdRotHead.ExecuteNonQuery();
+
                         // Başarılı silme mesajı
                         MessageBox.Show("Seçilen veri başarıyla silindi.", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
