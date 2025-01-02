@@ -456,10 +456,18 @@ namespace TRTERPproject
             int isPassive = checkboxpas.Checked ? 1 : 0;
             string drawnum = cizmikBox.Text.Trim();
 
+            // Boş alan kontrolü
             if (string.IsNullOrEmpty(comCode) || string.IsNullOrEmpty(bomDoctype) || string.IsNullOrEmpty(bomDocnum) || string.IsNullOrEmpty(bomDocFrom) ||
                 string.IsNullOrEmpty(bomDocUntil) || string.IsNullOrEmpty(matDoctype) || string.IsNullOrEmpty(matDocnum) || string.IsNullOrEmpty(quantity))
             {
                 MessageBox.Show("Lütfen tüm alanları doldurun!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Malzeme Tipi Kontrolü
+            if (matDoctype != "URUN" && matDoctype != "YMML")
+            {
+                MessageBox.Show("Seçtiğiniz malzeme tipine ürün ağacı ekleyemezsiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -471,7 +479,6 @@ namespace TRTERPproject
                     return;
                 }
 
-                // Burada ConnectionString'in doğru olduğundan emin olmak için debug ekleyin
                 string connectionString = ConnectionHelper.ConnectionString;
                 if (string.IsNullOrEmpty(connectionString))
                 {
@@ -496,8 +503,8 @@ namespace TRTERPproject
                 }
 
                 string insertQuery = @"INSERT INTO BSMGRTRTBOMHEAD 
-                     (COMCODE, BOMDOCTYPE, BOMDOCNUM, BOMDOCFROM, BOMDOCUNTIL, MATDOCTYPE, MATDOCNUM, QUANTITY, ISDELETED, ISPASSIVE, DRAWNUM) 
-                     VALUES (@COMCODE, @BOMDOCTYPE, @BOMDOCNUM, @BOMDOCFROM, @BOMDOCUNTIL, @MATDOCTYPE, @MATDOCNUM, @QUANTITY, @ISDELETED, @ISPASSIVE, @DRAWNUM)";
+             (COMCODE, BOMDOCTYPE, BOMDOCNUM, BOMDOCFROM, BOMDOCUNTIL, MATDOCTYPE, MATDOCNUM, QUANTITY, ISDELETED, ISPASSIVE, DRAWNUM) 
+             VALUES (@COMCODE, @BOMDOCTYPE, @BOMDOCNUM, @BOMDOCFROM, @BOMDOCUNTIL, @MATDOCTYPE, @MATDOCNUM, @QUANTITY, @ISDELETED, @ISPASSIVE, @DRAWNUM)";
 
                 using (SqlCommand command = new SqlCommand(insertQuery, con))
                 {
