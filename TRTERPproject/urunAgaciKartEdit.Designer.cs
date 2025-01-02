@@ -39,7 +39,6 @@
             label7 = new Label();
             urnAgaTipBox = new ComboBox();
             label2 = new Label();
-            firmbox = new ComboBox();
             checkboxpas = new CheckBox();
             deletedlbl = new CheckBox();
             label6 = new Label();
@@ -49,19 +48,12 @@
             label1 = new Label();
             baslangicDateTimePicker = new DateTimePicker();
             bitisDateTimePicker = new DateTimePicker();
-            kalemAgUrnKodBox = new ComboBox();
-            label13 = new Label();
-            label12 = new Label();
-            kalemAgUrnTipBox = new ComboBox();
-            bilesenKodBox = new ComboBox();
-            label11 = new Label();
-            label10 = new Label();
-            icerikNumBox = new TextBox();
+            firmbox = new ComboBox();
             SuspendLayout();
             // 
             // btnSave
             // 
-            btnSave.Location = new Point(478, 350);
+            btnSave.Location = new Point(474, 252);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(146, 53);
             btnSave.TabIndex = 121;
@@ -107,6 +99,7 @@
             // 
             // urnmalzemenumBox
             // 
+            urnmalzemenumBox.DropDownStyle = ComboBoxStyle.DropDownList;
             urnmalzemenumBox.FormattingEnabled = true;
             urnmalzemenumBox.Location = new Point(448, 68);
             urnmalzemenumBox.Name = "urnmalzemenumBox";
@@ -115,6 +108,7 @@
             // 
             // urnagamalztipbox
             // 
+            urnagamalztipbox.DropDownStyle = ComboBoxStyle.DropDownList;
             urnagamalztipbox.FormattingEnabled = true;
             urnagamalztipbox.Location = new Point(230, 68);
             urnagamalztipbox.Name = "urnagamalztipbox";
@@ -141,6 +135,7 @@
             // 
             // urnAgaTipBox
             // 
+            urnAgaTipBox.DropDownStyle = ComboBoxStyle.DropDownList;
             urnAgaTipBox.FormattingEnabled = true;
             urnAgaTipBox.Location = new Point(15, 151);
             urnAgaTipBox.Name = "urnAgaTipBox";
@@ -157,14 +152,6 @@
             label2.Size = new Size(135, 23);
             label2.TabIndex = 132;
             label2.Text = "Ürün Ağacı Tipi";
-            // 
-            // firmbox
-            // 
-            firmbox.FormattingEnabled = true;
-            firmbox.Location = new Point(15, 65);
-            firmbox.Name = "firmbox";
-            firmbox.Size = new Size(167, 28);
-            firmbox.TabIndex = 131;
             // 
             // checkboxpas
             // 
@@ -259,80 +246,14 @@
             bitisDateTimePicker.Size = new Size(207, 27);
             bitisDateTimePicker.TabIndex = 142;
             // 
-            // kalemAgUrnKodBox
+            // firmbox
             // 
-            kalemAgUrnKodBox.FormattingEnabled = true;
-            kalemAgUrnKodBox.Location = new Point(668, 232);
-            kalemAgUrnKodBox.Name = "kalemAgUrnKodBox";
-            kalemAgUrnKodBox.Size = new Size(200, 28);
-            kalemAgUrnKodBox.TabIndex = 180;
-            // 
-            // label13
-            // 
-            label13.AutoSize = true;
-            label13.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
-            label13.ForeColor = Color.GhostWhite;
-            label13.Location = new Point(668, 206);
-            label13.Name = "label13";
-            label13.Size = new Size(201, 23);
-            label13.TabIndex = 179;
-            label13.Text = "Kalem Ağacı Ürün Kodu";
-            // 
-            // label12
-            // 
-            label12.AutoSize = true;
-            label12.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
-            label12.ForeColor = Color.GhostWhite;
-            label12.Location = new Point(457, 206);
-            label12.Name = "label12";
-            label12.Size = new Size(190, 23);
-            label12.TabIndex = 178;
-            label12.Text = "Kalem Ağacı Ürün Tipi";
-            // 
-            // kalemAgUrnTipBox
-            // 
-            kalemAgUrnTipBox.FormattingEnabled = true;
-            kalemAgUrnTipBox.Location = new Point(448, 232);
-            kalemAgUrnTipBox.Name = "kalemAgUrnTipBox";
-            kalemAgUrnTipBox.Size = new Size(200, 28);
-            kalemAgUrnTipBox.TabIndex = 177;
-            // 
-            // bilesenKodBox
-            // 
-            bilesenKodBox.FormattingEnabled = true;
-            bilesenKodBox.Location = new Point(230, 232);
-            bilesenKodBox.Name = "bilesenKodBox";
-            bilesenKodBox.Size = new Size(186, 28);
-            bilesenKodBox.TabIndex = 176;
-            // 
-            // label11
-            // 
-            label11.AutoSize = true;
-            label11.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
-            label11.ForeColor = Color.GhostWhite;
-            label11.Location = new Point(268, 206);
-            label11.Name = "label11";
-            label11.Size = new Size(113, 23);
-            label11.TabIndex = 175;
-            label11.Text = "Bileşen Kodu";
-            // 
-            // label10
-            // 
-            label10.AutoSize = true;
-            label10.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
-            label10.ForeColor = Color.GhostWhite;
-            label10.Location = new Point(30, 206);
-            label10.Name = "label10";
-            label10.Size = new Size(135, 23);
-            label10.TabIndex = 174;
-            label10.Text = "İçerik Numarası";
-            // 
-            // icerikNumBox
-            // 
-            icerikNumBox.Location = new Point(15, 232);
-            icerikNumBox.Name = "icerikNumBox";
-            icerikNumBox.Size = new Size(182, 27);
-            icerikNumBox.TabIndex = 173;
+            firmbox.DropDownStyle = ComboBoxStyle.DropDownList;
+            firmbox.FormattingEnabled = true;
+            firmbox.Location = new Point(15, 65);
+            firmbox.Name = "firmbox";
+            firmbox.Size = new Size(167, 28);
+            firmbox.TabIndex = 131;
             // 
             // urunAgaciKartEdit
             // 
@@ -340,14 +261,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(1117, 647);
-            Controls.Add(kalemAgUrnKodBox);
-            Controls.Add(label13);
-            Controls.Add(label12);
-            Controls.Add(kalemAgUrnTipBox);
-            Controls.Add(bilesenKodBox);
-            Controls.Add(label11);
-            Controls.Add(label10);
-            Controls.Add(icerikNumBox);
             Controls.Add(bitisDateTimePicker);
             Controls.Add(baslangicDateTimePicker);
             Controls.Add(label9);
@@ -388,7 +301,6 @@
         private Label label7;
         private ComboBox urnAgaTipBox;
         private Label label2;
-        private ComboBox firmbox;
         private CheckBox checkboxpas;
         private CheckBox deletedlbl;
         private Label label6;
@@ -398,13 +310,6 @@
         private Label label1;
         private DateTimePicker baslangicDateTimePicker;
         private DateTimePicker bitisDateTimePicker;
-        private ComboBox kalemAgUrnKodBox;
-        private Label label13;
-        private Label label12;
-        private ComboBox kalemAgUrnTipBox;
-        private ComboBox bilesenKodBox;
-        private Label label11;
-        private Label label10;
-        private TextBox icerikNumBox;
+        private ComboBox firmbox;
     }
 }

@@ -50,7 +50,6 @@ namespace TRTERPproject
             urnagamalztipbox.Text = MalzemeTipi;
             urnmalzemenumBox.Text = MalzemeNumarasi;
             cizmikBox.Text = CizimNumarasi;
-            icerikNumBox.Text = IcerikNumarasi;
             temelmikBox.Text = TemelMiktar.ToString();
 
             baslangicDateTimePicker.Value = GecerlilikBaslangic;
@@ -58,10 +57,6 @@ namespace TRTERPproject
 
             checkboxpas.Checked = IsPassive;
             deletedlbl.Checked = IsDeleted;
-
-            bilesenKodBox.Text = BilesenKodu;
-            kalemAgUrnTipBox.Text = KalemUrunAgaciTipi;
-            kalemAgUrnKodBox.Text = KalemUrunAgaciNumarasi;
 
             // Combobox verilerini doldur
             LoadComboBoxData();
@@ -85,16 +80,7 @@ namespace TRTERPproject
                     LoadComboBoxData("SELECT DISTINCT DOCTYPE FROM BSMGRTRTBOM001", urnAgaTipBox, "DOCTYPE");
 
                     LoadComboBoxData("SELECT DISTINCT MATDOCNUM FROM BSMGRTRTMATHEAD", urnmalzemenumBox, "MATDOCNUM");
-
-                    // Bileşen Kodları
-                    LoadComboBoxData("SELECT DISTINCT COMPONENT FROM BSMGRTRTBOMCONTENT", bilesenKodBox, "COMPONENT");
-
-                    // Kalem Ürün Ağacı Tipi
-                    LoadComboBoxData("SELECT DISTINCT COMPBOMDOCTYPE FROM BSMGRTRTBOMCONTENT", kalemAgUrnTipBox, "COMPBOMDOCTYPE");
-
-                    // Kalem Ürün Ağacı Numarası
-                    LoadComboBoxData("SELECT DISTINCT COMPBOMDOCNUM FROM BSMGRTRTBOMCONTENT", kalemAgUrnKodBox, "COMPBOMDOCNUM");
-                }
+               }
             }
             catch (Exception ex)
             {
@@ -112,9 +98,7 @@ namespace TRTERPproject
 
                 comboBox.DataSource = dt;
                 comboBox.DisplayMember = displayMember;
-                comboBox.ValueMember = displayMember;
-                comboBox.DropDownStyle = ComboBoxStyle.DropDown;
-            }
+                comboBox.ValueMember = displayMember;            }
         }
 
         public void LoadDataFromDatabase(string bomDocNum)
@@ -187,7 +171,8 @@ namespace TRTERPproject
 
 
 
-        // DURUYORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+
+        
         private void btnSave_Click_1(object sender, EventArgs e)
         {
             try
@@ -248,43 +233,6 @@ namespace TRTERPproject
                         cmdHead.Parameters.AddWithValue("@ISPASSIVE", checkboxpas.Checked ? 1 : 0);
 
                         cmdHead.ExecuteNonQuery();
-                    }
-
-                    // BSMGR0BOMCONTENT tablosunu güncelle
-                    string queryContent = @"
-                UPDATE BSMGRTRTBOMCONTENT
-                SET 
-                    COMCODE = @COMCODE,
-                    BOMDOCTYPE = @BOMDOCTYPE,
-                    BOMDOCNUM = @BOMDOCNUM,
-                    BOMDOCFROM = @BOMDOCFROM,
-                    BOMDOCUNTIL = @BOMDOCUNTIL,
-                    MATDOCTYPE = @MATDOCTYPE,
-                    MATDOCNUM = @MATDOCNUM,
-                    CONTENTNUM = @CONTENTNUM,
-                    COMPONENT = @COMPONENT,
-                    COMPBOMDOCTYPE = @COMPBOMDOCTYPE,
-                    COMPBOMDOCNUM = @COMPBOMDOCNUM,
-                    QUANTITY = @QUANTITY
-                WHERE 
-                    BOMDOCNUM = @BOMDOCNUM;";
-
-                    using (SqlCommand cmdContent = new SqlCommand(queryContent, con))
-                    {
-                        cmdContent.Parameters.AddWithValue("@COMCODE", firmbox.Text ?? (object)DBNull.Value);
-                        cmdContent.Parameters.AddWithValue("@BOMDOCTYPE", urnAgaTipBox.Text ?? (object)DBNull.Value);
-                        cmdContent.Parameters.AddWithValue("@BOMDOCNUM", textBox1.Text ?? (object)DBNull.Value);
-                        cmdContent.Parameters.AddWithValue("@BOMDOCFROM", baslangicDateTimePicker.Value);
-                        cmdContent.Parameters.AddWithValue("@BOMDOCUNTIL", bitisDateTimePicker.Value);
-                        cmdContent.Parameters.AddWithValue("@MATDOCTYPE", urnagamalztipbox.Text ?? (object)DBNull.Value);
-                        cmdContent.Parameters.AddWithValue("@MATDOCNUM", urnmalzemenumBox.Text ?? (object)DBNull.Value);
-                        cmdContent.Parameters.AddWithValue("@CONTENTNUM", icerikNumBox.Text ?? (object)DBNull.Value);
-                        cmdContent.Parameters.AddWithValue("@COMPONENT", bilesenKodBox.Text ?? (object)DBNull.Value);
-                        cmdContent.Parameters.AddWithValue("@COMPBOMDOCTYPE", kalemAgUrnTipBox.Text ?? (object)DBNull.Value);
-                        cmdContent.Parameters.AddWithValue("@COMPBOMDOCNUM", kalemAgUrnKodBox.Text ?? (object)DBNull.Value);
-                        cmdContent.Parameters.AddWithValue("@QUANTITY", decimal.TryParse(temelmikBox.Text, out decimal contentQuantity) ? contentQuantity : (object)DBNull.Value);
-
-                        cmdContent.ExecuteNonQuery();
                     }
 
                     MessageBox.Show("Kayıt başarıyla güncellendi!", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
