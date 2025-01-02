@@ -30,16 +30,13 @@
         {
             matStockUnitComboBox = new ComboBox();
             matTypeComboBox = new ComboBox();
-            supplyTypeComboBox = new ComboBox();
             lanComboBox = new ComboBox();
             DateTimePickerBaslangic = new DateTimePicker();
             DateTimePickerBitis = new DateTimePicker();
             matCodeTextBox = new TextBox();
             matStatementShortTextBox = new TextBox();
             netWeightTextBox = new TextBox();
-            netWeightUnitTextBox = new TextBox();
             matStatementLongTextBox = new TextBox();
-            brutWeightUnitTextBox = new TextBox();
             firmCodeComboBox = new ComboBox();
             isTreeCheckBox = new CheckBox();
             isRouteCheckBox = new CheckBox();
@@ -69,12 +66,15 @@
             label18 = new Label();
             isPassiveCheckBox = new CheckBox();
             isDeletedCheckBox = new CheckBox();
+            supplyTypeTextBox = new TextBox();
+            netWeightUnitComboBox = new ComboBox();
+            brutWeightUnitComboBox = new ComboBox();
             SuspendLayout();
             // 
             // matStockUnitComboBox
             // 
             matStockUnitComboBox.FormattingEnabled = true;
-            matStockUnitComboBox.Location = new Point(476, 304);
+            matStockUnitComboBox.Location = new Point(481, 304);
             matStockUnitComboBox.Name = "matStockUnitComboBox";
             matStockUnitComboBox.Size = new Size(151, 28);
             matStockUnitComboBox.TabIndex = 0;
@@ -86,14 +86,6 @@
             matTypeComboBox.Name = "matTypeComboBox";
             matTypeComboBox.Size = new Size(151, 28);
             matTypeComboBox.TabIndex = 0;
-            // 
-            // supplyTypeComboBox
-            // 
-            supplyTypeComboBox.FormattingEnabled = true;
-            supplyTypeComboBox.Location = new Point(266, 224);
-            supplyTypeComboBox.Name = "supplyTypeComboBox";
-            supplyTypeComboBox.Size = new Size(151, 28);
-            supplyTypeComboBox.TabIndex = 0;
             // 
             // lanComboBox
             // 
@@ -139,26 +131,12 @@
             netWeightTextBox.Size = new Size(139, 27);
             netWeightTextBox.TabIndex = 2;
             // 
-            // netWeightUnitTextBox
-            // 
-            netWeightUnitTextBox.Location = new Point(60, 387);
-            netWeightUnitTextBox.Name = "netWeightUnitTextBox";
-            netWeightUnitTextBox.Size = new Size(139, 27);
-            netWeightUnitTextBox.TabIndex = 2;
-            // 
             // matStatementLongTextBox
             // 
             matStatementLongTextBox.Location = new Point(60, 139);
             matStatementLongTextBox.Name = "matStatementLongTextBox";
             matStatementLongTextBox.Size = new Size(175, 27);
             matStatementLongTextBox.TabIndex = 2;
-            // 
-            // brutWeightUnitTextBox
-            // 
-            brutWeightUnitTextBox.Location = new Point(269, 387);
-            brutWeightUnitTextBox.Name = "brutWeightUnitTextBox";
-            brutWeightUnitTextBox.Size = new Size(139, 27);
-            brutWeightUnitTextBox.TabIndex = 2;
             // 
             // firmCodeComboBox
             // 
@@ -438,7 +416,7 @@
             label18.AutoSize = true;
             label18.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             label18.ForeColor = SystemColors.ControlLightLight;
-            label18.Location = new Point(481, 281);
+            label18.Location = new Point(481, 272);
             label18.Name = "label18";
             label18.Size = new Size(153, 20);
             label18.TabIndex = 7;
@@ -469,12 +447,38 @@
             isDeletedCheckBox.Text = "Silindi mi?";
             isDeletedCheckBox.UseVisualStyleBackColor = true;
             // 
+            // supplyTypeTextBox
+            // 
+            supplyTypeTextBox.Location = new Point(284, 221);
+            supplyTypeTextBox.Name = "supplyTypeTextBox";
+            supplyTypeTextBox.Size = new Size(138, 27);
+            supplyTypeTextBox.TabIndex = 8;
+            // 
+            // netWeightUnitComboBox
+            // 
+            netWeightUnitComboBox.FormattingEnabled = true;
+            netWeightUnitComboBox.Location = new Point(56, 388);
+            netWeightUnitComboBox.Name = "netWeightUnitComboBox";
+            netWeightUnitComboBox.Size = new Size(151, 28);
+            netWeightUnitComboBox.TabIndex = 9;
+            // 
+            // brutWeightUnitComboBox
+            // 
+            brutWeightUnitComboBox.FormattingEnabled = true;
+            brutWeightUnitComboBox.Location = new Point(271, 388);
+            brutWeightUnitComboBox.Name = "brutWeightUnitComboBox";
+            brutWeightUnitComboBox.Size = new Size(151, 28);
+            brutWeightUnitComboBox.TabIndex = 9;
+            // 
             // matAddForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(1015, 603);
+            Controls.Add(brutWeightUnitComboBox);
+            Controls.Add(netWeightUnitComboBox);
+            Controls.Add(supplyTypeTextBox);
             Controls.Add(label5);
             Controls.Add(label6);
             Controls.Add(label8);
@@ -501,16 +505,13 @@
             Controls.Add(isRouteCheckBox);
             Controls.Add(isTreeCheckBox);
             Controls.Add(matStatementShortTextBox);
-            Controls.Add(brutWeightUnitTextBox);
             Controls.Add(brutWeightTextBox);
             Controls.Add(matStatementLongTextBox);
-            Controls.Add(netWeightUnitTextBox);
             Controls.Add(netWeightTextBox);
             Controls.Add(matCodeTextBox);
             Controls.Add(DateTimePickerBitis);
             Controls.Add(DateTimePickerBaslangic);
             Controls.Add(lanComboBox);
-            Controls.Add(supplyTypeComboBox);
             Controls.Add(matTypeComboBox);
             Controls.Add(productTreeTypeComboBox);
             Controls.Add(firmCodeComboBox);
@@ -527,16 +528,13 @@
 
         private ComboBox matStockUnitComboBox;
         private ComboBox matTypeComboBox;
-        private ComboBox supplyTypeComboBox;
         private ComboBox lanComboBox;
         private DateTimePicker DateTimePickerBaslangic;
         private DateTimePicker DateTimePickerBitis;
         private TextBox matCodeTextBox;
         private TextBox matStatementShortTextBox;
         private TextBox netWeightTextBox;
-        private TextBox netWeightUnitTextBox;
         private TextBox matStatementLongTextBox;
-        private TextBox brutWeightUnitTextBox;
         private ComboBox firmCodeComboBox;
         private CheckBox isTreeCheckBox;
         private CheckBox isRouteCheckBox;
@@ -566,5 +564,8 @@
         private Label label18;
         private CheckBox isPassiveCheckBox;
         private CheckBox isDeletedCheckBox;
+        private TextBox supplyTypeTextBox;
+        private ComboBox netWeightUnitComboBox;
+        private ComboBox brutWeightUnitComboBox;
     }
 }
