@@ -27,7 +27,9 @@ namespace TRTERPproject
 
             firmCodeComboBox.Leave += (s, e) => ValidateAndAddData(firmCodeComboBox, "COMCODE", "BSMGRTRTGEN001");
             matTypeComboBox.Leave += (s, e) => ValidateAndAddData(matTypeComboBox, "DOCTYPE", "BSMGRTRTMAT001");
-            supplyTypeComboBox.Leave += (s, e) => ValidateAndAddData(supplyTypeComboBox, "SUPPLYTYPE", "BSMGRTRTMATHEAD");
+            brutWeightUnitComboBox.Leave += (s, e) => ValidateAndAddData(brutWeightUnitComboBox, "UNITCODE", "BSMGRTRTGEN005");
+            netWeightUnitComboBox.Leave += (s, e) => ValidateAndAddData(netWeightUnitComboBox, "UNITCODE", "BSMGRTRTGEN005");
+            matStockUnitComboBox.Leave += (s, e) => ValidateAndAddData(matStockUnitComboBox, "UNITCODE", "BSMGRTRTGEN005");
             lanComboBox.Leave += (s, e) => ValidateAndAddData(lanComboBox, "LANCODE", "BSMGRTRTGEN002");
             routeTypeComboBox.Leave += (s, e) => ValidateAndAddData(routeTypeComboBox, "DOCTYPE", "BSMGRTRTROT001");
             productTreeTypeComboBox.Leave += (s, e) => ValidateAndAddData(productTreeTypeComboBox, "DOCTYPE", "BSMGRTRTBOM001");
@@ -78,6 +80,12 @@ namespace TRTERPproject
 
                     // Dil Kodları
                     LoadComboBox(lanComboBox, "SELECT DISTINCT LANCODE FROM BSMGRTRTGEN002", "LANCODE");
+
+                    LoadComboBox(matStockUnitComboBox, "SELECT DISTINCT UNITCODE FROM BSMGRTRTGEN005", "UNITCODE");
+
+                    LoadComboBox(netWeightUnitComboBox, "SELECT DISTINCT UNITCODE FROM BSMGRTRTGEN005", "UNITCODE");
+
+                    LoadComboBox(brutWeightUnitComboBox, "SELECT DISTINCT UNITCODE FROM BSMGRTRTGEN005", "UNITCODE");
 
                     // Operasyon Kodu
                     LoadComboBox(routeTypeComboBox, "SELECT DISTINCT DOCTYPE FROM BSMGRTRTROT001", "DOCTYPE");
@@ -138,13 +146,13 @@ namespace TRTERPproject
             string matStatementShort = matStatementShortTextBox.Text.Trim();
             string matStatementLong = matStatementLongTextBox.Text.Trim();
             string matDocType = matTypeComboBox.Text.Trim();
-            string supplyType = supplyTypeComboBox.Text.Trim();
+            string supplyType = supplyTypeTextBox.Text.Trim();
             string lan = lanComboBox.Text.Trim();
             string netWeight = netWeightTextBox.Text.Trim();
             string brutWeight = brutWeightTextBox.Text.Trim();
             string matStockUnit = matStockUnitComboBox.Text.Trim();
-            string netWeightUnit = netWeightUnitTextBox.Text.Trim();
-            string brutWeightUnit = brutWeightUnitTextBox.Text.Trim();
+            string netWeightUnit = netWeightUnitComboBox.Text.Trim();
+            string brutWeightUnit = brutWeightUnitComboBox.Text.Trim();
             DateTime matDocFrom = DateTimePickerBaslangic.Value;
             DateTime matDocUntil = DateTimePickerBitis.Value;
             string productTreeType = productTreeTypeComboBox.Text.Trim();
@@ -281,5 +289,5 @@ namespace TRTERPproject
         }
     }
 
-    }
+}
 
