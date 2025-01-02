@@ -60,7 +60,7 @@ namespace TRTERPproject
 
             firmCodeComboBox.Leave += (s, e) => ValidateAndAddData(firmCodeComboBox, "COMCODE", "BSMGRTRTGEN001");
             matTypeComboBox.Leave += (s, e) => ValidateAndAddData(matTypeComboBox, "DOCTYPE", "BSMGRTRTMAT001");
-            supplyTypeComboBox.Leave += (s, e) => ValidateAndAddData(supplyTypeComboBox, "SUPPLYTYPE", "BSMGRTRTMATHEAD");
+            lanComboBox.Leave += (s, e) => ValidateAndAddData(matStockUnitComboBox, "UNITCODE", "BSMGRTRTGEN005");
             lanComboBox.Leave += (s, e) => ValidateAndAddData(lanComboBox, "LANCODE", "BSMGRTRTGEN002");
             routeTypeComboBox.Leave += (s, e) => ValidateAndAddData(routeTypeComboBox, "DOCTYPE", "BSMGRTRTROT001");
             productTreeTypeComboBox.Leave += (s, e) => ValidateAndAddData(productTreeTypeComboBox, "DOCTYPE", "BSMGRTRTBOM001");
@@ -140,6 +140,12 @@ namespace TRTERPproject
                     // Dil Kodları
                     LoadComboBox(lanComboBox, "SELECT DISTINCT LANCODE FROM BSMGRTRTGEN002", "LANCODE");
 
+                    LoadComboBox(matStockUnitComboBox, "SELECT DISTINCT UNITCODE FROM BSMGRTRTGEN005", "UNITCODE");
+
+                    LoadComboBox(netWeightUnitComboBox, "SELECT DISTINCT UNITCODE FROM BSMGRTRTGEN005", "UNITCODE");
+
+                    LoadComboBox(brutWeightUnitComboBox, "SELECT DISTINCT UNITCODE FROM BSMGRTRTGEN005", "UNITCODE");
+
                     // Operasyon Kodu
                     LoadComboBox(routeTypeComboBox, "SELECT DISTINCT DOCTYPE FROM BSMGRTRTROT001", "DOCTYPE");
 
@@ -160,13 +166,13 @@ namespace TRTERPproject
             DateTimePickerBaslangic.Value = GecerliBaslangic;
             DateTimePickerBitis.Value = GecerliBitis;
             matCodeTextBox.Text = MatCode.ToString();
-            supplyTypeComboBox.Text = supplytype.ToString();
+            supplyTypeTextBox.Text = supplytype.ToString();
             matStatementLongTextBox.Text = uzunAciklama;
             matStatementShortTextBox.Text = kisaAciklama;
             netWeightTextBox.Text = netWeight.ToString();
             brutWeightTextBox.Text = brutWeight.ToString();
-            netWeightUnitTextBox.Text = netWeightUnit;
-            brutWeightUnitTextBox.Text = brutWeightUnit;
+            netWeightUnitComboBox.Text = netWeightUnit;
+            brutWeightUnitComboBox.Text = brutWeightUnit;
             lanComboBox.Text = Dil;
             matStockUnitComboBox.Text = malzemeStokBirimi;
             isDeletedCheckBox.Checked = IsDeleted;
@@ -249,12 +255,12 @@ namespace TRTERPproject
                                     command1.Parameters.AddWithValue("@MATDOCNUM", matCodeTextBox.Text ?? (object)DBNull.Value);
                                     command1.Parameters.AddWithValue("@MATDOCFROM", bomDocFrom);
                                     command1.Parameters.AddWithValue("@MATDOCUNTIL", bomDocUntil);
-                                    command1.Parameters.AddWithValue("@SUPPLYTYPE", int.TryParse(supplyTypeComboBox.Text, out int supplytype) ? supplytype : (object)DBNull.Value);
+                                    command1.Parameters.AddWithValue("@SUPPLYTYPE", int.TryParse(supplyTypeTextBox.Text, out int supplytype) ? supplytype : (object)DBNull.Value);
                                     command1.Parameters.AddWithValue("@STUNIT", matStockUnitComboBox.Text ?? (object)DBNull.Value);
                                     command1.Parameters.AddWithValue("@NETWEIGHT", decimal.TryParse(netWeightTextBox.Text, out decimal netWeight) ? netWeight : (object)DBNull.Value);
-                                    command1.Parameters.AddWithValue("@NWUNIT", netWeightUnitTextBox.Text ?? (object)DBNull.Value);
+                                    command1.Parameters.AddWithValue("@NWUNIT", netWeightUnitComboBox.Text ?? (object)DBNull.Value);
                                     command1.Parameters.AddWithValue("@BRUTWEIGHT", decimal.TryParse(brutWeightTextBox.Text, out decimal brutWeight) ? brutWeight : (object)DBNull.Value);
-                                    command1.Parameters.AddWithValue("@BWUNIT", brutWeightUnitTextBox.Text ?? (object)DBNull.Value);
+                                    command1.Parameters.AddWithValue("@BWUNIT", brutWeightUnitComboBox.Text ?? (object)DBNull.Value);
                                     command1.Parameters.AddWithValue("@ISBOM", isTreeCheckBox.Checked ? 1 : 0);
                                     command1.Parameters.AddWithValue("@BOMDOCTYPE", productTreeTypeComboBox.Text ?? (object)DBNull.Value);
                                     command1.Parameters.AddWithValue("@BOMDOCNUM", productTreeCodeTextBox.Text ?? (object)DBNull.Value);
@@ -326,9 +332,9 @@ namespace TRTERPproject
 
 
     }
-    }
-    
+}
 
-        
+
+
 
 
