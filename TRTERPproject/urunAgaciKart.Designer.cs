@@ -54,11 +54,14 @@
             dateTimePickerBitis = new DateTimePicker();
             getAll = new Button();
             urnmalzemenumBox = new ComboBox();
+            urunPatlat = new Button();
+            saveAgac = new Button();
             ((System.ComponentModel.ISupportInitialize)urnAgcData).BeginInit();
             SuspendLayout();
             // 
             // urnAgaTipBox
             // 
+            urnAgaTipBox.DropDownStyle = ComboBoxStyle.DropDownList;
             urnAgaTipBox.FormattingEnabled = true;
             urnAgaTipBox.Location = new Point(18, 160);
             urnAgaTipBox.Name = "urnAgaTipBox";
@@ -79,6 +82,7 @@
             // 
             // firmbox
             // 
+            firmbox.DropDownStyle = ComboBoxStyle.DropDownList;
             firmbox.FormattingEnabled = true;
             firmbox.Location = new Point(18, 74);
             firmbox.Name = "firmbox";
@@ -112,7 +116,7 @@
             // 
             // duzBut
             // 
-            duzBut.Location = new Point(543, 251);
+            duzBut.Location = new Point(428, 251);
             duzBut.Name = "duzBut";
             duzBut.Size = new Size(125, 38);
             duzBut.TabIndex = 90;
@@ -122,7 +126,7 @@
             // 
             // DelBut
             // 
-            DelBut.Location = new Point(696, 251);
+            DelBut.Location = new Point(559, 251);
             DelBut.Name = "DelBut";
             DelBut.Size = new Size(125, 38);
             DelBut.TabIndex = 89;
@@ -132,17 +136,17 @@
             // 
             // addBut
             // 
-            addBut.Location = new Point(396, 251);
+            addBut.Location = new Point(880, 251);
             addBut.Name = "addBut";
             addBut.Size = new Size(125, 38);
             addBut.TabIndex = 88;
-            addBut.Text = "Ekle";
+            addBut.Text = "İçerik Ekle";
             addBut.UseVisualStyleBackColor = true;
             addBut.Click += addBut_Click;
             // 
             // getBut
             // 
-            getBut.Location = new Point(233, 251);
+            getBut.Location = new Point(179, 251);
             getBut.Name = "getBut";
             getBut.Size = new Size(125, 38);
             getBut.TabIndex = 87;
@@ -235,6 +239,7 @@
             // 
             // urnagamalztipbox
             // 
+            urnagamalztipbox.DropDownStyle = ComboBoxStyle.DropDownList;
             urnagamalztipbox.FormattingEnabled = true;
             urnagamalztipbox.Location = new Point(233, 76);
             urnagamalztipbox.Name = "urnagamalztipbox";
@@ -294,9 +299,9 @@
             // 
             // getAll
             // 
-            getAll.Location = new Point(64, 251);
+            getAll.Location = new Point(33, 251);
             getAll.Name = "getAll";
-            getAll.Size = new Size(140, 34);
+            getAll.Size = new Size(140, 36);
             getAll.TabIndex = 107;
             getAll.Text = "Hepsini Getir";
             getAll.UseVisualStyleBackColor = true;
@@ -304,11 +309,32 @@
             // 
             // urnmalzemenumBox
             // 
+            urnmalzemenumBox.DropDownStyle = ComboBoxStyle.DropDownList;
             urnmalzemenumBox.FormattingEnabled = true;
             urnmalzemenumBox.Location = new Point(451, 78);
             urnmalzemenumBox.Name = "urnmalzemenumBox";
             urnmalzemenumBox.Size = new Size(186, 28);
             urnmalzemenumBox.TabIndex = 175;
+            // 
+            // urunPatlat
+            // 
+            urunPatlat.Location = new Point(733, 251);
+            urunPatlat.Name = "urunPatlat";
+            urunPatlat.Size = new Size(115, 38);
+            urunPatlat.TabIndex = 176;
+            urunPatlat.Text = "Patlat";
+            urunPatlat.UseVisualStyleBackColor = true;
+            urunPatlat.Click += urunPatlat_Click;
+            // 
+            // saveAgac
+            // 
+            saveAgac.Location = new Point(310, 251);
+            saveAgac.Name = "saveAgac";
+            saveAgac.Size = new Size(112, 38);
+            saveAgac.TabIndex = 177;
+            saveAgac.Text = "Ekle";
+            saveAgac.UseVisualStyleBackColor = true;
+            saveAgac.Click += saveAgac_Click;
             // 
             // urunAgaciKart
             // 
@@ -316,6 +342,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(1071, 673);
+            Controls.Add(saveAgac);
+            Controls.Add(urunPatlat);
             Controls.Add(urnmalzemenumBox);
             Controls.Add(getAll);
             Controls.Add(dateTimePickerBitis);
@@ -377,5 +405,7 @@
         private DateTimePicker dateTimePickerBitis;
         private Button getAll;
         private ComboBox urnmalzemenumBox;
+        private Button urunPatlat;
+        private Button saveAgac;
     }
 }
