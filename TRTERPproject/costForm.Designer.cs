@@ -33,14 +33,15 @@
             btnAdd = new Button();
             btnEdit = new Button();
             btnGet = new Button();
-            CountryDataGridView = new DataGridView();
+            costDataGridView = new DataGridView();
             costTypeStatementTextBox = new TextBox();
             costTypeTextBox = new TextBox();
-            firmCodeTextBox = new TextBox();
             label2 = new Label();
             label3 = new Label();
             label1 = new Label();
-            ((System.ComponentModel.ISupportInitialize)CountryDataGridView).BeginInit();
+            comboBoxFirmCode = new ComboBox();
+            btnFiltreliGetir = new Button();
+            ((System.ComponentModel.ISupportInitialize)costDataGridView).BeginInit();
             SuspendLayout();
             // 
             // isPassiveCheckBox
@@ -58,7 +59,7 @@
             // 
             // btnDel
             // 
-            btnDel.Location = new Point(469, 176);
+            btnDel.Location = new Point(631, 176);
             btnDel.Name = "btnDel";
             btnDel.Size = new Size(116, 29);
             btnDel.TabIndex = 34;
@@ -68,7 +69,7 @@
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(319, 176);
+            btnAdd.Location = new Point(481, 176);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(127, 29);
             btnAdd.TabIndex = 35;
@@ -78,7 +79,7 @@
             // 
             // btnEdit
             // 
-            btnEdit.Location = new Point(172, 176);
+            btnEdit.Location = new Point(339, 176);
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(127, 29);
             btnEdit.TabIndex = 36;
@@ -88,24 +89,24 @@
             // 
             // btnGet
             // 
-            btnGet.Location = new Point(21, 176);
+            btnGet.Location = new Point(24, 176);
             btnGet.Name = "btnGet";
-            btnGet.Size = new Size(127, 29);
+            btnGet.Size = new Size(124, 29);
             btnGet.TabIndex = 37;
-            btnGet.Text = "Getir";
+            btnGet.Text = "Hepsini Getir";
             btnGet.UseVisualStyleBackColor = true;
             btnGet.Click += btnGet_Click;
             // 
-            // CountryDataGridView
+            // costDataGridView
             // 
-            CountryDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            CountryDataGridView.Location = new Point(12, 248);
-            CountryDataGridView.Name = "CountryDataGridView";
-            CountryDataGridView.RowHeadersWidth = 51;
-            CountryDataGridView.RowTemplate.Height = 29;
-            CountryDataGridView.Size = new Size(915, 239);
-            CountryDataGridView.TabIndex = 33;
-            CountryDataGridView.CellContentClick += CountryDataGridView_CellContentClick;
+            costDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            costDataGridView.Location = new Point(12, 248);
+            costDataGridView.Name = "costDataGridView";
+            costDataGridView.RowHeadersWidth = 51;
+            costDataGridView.RowTemplate.Height = 29;
+            costDataGridView.Size = new Size(915, 239);
+            costDataGridView.TabIndex = 33;
+            costDataGridView.CellContentClick += CountryDataGridView_CellContentClick;
             // 
             // costTypeStatementTextBox
             // 
@@ -122,14 +123,6 @@
             costTypeTextBox.Size = new Size(150, 27);
             costTypeTextBox.TabIndex = 31;
             costTypeTextBox.TextChanged += costTypeTextBox_TextChanged;
-            // 
-            // firmCodeTextBox
-            // 
-            firmCodeTextBox.Location = new Point(21, 125);
-            firmCodeTextBox.Name = "firmCodeTextBox";
-            firmCodeTextBox.Size = new Size(127, 27);
-            firmCodeTextBox.TabIndex = 32;
-            firmCodeTextBox.TextChanged += firmCodeTextBox_TextChanged;
             // 
             // label2
             // 
@@ -167,27 +160,46 @@
             label1.Text = "Firma Kodu";
             label1.Click += label1_Click;
             // 
+            // comboBoxFirmCode
+            // 
+            comboBoxFirmCode.FormattingEnabled = true;
+            comboBoxFirmCode.Location = new Point(24, 124);
+            comboBoxFirmCode.Name = "comboBoxFirmCode";
+            comboBoxFirmCode.Size = new Size(124, 28);
+            comboBoxFirmCode.TabIndex = 39;
+            // 
+            // btnFiltreliGetir
+            // 
+            btnFiltreliGetir.Location = new Point(172, 176);
+            btnFiltreliGetir.Name = "btnFiltreliGetir";
+            btnFiltreliGetir.Size = new Size(150, 29);
+            btnFiltreliGetir.TabIndex = 40;
+            btnFiltreliGetir.Text = "Getir";
+            btnFiltreliGetir.UseVisualStyleBackColor = true;
+            btnFiltreliGetir.Click += btnFiltreliGetir_Click;
+            // 
             // costForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(941, 540);
+            Controls.Add(btnFiltreliGetir);
+            Controls.Add(comboBoxFirmCode);
             Controls.Add(isPassiveCheckBox);
             Controls.Add(btnDel);
             Controls.Add(btnAdd);
             Controls.Add(btnEdit);
             Controls.Add(btnGet);
-            Controls.Add(CountryDataGridView);
+            Controls.Add(costDataGridView);
             Controls.Add(costTypeStatementTextBox);
             Controls.Add(costTypeTextBox);
-            Controls.Add(firmCodeTextBox);
             Controls.Add(label2);
             Controls.Add(label3);
             Controls.Add(label1);
             Name = "costForm";
             Text = "Maliyet Merkezi";
-            ((System.ComponentModel.ISupportInitialize)CountryDataGridView).EndInit();
+            ((System.ComponentModel.ISupportInitialize)costDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -199,12 +211,13 @@
         private Button btnAdd;
         private Button btnEdit;
         private Button btnGet;
-        private DataGridView CountryDataGridView;
+        private DataGridView costDataGridView;
         private TextBox costTypeStatementTextBox;
         private TextBox costTypeTextBox;
-        private TextBox firmCodeTextBox;
         private Label label2;
         private Label label3;
         private Label label1;
+        private ComboBox comboBoxFirmCode;
+        private Button btnFiltreliGetir;
     }
 }

@@ -31,12 +31,12 @@
             isPassiveCheckBox = new CheckBox();
             costTypeStatementTextBox = new TextBox();
             costTypeTextBox = new TextBox();
-            firmCodeTextBox = new TextBox();
             label2 = new Label();
             label4 = new Label();
             label3 = new Label();
             label1 = new Label();
             btnSave = new Button();
+            comboBoxFirmCode = new ComboBox();
             SuspendLayout();
             // 
             // isPassiveCheckBox
@@ -64,13 +64,6 @@
             costTypeTextBox.Name = "costTypeTextBox";
             costTypeTextBox.Size = new Size(150, 27);
             costTypeTextBox.TabIndex = 28;
-            // 
-            // firmCodeTextBox
-            // 
-            firmCodeTextBox.Location = new Point(51, 148);
-            firmCodeTextBox.Name = "firmCodeTextBox";
-            firmCodeTextBox.Size = new Size(127, 27);
-            firmCodeTextBox.TabIndex = 29;
             // 
             // label2
             // 
@@ -124,23 +117,31 @@
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Click += btnSave_Click;
             // 
+            // comboBoxFirmCode
+            // 
+            comboBoxFirmCode.FormattingEnabled = true;
+            comboBoxFirmCode.Location = new Point(51, 148);
+            comboBoxFirmCode.Name = "comboBoxFirmCode";
+            comboBoxFirmCode.Size = new Size(129, 28);
+            comboBoxFirmCode.TabIndex = 32;
+            // 
             // costEditForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(860, 553);
+            Controls.Add(comboBoxFirmCode);
             Controls.Add(btnSave);
             Controls.Add(isPassiveCheckBox);
             Controls.Add(costTypeStatementTextBox);
             Controls.Add(costTypeTextBox);
-            Controls.Add(firmCodeTextBox);
             Controls.Add(label2);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label1);
             Name = "costEditForm";
-            Text = "costEditForm";
+            Text = "Maliyet Düzenle";
             Load += costEditForm_Load;
             ResumeLayout(false);
             PerformLayout();
@@ -151,11 +152,11 @@
         private CheckBox isPassiveCheckBox;
         private TextBox costTypeStatementTextBox;
         private TextBox costTypeTextBox;
-        private TextBox firmCodeTextBox;
         private Label label2;
         private Label label4;
         private Label label3;
         private Label label1;
         private Button btnSave;
+        private ComboBox comboBoxFirmCode;
     }
 }

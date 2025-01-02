@@ -32,11 +32,11 @@
             isPassiveCheckBox = new CheckBox();
             businessTypeStatementTextBox = new TextBox();
             businessTypeTextBox = new TextBox();
-            firmCodeTextBox = new TextBox();
             label2 = new Label();
             label4 = new Label();
             label3 = new Label();
             label1 = new Label();
+            comboBoxFirmCode = new ComboBox();
             SuspendLayout();
             // 
             // btnSave
@@ -74,13 +74,6 @@
             businessTypeTextBox.Name = "businessTypeTextBox";
             businessTypeTextBox.Size = new Size(150, 27);
             businessTypeTextBox.TabIndex = 37;
-            // 
-            // firmCodeTextBox
-            // 
-            firmCodeTextBox.Location = new Point(20, 116);
-            firmCodeTextBox.Name = "firmCodeTextBox";
-            firmCodeTextBox.Size = new Size(127, 27);
-            firmCodeTextBox.TabIndex = 38;
             // 
             // label2
             // 
@@ -124,23 +117,31 @@
             label1.TabIndex = 35;
             label1.Text = "Firma Kodu";
             // 
+            // comboBoxFirmCode
+            // 
+            comboBoxFirmCode.FormattingEnabled = true;
+            comboBoxFirmCode.Location = new Point(20, 116);
+            comboBoxFirmCode.Name = "comboBoxFirmCode";
+            comboBoxFirmCode.Size = new Size(141, 28);
+            comboBoxFirmCode.TabIndex = 41;
+            // 
             // businessEditForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(800, 450);
+            Controls.Add(comboBoxFirmCode);
             Controls.Add(btnSave);
             Controls.Add(isPassiveCheckBox);
             Controls.Add(businessTypeStatementTextBox);
             Controls.Add(businessTypeTextBox);
-            Controls.Add(firmCodeTextBox);
             Controls.Add(label2);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label1);
             Name = "businessEditForm";
-            Text = "businessEditForm";
+            Text = "İş Merkezi Düzenle";
             Load += businessEditForm_Load;
             ResumeLayout(false);
             PerformLayout();
@@ -152,10 +153,10 @@
         private CheckBox isPassiveCheckBox;
         private TextBox businessTypeStatementTextBox;
         private TextBox businessTypeTextBox;
-        private TextBox firmCodeTextBox;
         private Label label2;
         private Label label4;
         private Label label3;
         private Label label1;
+        private ComboBox comboBoxFirmCode;
     }
 }

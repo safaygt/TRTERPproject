@@ -32,19 +32,20 @@
             btnAdd = new Button();
             btnEdit = new Button();
             btnGet = new Button();
-            CountryDataGridView = new DataGridView();
+            lanDataGridView = new DataGridView();
             lanTextBox = new TextBox();
             lanCodeTextBox = new TextBox();
-            firmCodeTextBox = new TextBox();
             label3 = new Label();
             label1 = new Label();
             label2 = new Label();
-            ((System.ComponentModel.ISupportInitialize)CountryDataGridView).BeginInit();
+            comboBoxFirmCode = new ComboBox();
+            btnFiltreliGetir = new Button();
+            ((System.ComponentModel.ISupportInitialize)lanDataGridView).BeginInit();
             SuspendLayout();
             // 
             // btnDel
             // 
-            btnDel.Location = new Point(519, 135);
+            btnDel.Location = new Point(668, 135);
             btnDel.Name = "btnDel";
             btnDel.Size = new Size(127, 29);
             btnDel.TabIndex = 11;
@@ -54,7 +55,7 @@
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(369, 135);
+            btnAdd.Location = new Point(518, 135);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(127, 29);
             btnAdd.TabIndex = 12;
@@ -64,7 +65,7 @@
             // 
             // btnEdit
             // 
-            btnEdit.Location = new Point(222, 135);
+            btnEdit.Location = new Point(369, 135);
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(127, 29);
             btnEdit.TabIndex = 13;
@@ -78,20 +79,20 @@
             btnGet.Name = "btnGet";
             btnGet.Size = new Size(127, 29);
             btnGet.TabIndex = 14;
-            btnGet.Text = "Getir";
+            btnGet.Text = "Hepsini Getir";
             btnGet.UseVisualStyleBackColor = true;
             btnGet.Click += btnGet_Click;
             // 
-            // CountryDataGridView
+            // lanDataGridView
             // 
-            CountryDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            CountryDataGridView.Location = new Point(26, 221);
-            CountryDataGridView.Name = "CountryDataGridView";
-            CountryDataGridView.RowHeadersWidth = 51;
-            CountryDataGridView.RowTemplate.Height = 29;
-            CountryDataGridView.Size = new Size(915, 239);
-            CountryDataGridView.TabIndex = 10;
-            CountryDataGridView.CellContentClick += CountryDataGridView_CellContentClick;
+            lanDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            lanDataGridView.Location = new Point(26, 221);
+            lanDataGridView.Name = "lanDataGridView";
+            lanDataGridView.RowHeadersWidth = 51;
+            lanDataGridView.RowTemplate.Height = 29;
+            lanDataGridView.Size = new Size(915, 239);
+            lanDataGridView.TabIndex = 10;
+            lanDataGridView.CellContentClick += CountryDataGridView_CellContentClick;
             // 
             // lanTextBox
             // 
@@ -108,14 +109,6 @@
             lanCodeTextBox.Size = new Size(127, 27);
             lanCodeTextBox.TabIndex = 8;
             lanCodeTextBox.TextChanged += lanCodeTextBox_TextChanged;
-            // 
-            // firmCodeTextBox
-            // 
-            firmCodeTextBox.Location = new Point(71, 69);
-            firmCodeTextBox.Name = "firmCodeTextBox";
-            firmCodeTextBox.Size = new Size(127, 27);
-            firmCodeTextBox.TabIndex = 9;
-            firmCodeTextBox.TextChanged += firmCodeTextBox_TextChanged;
             // 
             // label3
             // 
@@ -153,26 +146,45 @@
             label2.Text = "Dil Kodu";
             label2.Click += label2_Click;
             // 
+            // comboBoxFirmCode
+            // 
+            comboBoxFirmCode.FormattingEnabled = true;
+            comboBoxFirmCode.Location = new Point(71, 69);
+            comboBoxFirmCode.Name = "comboBoxFirmCode";
+            comboBoxFirmCode.Size = new Size(127, 28);
+            comboBoxFirmCode.TabIndex = 15;
+            // 
+            // btnFiltreliGetir
+            // 
+            btnFiltreliGetir.Location = new Point(222, 135);
+            btnFiltreliGetir.Name = "btnFiltreliGetir";
+            btnFiltreliGetir.Size = new Size(127, 29);
+            btnFiltreliGetir.TabIndex = 16;
+            btnFiltreliGetir.Text = "Getir";
+            btnFiltreliGetir.UseVisualStyleBackColor = true;
+            btnFiltreliGetir.Click += btnFiltreliGetir_Click;
+            // 
             // lanForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(1016, 508);
+            Controls.Add(btnFiltreliGetir);
+            Controls.Add(comboBoxFirmCode);
             Controls.Add(btnDel);
             Controls.Add(btnAdd);
             Controls.Add(btnEdit);
             Controls.Add(btnGet);
-            Controls.Add(CountryDataGridView);
+            Controls.Add(lanDataGridView);
             Controls.Add(lanTextBox);
             Controls.Add(lanCodeTextBox);
-            Controls.Add(firmCodeTextBox);
             Controls.Add(label2);
             Controls.Add(label3);
             Controls.Add(label1);
             Name = "lanForm";
-            Text = "lanForm";
-            ((System.ComponentModel.ISupportInitialize)CountryDataGridView).EndInit();
+            Text = "Dil Destek Tablosu";
+            ((System.ComponentModel.ISupportInitialize)lanDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -183,12 +195,13 @@
         private Button btnAdd;
         private Button btnEdit;
         private Button btnGet;
-        private DataGridView CountryDataGridView;
+        private DataGridView lanDataGridView;
         private TextBox lanTextBox;
         private TextBox lanCodeTextBox;
-        private TextBox firmCodeTextBox;
         private Label label3;
         private Label label1;
         private Label label2;
+        private ComboBox comboBoxFirmCode;
+        private Button btnFiltreliGetir;
     }
 }

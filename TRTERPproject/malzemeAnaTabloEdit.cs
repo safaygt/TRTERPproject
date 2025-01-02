@@ -181,204 +181,6 @@ namespace TRTERPproject
         }
 
 
-        /*
-        private void btnKaydet_Click(object sender, EventArgs e)
-        {
-
-
-            DateTime bomDocFrom = DateTimePickerBaslangic.Value;
-            DateTime bomDocUntil = DateTimePickerBitis.Value;
-
-            if (bomDocFrom >= bomDocUntil)
-            {
-                MessageBox.Show("Başlangıç tarihi, bitiş tarihinden önce olmalıdır!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return; // İşlemi durdur
-            }
-
-            string query = @"
-    UPDATE BSMGRTRTMATHEAD 
-SET 
-    COMCODE = @COMCODE,
-    MATDOCTYPE = @MATDOCTYPE,
-    MATDOCFROM = @MATDOCFROM,
-MATDOCNUM = @MATDOCNUM,
-    MATDOCUNTIL = @MATDOCUNTIL,
-    SUPPLYTYPE = @SUPPLYTYPE,
-    STUNIT = @STUNIT,
-    NETWEIGHT = @NETWEIGHT,
-    NWUNIT = @NWUNIT,
-    BRUTWEIGHT = @BRUTWEIGHT,
-    BWUNIT = @BWUNIT,
-    ISBOM = @ISBOM,
-    BOMDOCTYPE = @BOMDOCTYPE,
-    BOMDOCNUM = @BOMDOCNUM,
-    ISROUTE = @ISROUTE,
-    ROTDOCTYPE = @ROTDOCTYPE,
-    ROTDOCNUM = @ROTDOCNUM,
-    ISDELETED = @ISDELETED,
-    ISPASSIVE = @ISPASSIVE 
-WHERE MATDOCNUM = @MATDOCNUM";
-
-
-
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
-            using (cmd = new SqlCommand(query, con))
-            {
-                // Parametreleri ekliyoruz
-                cmd.Parameters.AddWithValue("@COMCODE", SqlDbType.VarChar).Value = Firma;
-                cmd.Parameters.AddWithValue("@MATDOCTYPE", SqlDbType.VarChar).Value = MatdocType;
-                cmd.Parameters.AddWithValue("@MATDOCNUM", SqlDbType.Int).Value = MatCode; // Malzeme numarası bir int olarak belirlenmiş
-                cmd.Parameters.AddWithValue("@MATDOCFROM", SqlDbType.DateTime).Value = GecerliBaslangic;
-                cmd.Parameters.AddWithValue("@MATDOCUNTIL", SqlDbType.DateTime).Value = GecerliBitis;
-                cmd.Parameters.AddWithValue("@SUPPLYTYPE", SqlDbType.Int).Value = supplytype;
-                cmd.Parameters.AddWithValue("@STUNIT", SqlDbType.VarChar).Value = malzemeStokBirimi;
-                cmd.Parameters.Add(new SqlParameter("@NETWEIGHT", SqlDbType.Int)
-                {
-                    Value = netWeight.HasValue ? (object)netWeight.Value : DBNull.Value // Nullable kontrolü
-                });
-                cmd.Parameters.AddWithValue("@NWUNIT", SqlDbType.VarChar).Value = netWeightUnit;
-                cmd.Parameters.Add(new SqlParameter("@BRUTWEIGHT", SqlDbType.Int)
-                {
-                    Value = brutWeight.HasValue ? (object)brutWeight.Value : DBNull.Value // Nullable kontrolü
-                });
-                cmd.Parameters.AddWithValue("@BWUNIT", SqlDbType.VarChar).Value = brutWeightUnit;
-                cmd.Parameters.AddWithValue("@ISBOM", SqlDbType.Bit).Value = isTree ? 1 : 0; // bool değer için
-                cmd.Parameters.AddWithValue("@BOMDOCTYPE", SqlDbType.VarChar).Value = treeType;
-                cmd.Parameters.AddWithValue("@BOMDOCNUM", SqlDbType.VarChar).Value = treeCode;
-                cmd.Parameters.AddWithValue("@ISROUTE", SqlDbType.Bit).Value = isRot ? 1 : 0; // bool değer için
-                cmd.Parameters.AddWithValue("@ROTDOCTYPE", SqlDbType.VarChar).Value = rotType;
-                cmd.Parameters.AddWithValue("@ROTDOCNUM", SqlDbType.VarChar).Value = rotCode;
-                cmd.Parameters.AddWithValue("@ISDELETED", SqlDbType.Bit).Value = IsDeleted ? 1 : 0; // bool değer için
-                cmd.Parameters.AddWithValue("@ISPASSIVE", SqlDbType.Bit).Value = IsPassive ? 1 : 0; // bool değer için
-
-                try
-                {
-                    con.Open();
-                    int rowsAffected = cmd.ExecuteNonQuery(); // SQL komutunu çalıştırıyoruz
-
-                    if (rowsAffected > 0)
-                    {
-                        MessageBox.Show("Kayıt başarıyla güncellendi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        // Başarılıysa formu kapatıyoruz
-                    }
-                    else
-                    {
-                        MessageBox.Show("Kayıt güncellenemedi.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                catch (SqlException sqlEx)
-                {
-                    string errorMessage = "Bir veritabanı hatası oluştu. Lütfen tekrar deneyin.";
-
-                    // SQL hata koduna göre mesajları özelleştir
-                    switch (sqlEx.Number)
-                    {
-                        case 2627: // UNIQUE constraint violation
-                            errorMessage = "Girilen başlangıç tarihi zaten mevcut. Lütfen farklı bir tarih girin.";
-                            break;
-                        case 547: // Foreign Key violation
-                            errorMessage = "Girilen bilgiler veritabanındaki diğer kayıtlarla uyumlu değil. Lütfen kontrol edin.";
-                            break;
-                        default:
-                            errorMessage = $"Veritabanı hatası: {sqlEx.Message}";
-                            break;
-                    }
-
-                    MessageBox.Show(errorMessage, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Bir hata oluştu. Lütfen girdiğiniz bilgileri kontrol edin ve tekrar deneyin.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-
-
-
-
-            string query2 = @"
-    UPDATE BSMGRTRTMATTEXT 
-SET 
-    COMCODE = @COMCODE,
-    MATDOCTYPE = @MATDOCTYPE,
-    MATDOCNUM = @MATDOCNUM,
-    MATDOCFROM = @MATDOCFROM,
-    MATDOCUNTIL = @MATDOCUNTIL,
-    LANCODE = @LANCODE,
-    MATSTEXT = @MATSTEXT,
-    MATLTEXT = @MATLTEXT
-   
-WHERE MATDOCNUM = @MATDOCNUM";
-
-
-
-            using (con = new SqlConnection(ConnectionHelper.ConnectionString))
-            using (cmd = new SqlCommand(query2, con))
-            {
-                // Parametreleri ekliyoruz
-                cmd.Parameters.AddWithValue("@COMCODE", SqlDbType.VarChar).Value = Firma;
-                cmd.Parameters.AddWithValue("@MATDOCTYPE", SqlDbType.VarChar).Value = MatdocType;
-                cmd.Parameters.AddWithValue("@MATDOCNUM", SqlDbType.Int).Value = MatCode; // Malzeme numarası bir int olarak belirlenmiş
-                cmd.Parameters.AddWithValue("@MATDOCFROM", SqlDbType.DateTime).Value = GecerliBaslangic;
-                cmd.Parameters.AddWithValue("@MATDOCUNTIL", SqlDbType.DateTime).Value = GecerliBitis;
-
-                // Dil parametresi için doğru veri tipi kullanın (int veya string)
-                cmd.Parameters.AddWithValue("@LANCODE", SqlDbType.VarChar).Value = Dil; // Burada Dil'in tipi doğru olmalı, gerekirse int yapabilirsiniz
-
-                // MATSTEXT parametresi eklendi ve kisaAciklama ile bağlandı
-                cmd.Parameters.AddWithValue("@MATSTEXT", SqlDbType.VarChar).Value = kisaAciklama; // kisaAciklama parametresi burada kullanılıyor
-
-                cmd.Parameters.AddWithValue("@MATLTEXT", SqlDbType.VarChar).Value = uzunAciklama;
-
-                try
-                {
-                    con.Open();
-                    int rowsAffected = cmd.ExecuteNonQuery(); // SQL komutunu çalıştırıyoruz
-
-                    if (rowsAffected > 0)
-                    {
-                        MessageBox.Show("Kayıt başarıyla güncellendi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        // Başarılıysa formu kapatıyoruz
-                    }
-                    else
-                    {
-                        MessageBox.Show("Kayıt güncellenemedi.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                catch (SqlException sqlEx)
-                {
-                    string errorMessage = "Bir veritabanı hatası oluştu. Lütfen tekrar deneyin.";
-
-                    // SQL hata koduna göre mesajları özelleştir
-                    switch (sqlEx.Number)
-                    {
-                        case 2627: // UNIQUE constraint violation
-                            errorMessage = "Girilen başlangıç tarihi zaten mevcut. Lütfen farklı bir tarih girin.";
-                            break;
-                        case 547: // Foreign Key violation
-                            errorMessage = "Girilen bilgiler veritabanındaki diğer kayıtlarla uyumlu değil. Lütfen kontrol edin.";
-                            break;
-                        default:
-                            errorMessage = $"Veritabanı hatası: {sqlEx.Message}";
-                            break;
-                    }
-
-                    MessageBox.Show(errorMessage, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Bir hata oluştu. Lütfen girdiğiniz bilgileri kontrol edin ve tekrar deneyin.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-
-
-
-        }
-    }
-}
-
-        */
-
-
 
         private void btnKaydet_Click(object sender, EventArgs e)
         {
@@ -394,19 +196,27 @@ WHERE MATDOCNUM = @MATDOCNUM";
                     {
                         con.Open();
 
-                        // Başlangıç ve Bitiş tarihlerini al
-                        DateTime bomDocFrom = DateTime.TryParse(DateTimePickerBaslangic.Text, out DateTime fromDate) ? fromDate : DateTime.MinValue;
-                        DateTime bomDocUntil = DateTime.TryParse(DateTimePickerBitis.Text, out DateTime untilDate) ? untilDate : DateTime.MinValue;
-
-                        // Bitiş tarihinin, Başlangıç tarihinden önce olup olmadığını kontrol et
-                        if (bomDocFrom >= bomDocUntil)
+                        // Transaction başlat
+                        using (SqlTransaction transaction = con.BeginTransaction())
                         {
-                            MessageBox.Show("Başlangıç tarihi, bitiş tarihinden önce olmalıdır!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            return; // İşlemi durdur
-                        }
+                            cmd.Connection = con;
+                            cmd.Transaction = transaction;
 
-                        // Mathead Tablosu Güncelleme
-                        string query1 = @"
+                            // Başlangıç ve Bitiş tarihlerini al
+                            DateTime bomDocFrom = DateTime.TryParse(DateTimePickerBaslangic.Text, out DateTime fromDate) ? fromDate : DateTime.MinValue;
+                            DateTime bomDocUntil = DateTime.TryParse(DateTimePickerBitis.Text, out DateTime untilDate) ? untilDate : DateTime.MinValue;
+
+                            // Bitiş tarihinin, Başlangıç tarihinden önce olup olmadığını kontrol et
+                            if (bomDocFrom >= bomDocUntil)
+                            {
+                                MessageBox.Show("Başlangıç tarihi, bitiş tarihinden önce olmalıdır!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                return; // İşlemi durdur
+                            }
+
+                            try
+                            {
+                                // Mathead Tablosu Güncelleme
+                                string query1 = @"
                     UPDATE BSMGRTRTMATHEAD
                     SET 
                         COMCODE = @COMCODE,
@@ -431,50 +241,34 @@ WHERE MATDOCNUM = @MATDOCNUM";
                     WHERE 
                         MATDOCNUM = @MATDOCNUM;";
 
-                        using (SqlCommand command1 = new SqlCommand(query1, con))
-                        {
-                            // Güncelleme için parametreler
-                            command1.Parameters.AddWithValue("@COMCODE", firmCodeComboBox.Text ?? (object)DBNull.Value);
-                            command1.Parameters.AddWithValue("@MATDOCTYPE", matTypeComboBox.Text ?? (object)DBNull.Value);
-                            command1.Parameters.AddWithValue("@MATDOCNUM", matCodeTextBox.Text ?? (object)DBNull.Value);
+                                using (SqlCommand command1 = new SqlCommand(query1, con, transaction))
+                                {
+                                    // Parametreler ekleme
+                                    command1.Parameters.AddWithValue("@COMCODE", firmCodeComboBox.Text ?? (object)DBNull.Value);
+                                    command1.Parameters.AddWithValue("@MATDOCTYPE", matTypeComboBox.Text ?? (object)DBNull.Value);
+                                    command1.Parameters.AddWithValue("@MATDOCNUM", matCodeTextBox.Text ?? (object)DBNull.Value);
+                                    command1.Parameters.AddWithValue("@MATDOCFROM", bomDocFrom);
+                                    command1.Parameters.AddWithValue("@MATDOCUNTIL", bomDocUntil);
+                                    command1.Parameters.AddWithValue("@SUPPLYTYPE", int.TryParse(supplyTypeComboBox.Text, out int supplytype) ? supplytype : (object)DBNull.Value);
+                                    command1.Parameters.AddWithValue("@STUNIT", matStockUnitComboBox.Text ?? (object)DBNull.Value);
+                                    command1.Parameters.AddWithValue("@NETWEIGHT", decimal.TryParse(netWeightTextBox.Text, out decimal netWeight) ? netWeight : (object)DBNull.Value);
+                                    command1.Parameters.AddWithValue("@NWUNIT", netWeightUnitTextBox.Text ?? (object)DBNull.Value);
+                                    command1.Parameters.AddWithValue("@BRUTWEIGHT", decimal.TryParse(brutWeightTextBox.Text, out decimal brutWeight) ? brutWeight : (object)DBNull.Value);
+                                    command1.Parameters.AddWithValue("@BWUNIT", brutWeightUnitTextBox.Text ?? (object)DBNull.Value);
+                                    command1.Parameters.AddWithValue("@ISBOM", isTreeCheckBox.Checked ? 1 : 0);
+                                    command1.Parameters.AddWithValue("@BOMDOCTYPE", productTreeTypeComboBox.Text ?? (object)DBNull.Value);
+                                    command1.Parameters.AddWithValue("@BOMDOCNUM", productTreeCodeTextBox.Text ?? (object)DBNull.Value);
+                                    command1.Parameters.AddWithValue("@ISROUTE", isRouteCheckBox.Checked ? 1 : 0);
+                                    command1.Parameters.AddWithValue("@ROTDOCTYPE", routeTypeComboBox.Text ?? (object)DBNull.Value);
+                                    command1.Parameters.AddWithValue("@ROTDOCNUM", routeCodeTextBox.Text ?? (object)DBNull.Value);
+                                    command1.Parameters.AddWithValue("@ISDELETED", isDeletedCheckBox.Checked ? 1 : 0);
+                                    command1.Parameters.AddWithValue("@ISPASSIVE", isPassiveCheckBox.Checked ? 1 : 0);
 
-                            command1.Parameters.AddWithValue("@MATDOCFROM", bomDocFrom);
-                            command1.Parameters.AddWithValue("@MATDOCUNTIL", bomDocUntil);
+                                    command1.ExecuteNonQuery();
+                                }
 
-                            command1.Parameters.AddWithValue("@SUPPLYTYPE", int.TryParse(supplyTypeComboBox.Text, out int supplytype) ? supplytype : (object)DBNull.Value);
-                            command1.Parameters.AddWithValue("@STUNIT", matStockUnitComboBox.Text ?? (object)DBNull.Value);
-
-                            command1.Parameters.AddWithValue("@NETWEIGHT", decimal.TryParse(netWeightTextBox.Text, out decimal netWeight) ? netWeight : (object)DBNull.Value);
-                            command1.Parameters.AddWithValue("@NWUNIT", netWeightUnitTextBox.Text ?? (object)DBNull.Value);
-
-                            command1.Parameters.AddWithValue("@BRUTWEIGHT", decimal.TryParse(brutWeightTextBox.Text, out decimal brutWeight) ? brutWeight : (object)DBNull.Value);
-                            command1.Parameters.AddWithValue("@BWUNIT", brutWeightUnitTextBox.Text ?? (object)DBNull.Value);
-
-                            command1.Parameters.AddWithValue("@ISBOM", isTreeCheckBox.Checked ? 1 : 0);
-                            command1.Parameters.AddWithValue("@BOMDOCTYPE", productTreeTypeComboBox.Text ?? (object)DBNull.Value);
-                            command1.Parameters.AddWithValue("@BOMDOCNUM", productTreeCodeTextBox.Text ?? (object)DBNull.Value);
-
-                            command1.Parameters.AddWithValue("@ISROUTE", isRouteCheckBox.Checked ? 1 : 0);
-                            command1.Parameters.AddWithValue("@ROTDOCTYPE", routeTypeComboBox.Text ?? (object)DBNull.Value);
-                            command1.Parameters.AddWithValue("@ROTDOCNUM", routeCodeTextBox.Text ?? (object)DBNull.Value);
-
-                            command1.Parameters.AddWithValue("@ISDELETED", isDeletedCheckBox.Checked ? 1 : 0);
-                            command1.Parameters.AddWithValue("@ISPASSIVE", isPassiveCheckBox.Checked ? 1 : 0);
-
-                            int rowsAffected = command1.ExecuteNonQuery(); // SQL komutunu çalıştırıyoruz
-
-                            if (rowsAffected > 0)
-                            {
-                                MessageBox.Show("Kayıt başarıyla güncellendi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            }
-                            else
-                            {
-                                MessageBox.Show("Kayıt güncellenemedi.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            }
-                        }
-
-                        // Mattext Tablosu Güncelleme
-                        string query2 = @"
+                                // Mattext Tablosu Güncelleme
+                                string query2 = @"
                     UPDATE BSMGRTRTMATTEXT
                     SET 
                         COMCODE = @COMCODE,
@@ -487,62 +281,53 @@ WHERE MATDOCNUM = @MATDOCNUM";
                         MATLTEXT = @MATLTEXT
                     WHERE MATDOCNUM = @MATDOCNUM;";
 
-                        using (SqlCommand command2 = new SqlCommand(query2, con))
-                        {
-                            // Güncelleme için parametreler
-                            command2.Parameters.AddWithValue("@COMCODE", firmCodeComboBox.Text ?? (object)DBNull.Value);
-                            command2.Parameters.AddWithValue("@MATDOCTYPE", matTypeComboBox.Text ?? (object)DBNull.Value);
-                            command2.Parameters.AddWithValue("@MATDOCNUM", matCodeTextBox.Text ?? (object)DBNull.Value);
+                                using (SqlCommand command2 = new SqlCommand(query2, con, transaction))
+                                {
+                                    // Parametreler ekleme
+                                    command2.Parameters.AddWithValue("@COMCODE", firmCodeComboBox.Text ?? (object)DBNull.Value);
+                                    command2.Parameters.AddWithValue("@MATDOCTYPE", matTypeComboBox.Text ?? (object)DBNull.Value);
+                                    command2.Parameters.AddWithValue("@MATDOCNUM", matCodeTextBox.Text ?? (object)DBNull.Value);
+                                    command2.Parameters.AddWithValue("@MATDOCFROM", bomDocFrom);
+                                    command2.Parameters.AddWithValue("@MATDOCUNTIL", bomDocUntil);
+                                    command2.Parameters.AddWithValue("@LANCODE", lanComboBox.Text ?? (object)DBNull.Value);
+                                    command2.Parameters.AddWithValue("@MATSTEXT", matStatementShortTextBox.Text ?? (object)DBNull.Value);
+                                    command2.Parameters.AddWithValue("@MATLTEXT", matStatementLongTextBox.Text ?? (object)DBNull.Value);
 
-                            command2.Parameters.AddWithValue("@MATDOCFROM", bomDocFrom);
-                            command2.Parameters.AddWithValue("@MATDOCUNTIL", bomDocUntil);
+                                    command2.ExecuteNonQuery();
+                                }
 
-                            command2.Parameters.AddWithValue("@LANCODE", lanComboBox.Text ?? (object)DBNull.Value);
-                            command2.Parameters.AddWithValue("@MATSTEXT", matStatementShortTextBox.Text ?? (object)DBNull.Value);
-                            command2.Parameters.AddWithValue("@MATLTEXT", matStatementLongTextBox.Text ?? (object)DBNull.Value);
-
-                            int rowsAffected = command2.ExecuteNonQuery(); // SQL komutunu çalıştırıyoruz
-
-                            if (rowsAffected > 0)
-                            {
+                                // İşlem başarılı ise transaction'ı tamamla
+                                transaction.Commit();
                                 MessageBox.Show("Kayıt başarıyla güncellendi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
-                            else
+                            catch (SqlException sqlEx)
                             {
-                                MessageBox.Show("Kayıt güncellenemedi.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                // SQL Hatası yakalama ve rollback
+                                transaction.Rollback();
+                                MessageBox.Show($"SQL Hatası: {sqlEx.Message} (Hata Kodu: {sqlEx.Number})", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                            catch (Exception ex)
+                            {
+                                // Diğer hatalar için rollback
+                                transaction.Rollback();
+                                MessageBox.Show($"Bir hata oluştu: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                         }
                     }
                 }
-                catch (SqlException sqlEx)
-                {
-                    string errorMessage = "Bir veritabanı hatası oluştu. Lütfen tekrar deneyin.";
-
-                    // SQL hata koduna göre mesajları özelleştir
-                    switch (sqlEx.Number)
-                    {
-                        case 2627: // UNIQUE constraint violation
-                            errorMessage = "Girilen malzeme numarası zaten mevcut. Lütfen farklı bir numara girin.";
-                            break;
-                        case 547: // Foreign Key violation
-                            errorMessage = "Girilen bilgiler veritabanındaki diğer kayıtlarla uyumlu değil. Lütfen kontrol edin.";
-                            break;
-                        default:
-                            errorMessage = $"Veritabanı hatası: {sqlEx.Message}";
-                            break;
-                    }
-
-                    MessageBox.Show(errorMessage, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Bir hata oluştu. Lütfen girdiğiniz bilgileri kontrol edin ve tekrar deneyin.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Bağlantı hatası: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
+
         }
-        }
+
+
     }
+    }
+    
 
         
 

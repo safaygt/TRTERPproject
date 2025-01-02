@@ -32,10 +32,10 @@
             prodDoctypeTextTextBox = new TextBox();
             prodDoctypeTextBox = new TextBox();
             label2 = new Label();
-            firmCodeTextBox = new TextBox();
             label3 = new Label();
             label1 = new Label();
             btnSave = new Button();
+            comboBoxFirmCode = new ComboBox();
             SuspendLayout();
             // 
             // prodDocispassiveBOX
@@ -68,23 +68,18 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label2.ForeColor = SystemColors.ControlLightLight;
             label2.Location = new Point(217, 45);
             label2.Name = "label2";
             label2.Size = new Size(117, 20);
             label2.TabIndex = 17;
             label2.Text = "Ürün Ağacı Tipi";
             // 
-            // firmCodeTextBox
-            // 
-            firmCodeTextBox.Location = new Point(66, 100);
-            firmCodeTextBox.Name = "firmCodeTextBox";
-            firmCodeTextBox.Size = new Size(127, 27);
-            firmCodeTextBox.TabIndex = 22;
-            // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label3.ForeColor = SystemColors.ControlLightLight;
             label3.Location = new Point(364, 45);
             label3.Name = "label3";
             label3.Size = new Size(196, 20);
@@ -95,6 +90,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label1.ForeColor = SystemColors.ControlLightLight;
             label1.Location = new Point(66, 45);
             label1.Name = "label1";
             label1.Size = new Size(90, 20);
@@ -111,22 +107,30 @@
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Click += btnSave_Click;
             // 
+            // comboBoxFirmCode
+            // 
+            comboBoxFirmCode.FormattingEnabled = true;
+            comboBoxFirmCode.Location = new Point(66, 99);
+            comboBoxFirmCode.Name = "comboBoxFirmCode";
+            comboBoxFirmCode.Size = new Size(128, 28);
+            comboBoxFirmCode.TabIndex = 25;
+            // 
             // prodTreeEdit
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(800, 450);
+            Controls.Add(comboBoxFirmCode);
             Controls.Add(btnSave);
             Controls.Add(prodDocispassiveBOX);
             Controls.Add(prodDoctypeTextTextBox);
             Controls.Add(prodDoctypeTextBox);
             Controls.Add(label2);
-            Controls.Add(firmCodeTextBox);
             Controls.Add(label3);
             Controls.Add(label1);
             Name = "prodTreeEdit";
-            Text = "prodTreeEdit";
+            Text = "Ürün Ağacı Düzenle";
             Load += prodTreeEdit_Load_1;
             ResumeLayout(false);
             PerformLayout();
@@ -138,9 +142,9 @@
         private TextBox prodDoctypeTextTextBox;
         private TextBox prodDoctypeTextBox;
         private Label label2;
-        private TextBox firmCodeTextBox;
         private Label label3;
         private Label label1;
         private Button btnSave;
+        private ComboBox comboBoxFirmCode;
     }
 }

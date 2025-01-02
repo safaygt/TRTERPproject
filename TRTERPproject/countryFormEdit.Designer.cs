@@ -34,7 +34,7 @@
             label1 = new Label();
             countryNameTextBox = new TextBox();
             countryCodeTextBox = new TextBox();
-            firmCodeTextBox = new TextBox();
+            comboBoxFirmCode = new ComboBox();
             SuspendLayout();
             // 
             // btnSave
@@ -94,12 +94,13 @@
             countryCodeTextBox.Size = new Size(127, 27);
             countryCodeTextBox.TabIndex = 6;
             // 
-            // firmCodeTextBox
+            // comboBoxFirmCode
             // 
-            firmCodeTextBox.Location = new Point(68, 104);
-            firmCodeTextBox.Name = "firmCodeTextBox";
-            firmCodeTextBox.Size = new Size(127, 27);
-            firmCodeTextBox.TabIndex = 7;
+            comboBoxFirmCode.FormattingEnabled = true;
+            comboBoxFirmCode.Location = new Point(68, 104);
+            comboBoxFirmCode.Name = "comboBoxFirmCode";
+            comboBoxFirmCode.Size = new Size(151, 28);
+            comboBoxFirmCode.TabIndex = 7;
             // 
             // countryFormEdit
             // 
@@ -107,15 +108,15 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(800, 450);
+            Controls.Add(comboBoxFirmCode);
             Controls.Add(countryNameTextBox);
             Controls.Add(countryCodeTextBox);
-            Controls.Add(firmCodeTextBox);
             Controls.Add(label2);
             Controls.Add(label3);
             Controls.Add(label1);
             Controls.Add(btnSave);
             Name = "countryFormEdit";
-            Text = "Edit";
+            Text = "Ülke Düzenle";
             Load += countryFormEdit_Load;
             ResumeLayout(false);
             PerformLayout();
@@ -128,6 +129,6 @@
         private Label label1;
         private TextBox countryNameTextBox;
         private TextBox countryCodeTextBox;
-        private TextBox firmCodeTextBox;
+        private ComboBox comboBoxFirmCode;
     }
 }

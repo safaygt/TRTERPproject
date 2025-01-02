@@ -251,6 +251,8 @@ namespace TRTERPproject
                 MessageBox.Show("Lütfen bir satır seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
+            // Kullanıcıdan alınacak form verilerini okuma
+
         }
 
         private void basTarTxtBox_TextChanged(object sender, EventArgs e)

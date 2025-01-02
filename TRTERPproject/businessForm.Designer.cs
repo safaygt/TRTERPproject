@@ -33,14 +33,15 @@
             btnAdd = new Button();
             btnEdit = new Button();
             btnGet = new Button();
-            CountryDataGridView = new DataGridView();
+            businessDataGridView = new DataGridView();
             businessTypeStatementTextBox = new TextBox();
             businessTypeTextBox = new TextBox();
-            firmCodeTextBox = new TextBox();
             label2 = new Label();
             label3 = new Label();
             label1 = new Label();
-            ((System.ComponentModel.ISupportInitialize)CountryDataGridView).BeginInit();
+            btnFiltreliGetir = new Button();
+            comboBoxFirmCode = new ComboBox();
+            ((System.ComponentModel.ISupportInitialize)businessDataGridView).BeginInit();
             SuspendLayout();
             // 
             // isPassiveCheckBox
@@ -57,7 +58,7 @@
             // 
             // btnDel
             // 
-            btnDel.Location = new Point(481, 125);
+            btnDel.Location = new Point(643, 124);
             btnDel.Name = "btnDel";
             btnDel.Size = new Size(116, 29);
             btnDel.TabIndex = 46;
@@ -67,7 +68,7 @@
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(331, 125);
+            btnAdd.Location = new Point(493, 124);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(127, 29);
             btnAdd.TabIndex = 47;
@@ -77,7 +78,7 @@
             // 
             // btnEdit
             // 
-            btnEdit.Location = new Point(184, 125);
+            btnEdit.Location = new Point(338, 124);
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(127, 29);
             btnEdit.TabIndex = 48;
@@ -87,23 +88,23 @@
             // 
             // btnGet
             // 
-            btnGet.Location = new Point(33, 125);
+            btnGet.Location = new Point(33, 124);
             btnGet.Name = "btnGet";
             btnGet.Size = new Size(127, 29);
             btnGet.TabIndex = 49;
-            btnGet.Text = "Getir";
+            btnGet.Text = "Hepsini Getir";
             btnGet.UseVisualStyleBackColor = true;
             btnGet.Click += btnGet_Click;
             // 
-            // CountryDataGridView
+            // businessDataGridView
             // 
-            CountryDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            CountryDataGridView.Location = new Point(24, 197);
-            CountryDataGridView.Name = "CountryDataGridView";
-            CountryDataGridView.RowHeadersWidth = 51;
-            CountryDataGridView.RowTemplate.Height = 29;
-            CountryDataGridView.Size = new Size(915, 239);
-            CountryDataGridView.TabIndex = 45;
+            businessDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            businessDataGridView.Location = new Point(24, 197);
+            businessDataGridView.Name = "businessDataGridView";
+            businessDataGridView.RowHeadersWidth = 51;
+            businessDataGridView.RowTemplate.Height = 29;
+            businessDataGridView.Size = new Size(915, 239);
+            businessDataGridView.TabIndex = 45;
             // 
             // businessTypeStatementTextBox
             // 
@@ -118,13 +119,6 @@
             businessTypeTextBox.Name = "businessTypeTextBox";
             businessTypeTextBox.Size = new Size(150, 27);
             businessTypeTextBox.TabIndex = 43;
-            // 
-            // firmCodeTextBox
-            // 
-            firmCodeTextBox.Location = new Point(33, 74);
-            firmCodeTextBox.Name = "firmCodeTextBox";
-            firmCodeTextBox.Size = new Size(127, 27);
-            firmCodeTextBox.TabIndex = 44;
             // 
             // label2
             // 
@@ -159,27 +153,46 @@
             label1.TabIndex = 41;
             label1.Text = "Firma Kodu";
             // 
+            // btnFiltreliGetir
+            // 
+            btnFiltreliGetir.Location = new Point(184, 124);
+            btnFiltreliGetir.Name = "btnFiltreliGetir";
+            btnFiltreliGetir.Size = new Size(127, 29);
+            btnFiltreliGetir.TabIndex = 51;
+            btnFiltreliGetir.Text = "Getir";
+            btnFiltreliGetir.UseVisualStyleBackColor = true;
+            btnFiltreliGetir.Click += btnFiltreliGetir_Click;
+            // 
+            // comboBoxFirmCode
+            // 
+            comboBoxFirmCode.FormattingEnabled = true;
+            comboBoxFirmCode.Location = new Point(33, 72);
+            comboBoxFirmCode.Name = "comboBoxFirmCode";
+            comboBoxFirmCode.Size = new Size(121, 28);
+            comboBoxFirmCode.TabIndex = 52;
+            // 
             // businessForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(1036, 533);
+            Controls.Add(comboBoxFirmCode);
+            Controls.Add(btnFiltreliGetir);
             Controls.Add(isPassiveCheckBox);
             Controls.Add(btnDel);
             Controls.Add(btnAdd);
             Controls.Add(btnEdit);
             Controls.Add(btnGet);
-            Controls.Add(CountryDataGridView);
+            Controls.Add(businessDataGridView);
             Controls.Add(businessTypeStatementTextBox);
             Controls.Add(businessTypeTextBox);
-            Controls.Add(firmCodeTextBox);
             Controls.Add(label2);
             Controls.Add(label3);
             Controls.Add(label1);
             Name = "businessForm";
-            Text = "businessForm";
-            ((System.ComponentModel.ISupportInitialize)CountryDataGridView).EndInit();
+            Text = "İş Merkezi Destek Tablosu";
+            ((System.ComponentModel.ISupportInitialize)businessDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -191,12 +204,13 @@
         private Button btnAdd;
         private Button btnEdit;
         private Button btnGet;
-        private DataGridView CountryDataGridView;
+        private DataGridView businessDataGridView;
         private TextBox businessTypeStatementTextBox;
         private TextBox businessTypeTextBox;
-        private TextBox firmCodeTextBox;
         private Label label2;
         private Label label3;
         private Label label1;
+        private Button btnFiltreliGetir;
+        private ComboBox comboBoxFirmCode;
     }
 }

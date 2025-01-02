@@ -14,31 +14,109 @@ namespace TRTERPproject
 {
     public partial class oprFormEdit : Form
     {
-        private string operationCode;
+    
         SqlCommand cmd;
         SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString);
+        public string firmCode;
+        public string docType;
+        public string docTypeText;
+        public bool isPassive;
 
-
-        public oprFormEdit(string operationCode)
+        public oprFormEdit()
         {
             InitializeComponent();
-            this.operationCode = operationCode;
+
+            this.Load += (s, e) => LoadComboBoxData();
+
+            // ComboBox Leave eventlerini bağla
+            comboBoxFirmCode.Leave += (s, e) => ValidateComboBox(comboBoxFirmCode, "COMCODE", "BSMGRTRTGEN001");
+
         }
 
+        private void LoadComboBox(ComboBox comboBox, string query, string columnName)
+        {
+            using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+            {
+                using (SqlDataAdapter adapter = new SqlDataAdapter(query, con))
+                {
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    comboBox.DataSource = dt;
+                    comboBox.DisplayMember = columnName;
+                    comboBox.ValueMember = columnName;
+                    comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+
+                    // Varsayılan seçim ilk satır olarak ayarlanır
+                    if (comboBox.SelectedValue == null && dt.Rows.Count > 0)
+                    {
+                        comboBox.SelectedValue = dt.Rows[0][columnName];
+                    }
+                }
+            }
+        }
+
+        private void LoadComboBoxData()
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    con.Open();
+
+                    // ComboBox'ları doldur
+                    LoadComboBox(comboBoxFirmCode, "SELECT DISTINCT COMCODE FROM BSMGRTRTGEN001", "COMCODE");
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Veriler yüklenirken hata oluştu: {ex.Message}");
+            }
+        }
+
+        private void ValidateComboBox(ComboBox comboBox, string columnName, string tableName)
+        {
+            string checkQuery = $"SELECT COUNT(*) FROM {tableName} WHERE {columnName} = @userInput";
+
+            if (string.IsNullOrEmpty(comboBox.Text)) return;
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
+                {
+                    con.Open();
+                    using (SqlCommand checkCmd = new SqlCommand(checkQuery, con))
+                    {
+                        checkCmd.Parameters.AddWithValue("@userInput", comboBox.Text);
+                        int count = (int)checkCmd.ExecuteScalar();
+
+                        if (count == 0)
+                        {
+                            MessageBox.Show($"{columnName} '{comboBox.Text}' tablodaki verilerle uyuşmuyor.");
+                            comboBox.Text = string.Empty; // Kullanıcının yanlış girişini temizler
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Hata: {ex.Message}");
+            }
+        }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
 
             using (SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString))
             {
-                string query = "UPDATE BSMGRTRTOPR001 SET COMCODE = @COMCODE, DOCTYPE = @DOCTYPE, DOCTYPETEXT = @DOCTYPETEXT, ISPASSIVE = @ISPASSIVE WHERE DOCTYPE = @NEWDOCTYPE";
+                string query = "UPDATE BSMGRTRTOPR001 SET COMCODE = @COMCODE, DOCTYPETEXT = @DOCTYPETEXT, ISPASSIVE = @ISPASSIVE WHERE DOCTYPE = @DOCTYPE";
                 cmd = new SqlCommand(query, con);
 
-                cmd.Parameters.AddWithValue("@COMCODE", oprFirmCodeTextBox.Text.Trim());
+                cmd.Parameters.AddWithValue("@COMCODE", comboBoxFirmCode.Text.Trim());
                 cmd.Parameters.AddWithValue("@DOCTYPE", oprTypeTextBox.Text.Trim());
                 cmd.Parameters.AddWithValue("@DOCTYPETEXT", oprTypeDesTextBox.Text.Trim());
                 cmd.Parameters.AddWithValue("@ISPASSIVE", isPassiveOprCheckbox.Checked ? 1 : 0);
-                cmd.Parameters.AddWithValue("@NEWDOCTYPE", operationCode);
+                
 
                 try
                 {
@@ -61,7 +139,7 @@ namespace TRTERPproject
             }
         }
 
-       
+
 
         private void oprFormEdit_Load(object sender, EventArgs e)
         {
@@ -70,7 +148,7 @@ namespace TRTERPproject
             {
                 string query = "SELECT COMCODE, DOCTYPE, DOCTYPETEXT, ISPASSIVE FROM BSMGRTRTOPR001 WHERE DOCTYPE = @DOCTYPE";
                 cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@DOCTYPE", operationCode);
+                cmd.Parameters.AddWithValue("@DOCTYPE", docType);
 
                 try
                 {
@@ -79,8 +157,8 @@ namespace TRTERPproject
 
                     if (reader.Read())
                     {
-                        oprFirmCodeTextBox.Text = reader["COMCODE"].ToString();
-                        oprTypeTextBox.Text = operationCode;
+                        comboBoxFirmCode.Text = reader["COMCODE"].ToString();
+                        oprTypeTextBox.Text = docType;
                         oprTypeDesTextBox.Text = reader["DOCTYPETEXT"].ToString();
                         isPassiveOprCheckbox.Checked = Convert.ToBoolean(reader["ISPASSIVE"]);
                     }

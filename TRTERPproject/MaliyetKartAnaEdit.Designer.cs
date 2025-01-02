@@ -258,7 +258,7 @@
             Controls.Add(maliylbl);
             Controls.Add(label1);
             Name = "MaliyetKartAnaEdit";
-            Text = "MaliyetKartAnaEdit";
+            Text = "Maliyet Ana Tablosu Düzenle";
             Load += MaliyetKartAnaEdit_Load;
             ResumeLayout(false);
             PerformLayout();

@@ -35,17 +35,18 @@
             oprDataGridView = new DataGridView();
             oprTypeDesTextBox = new TextBox();
             oprTypeTextBox = new TextBox();
-            oprFirmCodeTextBox = new TextBox();
             oprTypeLabel = new Label();
             oprTypeDesLabel = new Label();
             oprFrimLabel = new Label();
             oprPascheckbox = new CheckBox();
+            comboBoxFirmCode = new ComboBox();
+            btnFiltreliGetir = new Button();
             ((System.ComponentModel.ISupportInitialize)oprDataGridView).BeginInit();
             SuspendLayout();
             // 
             // btnDel
             // 
-            btnDel.Location = new Point(476, 163);
+            btnDel.Location = new Point(629, 166);
             btnDel.Name = "btnDel";
             btnDel.Size = new Size(127, 29);
             btnDel.TabIndex = 36;
@@ -55,7 +56,7 @@
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(326, 163);
+            btnAdd.Location = new Point(479, 166);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(127, 29);
             btnAdd.TabIndex = 37;
@@ -65,7 +66,7 @@
             // 
             // btnEdit
             // 
-            btnEdit.Location = new Point(179, 163);
+            btnEdit.Location = new Point(332, 166);
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(127, 29);
             btnEdit.TabIndex = 38;
@@ -75,11 +76,11 @@
             // 
             // btnGet
             // 
-            btnGet.Location = new Point(28, 163);
+            btnGet.Location = new Point(28, 166);
             btnGet.Name = "btnGet";
             btnGet.Size = new Size(127, 29);
             btnGet.TabIndex = 39;
-            btnGet.Text = "Getir";
+            btnGet.Text = "Hepsini Getir";
             btnGet.UseVisualStyleBackColor = true;
             btnGet.Click += btnGet_Click;
             // 
@@ -107,14 +108,6 @@
             oprTypeTextBox.Size = new Size(127, 27);
             oprTypeTextBox.TabIndex = 33;
             // 
-            // oprFirmCodeTextBox
-            // 
-            oprFirmCodeTextBox.Location = new Point(28, 99);
-            oprFirmCodeTextBox.Name = "oprFirmCodeTextBox";
-            oprFirmCodeTextBox.Size = new Size(127, 27);
-            oprFirmCodeTextBox.TabIndex = 34;
-            oprFirmCodeTextBox.TextChanged += firmCodeTextBox_TextChanged;
-            // 
             // oprTypeLabel
             // 
             oprTypeLabel.AutoSize = true;
@@ -125,7 +118,6 @@
             oprTypeLabel.Size = new Size(114, 20);
             oprTypeLabel.TabIndex = 28;
             oprTypeLabel.Text = "Operasyon Tipi";
-
             // 
             // oprTypeDesLabel
             // 
@@ -149,7 +141,6 @@
             oprFrimLabel.Size = new Size(90, 20);
             oprFrimLabel.TabIndex = 30;
             oprFrimLabel.Text = "Firma Kodu";
-
             // 
             // oprPascheckbox
             // 
@@ -163,12 +154,32 @@
             oprPascheckbox.Text = "Pasif mi?";
             oprPascheckbox.UseVisualStyleBackColor = true;
             // 
+            // comboBoxFirmCode
+            // 
+            comboBoxFirmCode.FormattingEnabled = true;
+            comboBoxFirmCode.Location = new Point(28, 102);
+            comboBoxFirmCode.Name = "comboBoxFirmCode";
+            comboBoxFirmCode.Size = new Size(127, 28);
+            comboBoxFirmCode.TabIndex = 68;
+            // 
+            // btnFiltreliGetir
+            // 
+            btnFiltreliGetir.Location = new Point(179, 166);
+            btnFiltreliGetir.Name = "btnFiltreliGetir";
+            btnFiltreliGetir.Size = new Size(127, 29);
+            btnFiltreliGetir.TabIndex = 69;
+            btnFiltreliGetir.Text = "Getir";
+            btnFiltreliGetir.UseVisualStyleBackColor = true;
+            btnFiltreliGetir.Click += btnFiltreliGetir_Click;
+            // 
             // oprForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(1003, 555);
+            Controls.Add(btnFiltreliGetir);
+            Controls.Add(comboBoxFirmCode);
             Controls.Add(oprPascheckbox);
             Controls.Add(btnDel);
             Controls.Add(btnAdd);
@@ -177,13 +188,11 @@
             Controls.Add(oprDataGridView);
             Controls.Add(oprTypeDesTextBox);
             Controls.Add(oprTypeTextBox);
-            Controls.Add(oprFirmCodeTextBox);
             Controls.Add(oprTypeLabel);
             Controls.Add(oprTypeDesLabel);
             Controls.Add(oprFrimLabel);
             Name = "oprForm";
-            Text = "oprForm";
-
+            Text = "Operasyon Destek Tablosu";
             ((System.ComponentModel.ISupportInitialize)oprDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -197,10 +206,11 @@
         private DataGridView oprDataGridView;
         private TextBox oprTypeDesTextBox;
         private TextBox oprTypeTextBox;
-        private TextBox oprFirmCodeTextBox;
         private Label oprTypeLabel;
         private Label oprTypeDesLabel;
         private Label oprFrimLabel;
         private CheckBox oprPascheckbox;
+        private ComboBox comboBoxFirmCode;
+        private Button btnFiltreliGetir;
     }
 }

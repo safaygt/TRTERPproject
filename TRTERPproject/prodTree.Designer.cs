@@ -36,16 +36,17 @@
             prodDoctypeTextTextBox = new TextBox();
             prodDoctypeTextBox = new TextBox();
             label2 = new Label();
-            firmCodeTextBox = new TextBox();
             label3 = new Label();
             label1 = new Label();
             prodDocispassiveBOX = new CheckBox();
+            btnFiltreliGetir = new Button();
+            comboBoxFirmCode = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)prodTreeDataGridView).BeginInit();
             SuspendLayout();
             // 
             // btnDel
             // 
-            btnDel.Location = new Point(482, 137);
+            btnDel.Location = new Point(635, 135);
             btnDel.Name = "btnDel";
             btnDel.Size = new Size(127, 29);
             btnDel.TabIndex = 11;
@@ -55,7 +56,7 @@
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(332, 137);
+            btnAdd.Location = new Point(485, 135);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(127, 29);
             btnAdd.TabIndex = 12;
@@ -65,7 +66,7 @@
             // 
             // btnEdit
             // 
-            btnEdit.Location = new Point(185, 137);
+            btnEdit.Location = new Point(338, 135);
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(127, 29);
             btnEdit.TabIndex = 13;
@@ -75,11 +76,11 @@
             // 
             // btnGet
             // 
-            btnGet.Location = new Point(34, 137);
+            btnGet.Location = new Point(34, 135);
             btnGet.Name = "btnGet";
             btnGet.Size = new Size(127, 29);
             btnGet.TabIndex = 14;
-            btnGet.Text = "Getir";
+            btnGet.Text = "Hepsini Getir";
             btnGet.UseVisualStyleBackColor = true;
             btnGet.Click += btnGet_Click;
             // 
@@ -96,7 +97,7 @@
             // prodDoctypeTextTextBox
             // 
             prodDoctypeTextTextBox.BackColor = SystemColors.ControlLightLight;
-            prodDoctypeTextTextBox.Location = new Point(332, 53);
+            prodDoctypeTextTextBox.Location = new Point(332, 70);
             prodDoctypeTextTextBox.Name = "prodDoctypeTextTextBox";
             prodDoctypeTextTextBox.Size = new Size(196, 27);
             prodDoctypeTextTextBox.TabIndex = 7;
@@ -104,7 +105,7 @@
             // prodDoctypeTextBox
             // 
             prodDoctypeTextBox.BackColor = SystemColors.ControlLightLight;
-            prodDoctypeTextBox.Location = new Point(185, 53);
+            prodDoctypeTextBox.Location = new Point(185, 70);
             prodDoctypeTextBox.Name = "prodDoctypeTextBox";
             prodDoctypeTextBox.Size = new Size(127, 27);
             prodDoctypeTextBox.TabIndex = 8;
@@ -113,25 +114,19 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label2.Location = new Point(185, 21);
+            label2.ForeColor = SystemColors.ControlLightLight;
+            label2.Location = new Point(185, 38);
             label2.Name = "label2";
             label2.Size = new Size(117, 20);
             label2.TabIndex = 4;
             label2.Text = "Ürün Ağacı Tipi";
             // 
-            // firmCodeTextBox
-            // 
-            firmCodeTextBox.BackColor = SystemColors.ControlLightLight;
-            firmCodeTextBox.Location = new Point(34, 53);
-            firmCodeTextBox.Name = "firmCodeTextBox";
-            firmCodeTextBox.Size = new Size(127, 27);
-            firmCodeTextBox.TabIndex = 9;
-            // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label3.Location = new Point(332, 21);
+            label3.ForeColor = SystemColors.ControlLightLight;
+            label3.Location = new Point(332, 38);
             label3.Name = "label3";
             label3.Size = new Size(196, 20);
             label3.TabIndex = 5;
@@ -141,7 +136,8 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label1.Location = new Point(34, 21);
+            label1.ForeColor = SystemColors.ControlLightLight;
+            label1.Location = new Point(34, 38);
             label1.Name = "label1";
             label1.Size = new Size(90, 20);
             label1.TabIndex = 6;
@@ -159,12 +155,32 @@
             prodDocispassiveBOX.Text = "Pasif mi?";
             prodDocispassiveBOX.UseVisualStyleBackColor = true;
             // 
+            // btnFiltreliGetir
+            // 
+            btnFiltreliGetir.Location = new Point(185, 135);
+            btnFiltreliGetir.Name = "btnFiltreliGetir";
+            btnFiltreliGetir.Size = new Size(127, 29);
+            btnFiltreliGetir.TabIndex = 17;
+            btnFiltreliGetir.Text = "Getir";
+            btnFiltreliGetir.UseVisualStyleBackColor = true;
+            btnFiltreliGetir.Click += btnFiltreliGetir_Click;
+            // 
+            // comboBoxFirmCode
+            // 
+            comboBoxFirmCode.FormattingEnabled = true;
+            comboBoxFirmCode.Location = new Point(34, 69);
+            comboBoxFirmCode.Name = "comboBoxFirmCode";
+            comboBoxFirmCode.Size = new Size(127, 28);
+            comboBoxFirmCode.TabIndex = 18;
+            // 
             // prodTree
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(869, 489);
+            Controls.Add(comboBoxFirmCode);
+            Controls.Add(btnFiltreliGetir);
             Controls.Add(prodDocispassiveBOX);
             Controls.Add(btnDel);
             Controls.Add(btnAdd);
@@ -174,11 +190,10 @@
             Controls.Add(prodDoctypeTextTextBox);
             Controls.Add(prodDoctypeTextBox);
             Controls.Add(label2);
-            Controls.Add(firmCodeTextBox);
             Controls.Add(label3);
             Controls.Add(label1);
             Name = "prodTree";
-            Text = "prodTree";
+            Text = "Ürün Ağacı Destek Tablosu";
             Load += prodTree_Load;
             ((System.ComponentModel.ISupportInitialize)prodTreeDataGridView).EndInit();
             ResumeLayout(false);
@@ -195,9 +210,10 @@
         private TextBox prodDoctypeTextTextBox;
         private TextBox prodDoctypeTextBox;
         private Label label2;
-        private TextBox firmCodeTextBox;
         private Label label3;
         private Label label1;
         private CheckBox prodDocispassiveBOX;
+        private Button btnFiltreliGetir;
+        private ComboBox comboBoxFirmCode;
     }
 }
