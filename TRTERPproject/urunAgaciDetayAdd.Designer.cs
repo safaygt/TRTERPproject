@@ -327,10 +327,12 @@
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label1);
+
             Controls.Add(contentbtnSave);
             Name = "urunAgaciDetayAdd";
             Text = "urunAgaciDetayAdd";
             Load += urunAgaciDetayAdd_Load;
+
             ResumeLayout(false);
             PerformLayout();
         }

@@ -18,7 +18,7 @@ namespace TRTERPproject
             // ComboBox leave eventlerini bağla
             comboBoxMalzFirm.Leave += (s, e) => ValidateAndAddData(comboBoxMalzFirm, "COMCODE", "BSMGRTRTGEN001");
             malzTipcombo.Leave += (s, e) => ValidateAndAddData(malzTipcombo, "DOCTYPE", "BSMGRTRTMAT001");
-            comboBoxTedTip.Leave += (s, e) => ValidateAndAddData(comboBoxTedTip, "SUPPLYTYPE", "BSMGRTRTMATHEAD");
+           
             comboBoxDil.Leave += (s, e) => ValidateAndAddData(comboBoxDil, "LANCODE", "BSMGRTRTGEN002");
         }
 
@@ -63,7 +63,6 @@ namespace TRTERPproject
 
                     LoadComboBox(comboBoxDil, "SELECT DISTINCT LANCODE FROM BSMGRTRTGEN002", "LANCODE");
 
-                    LoadComboBox(comboBoxTedTip, "SELECT DISTINCT SUPPLYTYPE FROM BSMGRTRTMATHEAD", "SUPPLYTYPE");
 
 
 
@@ -158,7 +157,7 @@ WHERE {columnName} = @userInput";
             }
 
             // Tedarik tipi filtresi
-            if (!string.IsNullOrEmpty(comboBoxTedTip.Text))
+            if (!string.IsNullOrEmpty(supplyTypeTextBox.Text))
             {
                 filters.Add("MH.SUPPLYTYPE = @SUPPLYTYPE");
             }
@@ -236,9 +235,9 @@ WHERE {columnName} = @userInput";
                 cmd.Parameters.AddWithValue("@MATLTEXT", $"{malacicTxtBox.Text}%");
             }
 
-            if (!string.IsNullOrEmpty(comboBoxTedTip.Text))
+            if (!string.IsNullOrEmpty(supplyTypeTextBox.Text))
             {
-                cmd.Parameters.AddWithValue("@SUPPLYTYPE", comboBoxTedTip.Text);
+                cmd.Parameters.AddWithValue("@SUPPLYTYPE", supplyTypeTextBox.Text);
             }
 
             if (!string.IsNullOrEmpty(comboBoxDil.Text))
@@ -390,6 +389,26 @@ WHERE {columnName} = @userInput";
                         cmdMatText.Parameters.AddWithValue("@MATDOCNUM", matDocNum);
                         cmdMatText.ExecuteNonQuery();
 
+                        string deleteFromBomContent = "DELETE FROM BSMGRTRTBOMCONTENT WHERE MATDOCNUM = @MATDOCNUM";
+                        SqlCommand cmdBomContent = new SqlCommand(deleteFromBomContent, con);
+                        cmdBomContent.Parameters.AddWithValue("@MATDOCNUM", matDocNum);
+                        cmdBomContent.ExecuteNonQuery();
+
+                        string deleteFromRotOprContent = "DELETE FROM BSMGRTRTROTOPRCONTENT WHERE MATDOCNUM = @MATDOCNUM";
+                        SqlCommand cmdRotOprCOntent = new SqlCommand(deleteFromRotOprContent, con);
+                        cmdRotOprCOntent.Parameters.AddWithValue("@MATDOCNUM", matDocNum);
+                        cmdRotOprCOntent.ExecuteNonQuery();
+
+                        string deleteFromRotBomContent = "DELETE FROM BSMGRTRTROTBOMCONTENT WHERE MATDOCNUM = @MATDOCNUM";
+                        SqlCommand cmdRotBomContent = new SqlCommand(deleteFromRotBomContent, con);
+                        cmdRotBomContent.Parameters.AddWithValue("@MATDOCNUM", matDocNum);
+                        cmdRotBomContent.ExecuteNonQuery();
+
+                        string deleteFromRotHead = "DELETE FROM BSMGRTRTROTHEAD WHERE MATDOCNUM = @MATDOCNUM";
+                        SqlCommand cmdRotHead = new SqlCommand(deleteFromRotHead, con);
+                        cmdRotHead.Parameters.AddWithValue("@MATDOCNUM", matDocNum);
+                        cmdRotHead.ExecuteNonQuery();
+
                         // Başarılı silme mesajı
                         MessageBox.Show("Seçilen veri başarıyla silindi.", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -475,12 +494,18 @@ WHERE {columnName} = @userInput";
 
 
 
-         
+
 
                 // Other fields assignment
                 MalzemeAnaTabloEdit.brutWeightUnit = selectedRow.Cells["Brüt Ağırlık Birimi"].Value != DBNull.Value
                     ? selectedRow.Cells["Brüt Ağırlık Birimi"].Value.ToString()
                     : string.Empty;
+
+
+              
+
+
+
 
                 MalzemeAnaTabloEdit.isTree = selectedRow.Cells["Ürün Ağacı Var mı?"].Value != DBNull.Value
                     ? Convert.ToBoolean(selectedRow.Cells["Ürün Ağacı Var mı?"].Value)

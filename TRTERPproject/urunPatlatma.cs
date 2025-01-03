@@ -39,14 +39,16 @@ namespace TRTERPproject
                     H.BOMDOCNUM AS 'Ürün Ağacı Numarası', 
                     H.BOMDOCFROM AS 'Geçerlilik Başlangıç',
                     H.BOMDOCUNTIL AS 'Geçerlilik Bitiş',
-                    H.MATDOCTYPE AS 'Malzeme Tipi', 
-                    H.MATDOCNUM AS 'Malzeme Numarası', 
+                    M.MATDOCTYPE AS 'Malzeme Tipi', 
+                    M.MATDOCNUM AS 'Malzeme Numarası', 
                     H.QUANTITY AS 'Temel Miktar',
                     H.ISDELETED AS 'Silindi mi?',
                     H.ISPASSIVE AS 'Pasif mi?',
                     H.DRAWNUM AS 'Çizim Numarası'
                 FROM 
                     BSMGRTRTBOMHEAD H
+                INNER JOIN 
+                    BSMGRTRTMATHEAD M ON M.MATDOCNUM = H.MATDOCNUM
                 WHERE 
                     H.BOMDOCNUM = @BOMDOCNUM";
 

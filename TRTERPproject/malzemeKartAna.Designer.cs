@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            comboBoxTedTip = new ComboBox();
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
@@ -52,17 +51,9 @@
             dateTimePickerBaslangic = new DateTimePicker();
             dateTimePickerBitis = new DateTimePicker();
             getAll = new Button();
+            supplyTypeTextBox = new TextBox();
             ((System.ComponentModel.ISupportInitialize)malKartAna).BeginInit();
             SuspendLayout();
-            // 
-            // comboBoxTedTip
-            // 
-            comboBoxTedTip.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxTedTip.FormattingEnabled = true;
-            comboBoxTedTip.Location = new Point(244, 133);
-            comboBoxTedTip.Name = "comboBoxTedTip";
-            comboBoxTedTip.Size = new Size(151, 28);
-            comboBoxTedTip.TabIndex = 27;
             // 
             // label1
             // 
@@ -289,16 +280,23 @@
             getAll.UseVisualStyleBackColor = true;
             getAll.Click += getAll_Click;
             // 
+            // supplyTypeTextBox
+            // 
+            supplyTypeTextBox.Location = new Point(259, 131);
+            supplyTypeTextBox.Name = "supplyTypeTextBox";
+            supplyTypeTextBox.Size = new Size(131, 27);
+            supplyTypeTextBox.TabIndex = 33;
+            // 
             // malzemeKartAna
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(1048, 635);
+            Controls.Add(supplyTypeTextBox);
             Controls.Add(getAll);
             Controls.Add(dateTimePickerBitis);
             Controls.Add(dateTimePickerBaslangic);
-            Controls.Add(comboBoxTedTip);
             Controls.Add(comboBoxDil);
             Controls.Add(label8);
             Controls.Add(malzTipcombo);
@@ -349,9 +347,9 @@
         private ComboBox malzTipcombo;
         private Label label8;
         private ComboBox comboBoxDil;
-        private ComboBox comboBoxTedTip;
         private DateTimePicker dateTimePickerBaslangic;
         private DateTimePicker dateTimePickerBitis;
         private Button getAll;
+        private TextBox supplyTypeTextBox;
     }
 }

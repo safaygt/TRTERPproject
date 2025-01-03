@@ -54,21 +54,21 @@
             isRouteCheckBox = new CheckBox();
             isTreeCheckBox = new CheckBox();
             matStatementShortTextBox = new TextBox();
-            brutWeightUnitTextBox = new TextBox();
             brutWeightTextBox = new TextBox();
             matStatementLongTextBox = new TextBox();
-            netWeightUnitTextBox = new TextBox();
             netWeightTextBox = new TextBox();
             matCodeTextBox = new TextBox();
             DateTimePickerBitis = new DateTimePicker();
             DateTimePickerBaslangic = new DateTimePicker();
             lanComboBox = new ComboBox();
-            supplyTypeComboBox = new ComboBox();
             matTypeComboBox = new ComboBox();
             productTreeTypeComboBox = new ComboBox();
             firmCodeComboBox = new ComboBox();
             routeTypeComboBox = new ComboBox();
             matStockUnitComboBox = new ComboBox();
+            supplyTypeTextBox = new TextBox();
+            netWeightUnitComboBox = new ComboBox();
+            brutWeightUnitComboBox = new ComboBox();
             SuspendLayout();
             // 
             // label5
@@ -348,13 +348,6 @@
             matStatementShortTextBox.Size = new Size(143, 27);
             matStatementShortTextBox.TabIndex = 22;
             // 
-            // brutWeightUnitTextBox
-            // 
-            brutWeightUnitTextBox.Location = new Point(289, 335);
-            brutWeightUnitTextBox.Name = "brutWeightUnitTextBox";
-            brutWeightUnitTextBox.Size = new Size(139, 27);
-            brutWeightUnitTextBox.TabIndex = 21;
-            // 
             // brutWeightTextBox
             // 
             brutWeightTextBox.Location = new Point(296, 252);
@@ -368,13 +361,6 @@
             matStatementLongTextBox.Name = "matStatementLongTextBox";
             matStatementLongTextBox.Size = new Size(175, 27);
             matStatementLongTextBox.TabIndex = 19;
-            // 
-            // netWeightUnitTextBox
-            // 
-            netWeightUnitTextBox.Location = new Point(80, 335);
-            netWeightUnitTextBox.Name = "netWeightUnitTextBox";
-            netWeightUnitTextBox.Size = new Size(139, 27);
-            netWeightUnitTextBox.TabIndex = 18;
             // 
             // netWeightTextBox
             // 
@@ -412,14 +398,6 @@
             lanComboBox.Name = "lanComboBox";
             lanComboBox.Size = new Size(169, 28);
             lanComboBox.TabIndex = 9;
-            // 
-            // supplyTypeComboBox
-            // 
-            supplyTypeComboBox.FormattingEnabled = true;
-            supplyTypeComboBox.Location = new Point(286, 172);
-            supplyTypeComboBox.Name = "supplyTypeComboBox";
-            supplyTypeComboBox.Size = new Size(151, 28);
-            supplyTypeComboBox.TabIndex = 10;
             // 
             // matTypeComboBox
             // 
@@ -461,12 +439,38 @@
             matStockUnitComboBox.Size = new Size(151, 28);
             matStockUnitComboBox.TabIndex = 8;
             // 
+            // supplyTypeTextBox
+            // 
+            supplyTypeTextBox.Location = new Point(290, 167);
+            supplyTypeTextBox.Name = "supplyTypeTextBox";
+            supplyTypeTextBox.Size = new Size(138, 27);
+            supplyTypeTextBox.TabIndex = 49;
+            // 
+            // netWeightUnitComboBox
+            // 
+            netWeightUnitComboBox.FormattingEnabled = true;
+            netWeightUnitComboBox.Location = new Point(80, 334);
+            netWeightUnitComboBox.Name = "netWeightUnitComboBox";
+            netWeightUnitComboBox.Size = new Size(151, 28);
+            netWeightUnitComboBox.TabIndex = 50;
+            // 
+            // brutWeightUnitComboBox
+            // 
+            brutWeightUnitComboBox.FormattingEnabled = true;
+            brutWeightUnitComboBox.Location = new Point(286, 334);
+            brutWeightUnitComboBox.Name = "brutWeightUnitComboBox";
+            brutWeightUnitComboBox.Size = new Size(151, 28);
+            brutWeightUnitComboBox.TabIndex = 50;
+            // 
             // malzemeAnaTabloEdit
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(197, 110, 51);
             ClientSize = new Size(1075, 648);
+            Controls.Add(brutWeightUnitComboBox);
+            Controls.Add(netWeightUnitComboBox);
+            Controls.Add(supplyTypeTextBox);
             Controls.Add(label5);
             Controls.Add(label6);
             Controls.Add(label8);
@@ -493,16 +497,13 @@
             Controls.Add(isRouteCheckBox);
             Controls.Add(isTreeCheckBox);
             Controls.Add(matStatementShortTextBox);
-            Controls.Add(brutWeightUnitTextBox);
             Controls.Add(brutWeightTextBox);
             Controls.Add(matStatementLongTextBox);
-            Controls.Add(netWeightUnitTextBox);
             Controls.Add(netWeightTextBox);
             Controls.Add(matCodeTextBox);
             Controls.Add(DateTimePickerBitis);
             Controls.Add(DateTimePickerBaslangic);
             Controls.Add(lanComboBox);
-            Controls.Add(supplyTypeComboBox);
             Controls.Add(matTypeComboBox);
             Controls.Add(productTreeTypeComboBox);
             Controls.Add(firmCodeComboBox);
@@ -543,20 +544,20 @@
         private CheckBox isRouteCheckBox;
         private CheckBox isTreeCheckBox;
         private TextBox matStatementShortTextBox;
-        private TextBox brutWeightUnitTextBox;
         private TextBox brutWeightTextBox;
         private TextBox matStatementLongTextBox;
-        private TextBox netWeightUnitTextBox;
         private TextBox netWeightTextBox;
         private TextBox matCodeTextBox;
         private DateTimePicker DateTimePickerBitis;
         private DateTimePicker DateTimePickerBaslangic;
         private ComboBox lanComboBox;
-        private ComboBox supplyTypeComboBox;
         private ComboBox matTypeComboBox;
         private ComboBox productTreeTypeComboBox;
         private ComboBox firmCodeComboBox;
         private ComboBox routeTypeComboBox;
         private ComboBox matStockUnitComboBox;
+        private TextBox supplyTypeTextBox;
+        private ComboBox netWeightUnitComboBox;
+        private ComboBox brutWeightUnitComboBox;
     }
 }
