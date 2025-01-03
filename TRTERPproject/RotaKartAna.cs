@@ -172,7 +172,7 @@ WHERE {columnName} = @userInput";
 			// Firma filtresi (LIKE ile kısmi eşleşme)
 			if (!string.IsNullOrEmpty(firmbox.Text))
 			{
-				filters.Add("RH.COMCODE LIKE @COMCODE");
+				filters.Add("RH.COMCODE = @COMCODE");
 			}
 
 			// Maliyet Merkezi Tipi filtresi (Tam eşleşme)
@@ -186,11 +186,15 @@ WHERE {columnName} = @userInput";
 			{
 				filters.Add("RH.ROTDOCNUM LIKE @ROTDOCNUM");
 			}
+			if (!string.IsNullOrEmpty(comboBoxIsmerkTip.Text))
+			{
+				filters.Add("BROC.WCMDOCTYPE = @WCMDOCTYPE");
+			}
 
 			// Ana Maliyet Merkezi Tipi filtresi (LIKE ile kısmi eşleşme)
 			if (!string.IsNullOrEmpty(comboBoxMalzTip.Text))
 			{
-				filters.Add("RH.MATDOCTYPE LIKE @MATDOCTYPE");
+				filters.Add("RH.MATDOCTYPE = @MATDOCTYPE");
 			}
 
 			// Dil filtresi
@@ -230,7 +234,7 @@ WHERE {columnName} = @userInput";
 				// Parametreleri ekle
 				if (!string.IsNullOrEmpty(firmbox.Text))
 				{
-					cmd.Parameters.AddWithValue("@COMCODE", $"{firmbox.Text}%");
+					cmd.Parameters.AddWithValue("@COMCODE", firmbox.Text);
 				}
 
 				if (!string.IsNullOrEmpty(comboBoxRotTip.Text))
@@ -245,7 +249,11 @@ WHERE {columnName} = @userInput";
 
 				if (!string.IsNullOrEmpty(comboBoxMalzTip.Text))
 				{
-					cmd.Parameters.AddWithValue("@MATDOCTYPE", $"{comboBoxMalzTip.Text}%");
+					cmd.Parameters.AddWithValue("@MATDOCTYPE", comboBoxMalzTip.Text);
+				}
+				if (!string.IsNullOrEmpty(comboBoxIsmerkTip.Text))
+				{
+					cmd.Parameters.AddWithValue("@WCMDOCTYPE", comboBoxIsmerkTip.Text);
 				}
 
 				if (!string.IsNullOrEmpty(dilBox.Text))
