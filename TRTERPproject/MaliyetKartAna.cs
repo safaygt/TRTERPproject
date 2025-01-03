@@ -23,7 +23,7 @@ namespace TRTERPproject
 
             // ComboBox leave eventlerini bağla
             firmComboBox.Leave += (s, e) => ValidateAndAddData(firmComboBox, "COMCODE", "BSMGRTRTGEN001");
-            comboBoxMalMerTip.Leave += (s, e) => ValidateAndAddData(comboBoxMalMerTip, "DOCTYPE", "BSMGR0CCM001");
+            comboBoxMalMerTip.Leave += (s, e) => ValidateAndAddData(comboBoxMalMerTip, "DOCTYPE", "BSMGRTRTCCM001");
             dilCombo.Leave += (s, e) => ValidateAndAddData(dilCombo, "LANCODE", "BSMGRTRTGEN002");
         }
 
@@ -71,16 +71,6 @@ namespace TRTERPproject
             }
         }
 
-       /* private void PopulateComboBox(string query, System.Windows.Forms.ComboBox comboBox, string displayMember)
-        {
-            SqlDataAdapter adapter = new SqlDataAdapter(query, _connection);
-            DataTable dataTable = new DataTable();
-            adapter.Fill(dataTable);
-            comboBox.DataSource = dataTable;
-            comboBox.DisplayMember = displayMember;
-            comboBox.ValueMember = displayMember;
-            comboBox.DropDownStyle = ComboBoxStyle.DropDown;
-        }*/
 
         private void ValidateAndAddData(System.Windows.Forms.ComboBox comboBox, string columnName, string tableName)
         {
@@ -257,6 +247,10 @@ namespace TRTERPproject
             string malDes = maliyTxtBox.Text.Trim();
             int isMainUnit = checkboxpas.Checked ? 1 : 0;
             int isDelUnit = deletedlbl.Checked ? 1 : 0;
+            string malText = maliyTxtBox.Text.Trim();
+            string malText2 = maliyTxtBox.Text.Trim();
+            string lanCode = dilCombo.Text.Trim();
+
 
             if (string.IsNullOrEmpty(comCode) || string.IsNullOrEmpty(malMerType) || string.IsNullOrEmpty(malMerCode) || string.IsNullOrEmpty(malDes) ||
                 string.IsNullOrEmpty(startDate) || string.IsNullOrEmpty(lastDate))
@@ -290,7 +284,7 @@ namespace TRTERPproject
 
                 string insertQuery = @"INSERT INTO BSMGRTRTCCMHEAD 
                                        (COMCODE, CCMDOCTYPE, CCMDOCNUM, CCMDOCFROM, CCMDOCUNTIL, MAINCCMDOCTYPE, MAINCCMDOCNUM, ISDELETED, ISPASSIVE) 
-                                       VALUES (@COMCODE, @CCMDOCTYPE, @CCMDOCNUM, @CCMDOCFROM, @CCMDOCUNTIL, @MAINCCMDOCTYPE, @MAINCCMDOCNUM, @ISDELETED, @ISPASSIVE)";
+                                       VALUES (@COMCODE, @CCMDOCTYPE, @CCMDOCNUM, @CCMDOCFROM, @CCMDOCUNTIL, @MAINCCMDOCTYPE, @MAINCCMDOCNUM, @ISDELETED, @ISPASSIVE)"; ;
 
                 using (SqlCommand command = new SqlCommand(insertQuery, con))
                 {
@@ -306,6 +300,7 @@ namespace TRTERPproject
 
                     int rowsAffected = command.ExecuteNonQuery();
 
+
                     if (rowsAffected > 0)
                     {
                         MessageBox.Show("Kayıt başarıyla eklendi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -314,6 +309,37 @@ namespace TRTERPproject
                     else
                     {
                         MessageBox.Show("Kayıt eklenemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                    string insertQuery2 = @"INSERT INTO BSMGRTRTCCMTEXT
+                                       (COMCODE, CCMDOCTYPE, CCMDOCNUM, CCMDOCFROM, CCMDOCUNTIL, LANCODE, CCMSTEXT, CCMLTEXT) 
+                                       VALUES (@COMCODE, @CCMDOCTYPE, @CCMDOCNUM, @CCMDOCFROM, @CCMDOCUNTIL, @LANCODE, @CCMSTEXT, @CCMLTEXT)";
+
+                    using (SqlCommand command2 = new SqlCommand(insertQuery2, con))
+                    {
+                        command2.Parameters.AddWithValue("@COMCODE", comCode);
+                        command2.Parameters.AddWithValue("@CCMDOCTYPE", malMerType);
+                        command2.Parameters.AddWithValue("@CCMDOCNUM", malMerCode);
+                        command2.Parameters.AddWithValue("@CCMDOCFROM", parsedStartDate.ToString("yyyy-MM-dd"));
+                        command2.Parameters.AddWithValue("@CCMDOCUNTIL", parsedLastDate.ToString("yyyy-MM-dd"));
+                        command2.Parameters.AddWithValue("@LANCODE", lanCode);
+                        command2.Parameters.AddWithValue("@CCMSTEXT", malText);
+                        command2.Parameters.AddWithValue("@CCMLTEXT", malText2);
+
+
+
+
+                        int rowsAffected2 = command2.ExecuteNonQuery();
+
+                        if (rowsAffected2 > 0)
+                        {
+                            MessageBox.Show("Kayıt başarıyla eklendi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            ResetFormFields();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Kayıt eklenemedi. Lütfen tekrar deneyiniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
             }
