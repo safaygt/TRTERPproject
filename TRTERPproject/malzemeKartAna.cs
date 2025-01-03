@@ -230,7 +230,7 @@ WHERE {columnName} = @userInput";
                 cmd.Parameters.AddWithValue("@MATDOCNUM", $"{malNotxtBox.Text}%");
             }
 
-            if (!string.IsNullOrEmpty(malNotxtBox.Text))
+            if (!string.IsNullOrEmpty(malacicTxtBox.Text))
             {
                 cmd.Parameters.AddWithValue("@MATLTEXT", $"{malacicTxtBox.Text}%");
             }

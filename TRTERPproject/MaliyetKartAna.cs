@@ -23,7 +23,7 @@ namespace TRTERPproject
 
             // ComboBox leave eventlerini bağla
             firmComboBox.Leave += (s, e) => ValidateAndAddData(firmComboBox, "COMCODE", "BSMGRTRTGEN001");
-            comboBoxMalMerTip.Leave += (s, e) => ValidateAndAddData(comboBoxMalMerTip, "DOCTYPE", "BSMGR0CCM001");
+            comboBoxMalMerTip.Leave += (s, e) => ValidateAndAddData(comboBoxMalMerTip, "DOCTYPE", "BSMGRTRTCCM001");
             dilCombo.Leave += (s, e) => ValidateAndAddData(dilCombo, "LANCODE", "BSMGRTRTGEN002");
         }
 
