@@ -19,10 +19,14 @@ namespace TRTERPproject
         SqlCommand cmd;
         SqlConnection con = new SqlConnection(ConnectionHelper.ConnectionString);
 
-        public MaliyetKartAnaEdit(string malCarNum)
+        public MaliyetKartAnaEdit(string malCarNum, string? firma, string? maliyetMerkeziTipi, string? gecerlilikBaslangic, string? gecerlilikBitis)
         {
             InitializeComponent();
             this.malCarNum = malCarNum;
+        }
+
+        public MaliyetKartAnaEdit(string malCarNum)
+        {
         }
 
         private void MaliyetKartAnaEdit_Load(object sender, EventArgs e)
