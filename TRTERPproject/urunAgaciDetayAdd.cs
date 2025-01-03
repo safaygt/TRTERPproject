@@ -164,10 +164,16 @@ namespace TRTERPproject
 
                 comboBox.DataSource = dt;
                 comboBox.DisplayMember = displayMember;
-                comboBox.ValueMember = displayMember;            }
+                comboBox.ValueMember = displayMember;
+            }
         }
 
         private void kalemAgUrnKodBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
         }

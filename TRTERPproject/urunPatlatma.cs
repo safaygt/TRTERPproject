@@ -21,6 +21,7 @@ namespace TRTERPproject
         }
 
         public string? UrunAgaciNumarasi { get; internal set; }
+        public string? Firma { get; internal set; }
 
         private void urunPatlatma_Load(object sender, EventArgs e)
         {// Ürün Ağacı Numarası kontrolü
@@ -76,25 +77,26 @@ namespace TRTERPproject
 
             // BOMCONTENT tablosundan verileri çekmek için SQL sorgusu
             string queryFilteredData = @"
-                SELECT 
-                    C.COMCODE AS 'Firma', 
-                    C.BOMDOCTYPE AS 'Ürün Ağacı Tipi', 
-                    C.BOMDOCNUM AS 'Ürün Ağacı Numarası', 
-                    C.BOMDOCFROM AS 'Geçerlilik Başlangıç',
-                    C.BOMDOCUNTIL AS 'Geçerlilik Bitiş',
-                    C.MATDOCTYPE AS 'Malzeme Tipi', 
-                    C.MATDOCNUM AS 'Malzeme Numarası', 
-                    C.CONTENTNUM AS 'İçerik Numarası',
-                    C.COMPONENT AS 'Bileşen Kodu',
-                    C.COMPBOMDOCTYPE AS 'Kalem Ağacı Tipi',
-                    C.COMPBOMDOCNUM AS 'Kalem Ağacı Kodu',
-                    C.QUANTITY AS 'Bileşen Miktarı'
-                FROM 
-                    BSMGRTRTBOMCONTENT C
-                WHERE 
-                    C.BOMDOCNUM = @BOMDOCNUM
-                ORDER BY 
-                    C.COMPBOMDOCNUM"; // COMBOMDOCNUM değerine göre sıralama yapılır
+    SELECT 
+        C.COMCODE AS 'Firma', 
+        C.BOMDOCTYPE AS 'Ürün Ağacı Tipi', 
+        C.BOMDOCNUM AS 'Ürün Ağacı Numarası', 
+        C.BOMDOCFROM AS 'Geçerlilik Başlangıç',
+        C.BOMDOCUNTIL AS 'Geçerlilik Bitiş',
+        C.MATDOCTYPE AS 'Malzeme Tipi', 
+        C.MATDOCNUM AS 'Malzeme Numarası', 
+        C.CONTENTNUM AS 'İçerik Numarası',
+        C.COMPONENT AS 'Bileşen Kodu',
+        C.COMPBOMDOCTYPE AS 'Kalem Ağacı Tipi',
+        C.COMPBOMDOCNUM AS 'Kalem Ağacı Kodu',
+        C.QUANTITY AS 'Bileşen Miktarı'
+    FROM 
+        BSMGRTRTBOMCONTENT C
+    WHERE 
+        C.BOMDOCNUM = @BOMDOCNUM
+        AND C.COMCODE = @COMCODE
+    ORDER BY 
+        C.COMPBOMDOCNUM"; // COMBOMDOCNUM değerine göre sıralama yapılır
 
             try
             {
@@ -104,8 +106,9 @@ namespace TRTERPproject
 
                     using (SqlCommand cmd = new SqlCommand(queryFilteredData, con))
                     {
-                        // BOMDOCNUM değerini parametre olarak ekle
-                        cmd.Parameters.AddWithValue("@BOMDOCNUM", UrunAgaciNumarasi);
+                        // Parametreleri ekle
+                        cmd.Parameters.AddWithValue("@BOMDOCNUM", UrunAgaciNumarasi);  // BOMDOCNUM
+                        cmd.Parameters.AddWithValue("@COMCODE", Firma); 
 
                         SqlDataAdapter da = new SqlDataAdapter(cmd);
                         DataSet ds = new DataSet();
@@ -127,6 +130,7 @@ namespace TRTERPproject
             {
                 MessageBox.Show($"Hata: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
         }
 
         private void getBut_Click(object sender, EventArgs e)

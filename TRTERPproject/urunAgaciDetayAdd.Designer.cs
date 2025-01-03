@@ -184,10 +184,13 @@
             // 
             // textBox1
             // 
+            textBox1.Enabled = false;
             textBox1.Location = new Point(338, 149);
             textBox1.Name = "textBox1";
+            textBox1.ReadOnly = true;
             textBox1.Size = new Size(189, 27);
             textBox1.TabIndex = 187;
+            textBox1.TextChanged += textBox1_TextChanged;
             // 
             // label7
             // 
@@ -324,17 +327,10 @@
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label1);
-<<<<<<< HEAD:TRTERPproject/urunAgaciDetayAdd.Designer.cs
             Controls.Add(contentbtnSave);
             Name = "urunAgaciDetayAdd";
             Text = "urunAgaciDetayAdd";
             Load += urunAgaciDetayAdd_Load;
-=======
-            Controls.Add(btnSave);
-            Name = "urunAgaciKartAdd";
-            Text = "Ürün Ağacı Ekleme Tablosu";
-            Load += urunAgaciKartAdd_Load;
->>>>>>> 67cb15581ba1da81555da7380acab4cb08a406c2:TRTERPproject/urunAgaciKartAdd.Designer.cs
             ResumeLayout(false);
             PerformLayout();
         }
