@@ -155,8 +155,8 @@ WHERE {columnName} = @userInput";
             ismerkKATxtBox.Text = IMKA;
             ismerkUAtextBox.Text = IMUA;
             textBoxGunlukCal.Text = Worktime;
-            checkboxpas.Checked = IsDeleted ?? false;
-            deletedlbl.Checked = IsPassive ?? false;
+            checkboxpas.Checked = IsPassive ?? false;
+            deletedlbl.Checked = IsDeleted ?? false;
 
         }
 
@@ -208,8 +208,8 @@ WHERE {columnName} = @userInput";
                                 command1.Parameters.AddWithValue("@MAINWCMDOCTYPE", anaismertip.Text ?? (object)DBNull.Value);
                                 command1.Parameters.AddWithValue("@MAINWCMDOCNUM", anaismerkod.Text ?? (object)DBNull.Value);
                                 command1.Parameters.AddWithValue("@WORKTIME", worktime);
-                                command1.Parameters.AddWithValue("@ISDELETED", checkboxpas.Checked ? 1 : (object)DBNull.Value);
-                                command1.Parameters.AddWithValue("@ISPASSIVE", deletedlbl.Checked ? 1 : (object)DBNull.Value);
+                                command1.Parameters.AddWithValue("@ISDELETED", deletedlbl.Checked ? 1 : (object)DBNull.Value);
+                                command1.Parameters.AddWithValue("@ISPASSIVE", checkboxpas.Checked ? 1 : (object)DBNull.Value);
                                 command1.ExecuteNonQuery();
                             }
 

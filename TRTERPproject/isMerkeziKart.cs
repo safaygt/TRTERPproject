@@ -164,7 +164,7 @@ INNER JOIN
             // İş merkezi kodu filtresi
             if (!string.IsNullOrEmpty(ismerkodtxtBox.Text))
             {
-                filters.Add("WH.WCMDOCNUM = @WCMDOCNUM");
+                filters.Add("WH.WCMDOCNUM LIKE @WCMDOCNUM");
             }
 
             // Operasyon kodu filtresi
@@ -196,19 +196,11 @@ INNER JOIN
             {
                 filters.Add("WH.ISPASSIVE = 1");
             }
-            else
-            {
-                filters.Add("WH.ISPASSIVE = 0");
-            }
 
             // Silindi mi filtresi
             if (deletedlbl.Checked)
             {
                 filters.Add("WH.ISDELETED = 1");
-            }
-            else
-            {
-                filters.Add("WH.ISDELETED = 0");
             }
 
             // Filtreleri sorguya ekle
@@ -239,7 +231,7 @@ INNER JOIN
 
             if (!string.IsNullOrEmpty(ismerkodtxtBox.Text))
             {
-                cmd.Parameters.AddWithValue("@WCMDOCNUM", ismerkodtxtBox.Text);
+                cmd.Parameters.AddWithValue("@WCMDOCNUM", $"{ismerkodtxtBox.Text}");
             }
 
             if (!string.IsNullOrEmpty(comboBoxOprCode.Text))
