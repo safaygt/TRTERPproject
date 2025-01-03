@@ -79,7 +79,7 @@
             // 
             // duzBut
             // 
-            duzBut.Location = new Point(684, 227);
+            duzBut.Location = new Point(520, 227);
             duzBut.Name = "duzBut";
             duzBut.Size = new Size(125, 38);
             duzBut.TabIndex = 43;
@@ -89,7 +89,7 @@
             // 
             // DelBut
             // 
-            DelBut.Location = new Point(520, 227);
+            DelBut.Location = new Point(684, 227);
             DelBut.Name = "DelBut";
             DelBut.Size = new Size(125, 38);
             DelBut.TabIndex = 42;
@@ -299,6 +299,7 @@
             Controls.Add(label1);
             Name = "MaliyetKartAna";
             Text = "Maliyet Kart Ana Tablosu";
+            Load += MaliyetKartAna_Load;
             ((System.ComponentModel.ISupportInitialize)maliyetdata).EndInit();
             ResumeLayout(false);
             PerformLayout();

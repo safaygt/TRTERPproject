@@ -7,7 +7,7 @@
 
 
 
-		public static string ConnectionString { get; } = "Server=DESKTOP-U86MLBA;Database=TRTdb;Integrated Security=True;";
+		public static string ConnectionString { get; } = "Server=LAPTOP-KJPATGFL;Database=TRTdb;Integrated Security=True;";
 
 
 
