@@ -184,10 +184,13 @@
             // 
             // textBox1
             // 
+            textBox1.Enabled = false;
             textBox1.Location = new Point(338, 149);
             textBox1.Name = "textBox1";
+            textBox1.ReadOnly = true;
             textBox1.Size = new Size(189, 27);
             textBox1.TabIndex = 187;
+            textBox1.TextChanged += textBox1_TextChanged;
             // 
             // label7
             // 
@@ -329,7 +332,6 @@
             Name = "urunAgaciDetayAdd";
             Text = "urunAgaciDetayAdd";
             Load += urunAgaciDetayAdd_Load;
-
 
             ResumeLayout(false);
             PerformLayout();

@@ -236,7 +236,7 @@ WHERE {columnName} = @userInput";
 
                             // BSMGRTRTGEN002 Tablosu Güncelleme
                             string query3 = @"
-                UPDATE BSMGRTRTGEN002
+                UPDATE BSMGRTRTWCMTEXT
                 SET 
                     LANCODE = @LANCODE
                 FROM 

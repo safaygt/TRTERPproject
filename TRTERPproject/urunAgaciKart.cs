@@ -124,11 +124,23 @@ namespace TRTERPproject
                 filters.Add("BOMDOCTYPE = @BOMDOCTYPE");
             }
 
+            if (!string.IsNullOrEmpty(temelmikBox.Text))
+            {
+                filters.Add("BOMDOCTYPE LIKE @BOMDOCTYPE");
+            }
+
 
             if (!string.IsNullOrEmpty(textBox1.Text))
             {
 
-                filters.Add("BOMDOCNUM = @BOMDOCNUM");
+                filters.Add("BOMDOCNUM LIKE @BOMDOCNUM");
+
+            }
+
+            if (!string.IsNullOrEmpty(cizmikBox.Text))
+            {
+
+                filters.Add("DRAWNUM LIKE @DRAWNUM");
 
             }
 
@@ -183,18 +195,17 @@ namespace TRTERPproject
 
                 if (!string.IsNullOrEmpty(textBox1.Text))
                 {
-                    cmd.Parameters.AddWithValue("@BOMDOCNUM", textBox1.Text);
-                }
-
-
-                if (!string.IsNullOrEmpty(textBox1.Text))
-                {
-                    cmd.Parameters.AddWithValue("@QUANTITY", temelmikBox.Text);
+                    cmd.Parameters.AddWithValue("@BOMDOCNUM",$"{textBox1.Text}%" );
                 }
 
                 if (!string.IsNullOrEmpty(textBox1.Text))
                 {
-                    cmd.Parameters.AddWithValue("@DRAWNUM", cizmikBox.Text);
+                    cmd.Parameters.AddWithValue("@QUANTITY",$"{temelmikBox.Text}%" );
+                }
+
+                if (!string.IsNullOrEmpty(textBox1.Text))
+                {
+                    cmd.Parameters.AddWithValue("@DRAWNUM", $"{cizmikBox.Text}%");
                 }
 
                 if (dateTimePickerBaslangic.Value.Date != DateTime.MinValue.Date && dateTimePickerBitis.Value.Date != DateTime.MinValue.Date)
@@ -266,9 +277,10 @@ namespace TRTERPproject
             // DataGridView'den seçilen satırı kontrol et
             if (urnAgcData.SelectedRows.Count > 0)
             {
-                // Seçilen satırdaki "Malzeme Numarası" bilgisini al
+                // Seçilen satırdaki "Malzeme Numarası" ve "Firma" bilgisini al
                 DataGridViewRow selectedRow = urnAgcData.SelectedRows[0];
-                string bomDocNum = selectedRow.Cells["Ürün Ağacı Numarası"].Value.ToString(); // doğru sütunu kontrol edin
+                string bomDocNum = selectedRow.Cells["Ürün Ağacı Numarası"].Value.ToString(); // Ürün Ağacı Numarası
+                string firmaKodu = selectedRow.Cells["Firma"].Value.ToString(); // Firma Kodu
 
                 // Kullanıcıdan onay al
                 DialogResult dialogResult = MessageBox.Show(
@@ -293,11 +305,18 @@ namespace TRTERPproject
                         {
                             con.Open();
 
-                            // BSMGRTRTMBOMHEAD tablosundan silme sorgusu
-                            string deleteFromMatHead = "DELETE FROM BSMGRTRTBOMHEAD WHERE BOMDOCNUM = @BOMDOCNUM";
-                            SqlCommand cmdMatHead = new SqlCommand(deleteFromMatHead, con);
-                            cmdMatHead.Parameters.AddWithValue("@BOMDOCNUM", bomDocNum);
-                            cmdMatHead.ExecuteNonQuery();
+                            // 1. BSMGRTRTBOMCONTENT tablosundan silme sorgusu
+                            string deleteFromContent = "DELETE FROM BSMGRTRTBOMCONTENT WHERE BOMDOCNUM = @BOMDOCNUM AND COMCODE = @COMCODE";
+                            SqlCommand cmdContent = new SqlCommand(deleteFromContent, con);
+                            cmdContent.Parameters.AddWithValue("@BOMDOCNUM", bomDocNum);
+                            cmdContent.Parameters.AddWithValue("@COMCODE", firmaKodu);
+                            cmdContent.ExecuteNonQuery();
+
+                            // 2. BSMGRTRTBOMHEAD tablosundan silme sorgusu
+                            string deleteFromHead = "DELETE FROM BSMGRTRTBOMHEAD WHERE BOMDOCNUM = @BOMDOCNUM";
+                            SqlCommand cmdHead = new SqlCommand(deleteFromHead, con);
+                            cmdHead.Parameters.AddWithValue("@BOMDOCNUM", bomDocNum);
+                            cmdHead.ExecuteNonQuery();
 
                             // Başarılı silme mesajı
                             MessageBox.Show("Seçilen veri başarıyla silindi.", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -426,11 +445,13 @@ namespace TRTERPproject
 
                 // Ürün Ağacı Numarası sütununu al (sütun adı veya indeks ile erişebilirsiniz)
                 string urunAgaciNumarası = selectedRow.Cells["Ürün Ağacı Numarası"].Value.ToString();
+                string firma = selectedRow.Cells["Firma"].Value.ToString();
 
                 // Yeni bir form oluştur ve değeri aktar
                 urunPatlatma urunPatlatmaForm = new urunPatlatma
                 {
-                    UrunAgaciNumarasi = urunAgaciNumarası // Değer atanıyor
+                    UrunAgaciNumarasi = urunAgaciNumarası , // Değer atanıyor
+                    Firma = firma
                 };
 
                 // Yeni formu aç
